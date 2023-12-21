@@ -1,3 +1,13 @@
+info:
+  contact: {}
+  title: CARMA API
+  description: API description for CARMA platform.
+  version: 1.0.0
+
+host: apicarma.bytequest.solutions
+basePath: /api/v1
+schemes:
+  - https
 definitions:
   dto.CreateUserRequest:
     properties:
@@ -148,8 +158,6 @@ definitions:
       status:
         $ref: "#/definitions/users.UserStatus"
     type: object
-info:
-  contact: {}
 paths:
   /auth/login:
     post:
