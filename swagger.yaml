@@ -1,309 +1,141 @@
+openapi: 3.0.3
 info:
-  contact: {}
-  title: CARMA API
-  description: API description for CARMA platform.
+  title: Carma
   version: 1.0.0
-
-host: apicarma.bytequest.solutions
-basePath: /api/v1
-schemes:
-  - https
-definitions:
-  dto.CreateUserRequest:
-    properties:
-      birthday:
-        type: string
-      clinicName:
-        type: string
-      doctorID:
-        type: string
-      email:
-        type: string
-      firstName:
-        type: string
-      lastName:
-        type: string
-      phoneNumber:
-        type: string
-      role:
-        enum:
-          - Doctor
-          - PractitionerFull
-          - PractitionerLimited
-          - Patient
-        type: string
-    required:
-      - email
-      - firstName
-      - lastName
-      - role
-    type: object
-  dto.LoginRequest:
-    properties:
-      email:
-        type: string
-      password:
-        minLength: 8
-        type: string
-    required:
-      - email
-      - password
-    type: object
-  shared.Pagination:
-    properties:
-      current:
-        type: integer
-      next:
-        type: integer
-      perPage:
-        type: integer
-      previous:
-        type: integer
-      totalItems:
-        type: integer
-      totalPages:
-        type: integer
-    type: object
-  users.DoctorView:
-    properties:
-      doctorClinicName:
-        type: string
-      doctorID:
-        type: string
-      doctorName:
-        type: string
-    type: object
-  users.UserList:
-    properties:
-      items:
-        items:
-          $ref: "#/definitions/users.UserView"
-        type: array
-      pagination:
-        $ref: "#/definitions/shared.Pagination"
-    type: object
-  users.UserRole:
-    enum:
-      - Admin
-      - Doctor
-      - PractitionerFull
-      - PractitionerLimited
-      - Patient
-    type: string
-    x-enum-varnames:
-      - Admin
-      - Doctor
-      - PractitionerFull
-      - PractitionerLimited
-      - Patient
-  users.UserStatus:
-    enum:
-      - Decline
-      - Invited
-      - Active
-    type: string
-    x-enum-varnames:
-      - Decline
-      - Invited
-      - Active
-  users.UserView:
-    properties:
-      birthday:
-        type: string
-      createdAt:
-        type: string
-      email:
-        type: string
-      emailVerified:
-        type: boolean
-      firstName:
-        type: string
-      id:
-        type: string
-      lastName:
-        type: string
-      phoneNumber:
-        type: string
-      representativeSelected:
-        type: boolean
-      role:
-        $ref: "#/definitions/users.UserRole"
-      status:
-        $ref: "#/definitions/users.UserStatus"
-    type: object
-  users.UserWithDoctorView:
-    properties:
-      birthday:
-        type: string
-      createdAt:
-        type: string
-      doctorInfo:
-        $ref: "#/definitions/users.DoctorView"
-      email:
-        type: string
-      emailVerified:
-        type: boolean
-      firstName:
-        type: string
-      id:
-        type: string
-      lastName:
-        type: string
-      phoneNumber:
-        type: string
-      representativeSelected:
-        type: boolean
-      role:
-        $ref: "#/definitions/users.UserRole"
-      status:
-        $ref: "#/definitions/users.UserStatus"
-    type: object
+  contact: {}
+servers:
+  - url: https://apicarma-dev.bytequest.solutions/api/v1
+tags:
+  - name: Newsletter
+    description: Subscription for Newsletter
 paths:
-  /auth/login:
+  /newsletters:
     post:
-      consumes:
-        - application/json
-      description:
-        Authenticates a user based on email and password, and returns an
-        access token.
-      parameters:
-        - description: Login Credentials
-          in: body
-          name: LoginRequest
-          required: true
-          schema:
-            $ref: "#/definitions/dto.LoginRequest"
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: User successfully logged in
-          schema:
-            type: string
-        "400":
-          description: Invalid Request Schema
-          schema:
-            type: string
-        "401":
-          description: Unauthorized - User not valid or not found
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: User login
       tags:
-        - Auth
-  /auth/signup:
-    post:
-      consumes:
-        - application/json
-      description: Registers a new user with the provided details.
-      parameters:
-        - description: Signup Information
-          in: body
-          name: CreateUserRequest
-          required: true
-          schema:
-            $ref: "#/definitions/dto.CreateUserRequest"
-      produces:
-        - application/json
+        - Newsletter
+      operationId: Newsletter Subscription
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: John.Doe@gmail.com
       responses:
-        "201":
-          description: User successfully registered
-          schema:
-            type: string
-        "400":
-          description: Invalid Request Schema
-          schema:
-            type: string
-        "403":
-          description: Forbidden - User Not Allowed
-          schema:
-            type: string
-        "422":
-          description: Validation Error
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: User signup
-      tags:
-        - Auth
-  /users:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: You successfully subscribed to the newsletter.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsletterSubscribeUnprocessableEntityError'
     get:
-      consumes:
-        - application/json
-      description: Retrieves a paginated list of users from the platform.
-      parameters:
-        - description: Name of the user to filter
-          in: query
-          name: name
-          type: string
-        - default: 10
-          description: Number of users per page
-          in: query
-          name: perPage
-          type: integer
-        - default: 1
-          description: Page number
-          in: query
-          name: page
-          type: integer
-      produces:
-        - application/json
-      responses:
-        "200":
-          description: Successful response with user data
-          schema:
-            $ref: "#/definitions/users.UserList"
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Fetch the list of users
       tags:
-        - Users
-  /users/me:
-    get:
-      consumes:
-        - application/json
-      description:
-        Retrieves detailed information about a specific user using their
-        user ID.
+        - Newsletter
+      operationId: Newsletter Email List
       parameters:
-        - description: User ID
-          in: path
-          name: userid
-          required: true
-          type: string
-      produces:
-        - application/json
+        - name: page
+          in: query
+          description: Paginate Newsletters' email list , If you want to show the Next, Previous and Last Page's button you can use "Meta" section in the response
+          schema:
+            type: integer
+          examples:
+            example:
+              value: 2
       responses:
-        "200":
-          description: Successful response with user information
-          schema:
-            $ref: "#/definitions/users.UserWithDoctorView"
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "404":
-          description: User Not Found
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      summary: Get user information
-      tags:
-        - Users
-swagger: "2.0"
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/NewslettersData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: You are not authorized
+      security:
+        - bearerAuth: []
+components:
+  schemas:
+    NewsletterSubscribeUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+                example: The Email must be a valid email address
+    NewslettersData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                ID:
+                  type: string
+                  example: c360beee-78d4-417a-8f73-8d1e25f76502
+                Email:
+                  type: string
+                  example: John.Doe@gmail.com
+    PaginationMeta:
+      type: array
+      items:
+        type: object
+        properties:
+          totalItems:
+            type: integer
+            example: 221
+          totalPages:
+            type: integer
+            example: 22
+          current:
+            type: integer
+            example: 10
+          next:
+            type: integer
+            example: 11
+          previous:
+            type: integer
+            example: 9
+          perPage:
+            type: integer
+            example: 10
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
