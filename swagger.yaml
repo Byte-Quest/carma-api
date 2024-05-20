@@ -6,9 +6,517 @@ info:
 servers:
   - url: https://apicarma-dev.bytequest.solutions/api/v1
 tags:
+  - name: Authentication
+    description: Authentication Management
+  - name: Users
+    description: User Management
   - name: Newsletter
     description: Subscription for Newsletter
+  - name: Contacts
+    description: Contacts Management
+  - name: Tips
+    description: Tips Management
+  - name: Resources
+    description: Resources Management
+  - name: Categories
+    description: Categories Management
+  - name: Messages
+    description: Messages Management
+  - name: Faker
+    description: Faker & Seeder
+  - name: Patients
+    description: Patients Management
+  - name: Practitioner
+    description: Practitioner Management
+  - name: Doctors
+    description: Doctors Management
+  - name: Onboard
+    description: Onboard Users Management
 paths:
+  /auth/login:
+    post:
+      tags:
+      - Authentication
+      operationId: Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+                - password
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: John.Doe@gmail.com
+                password:
+                  type: string
+                  example: $12345678
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: You're logged in!
+                  data:
+                    $ref: "#/components/schemas/Login"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Provided credentials are incorrect
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginUnprocessableEntityError'
+  /auth/signup:
+    post:
+      tags:
+      - Authentication
+      operationId: Signup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - firstName
+                - lastName
+                - email
+                - role
+                - birthday
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
+                email:
+                  type: string
+                  example: John.Doe@gmail.com
+                role:
+                  type: string
+                  example: Patient
+                clinicName:
+                  type: string
+                  example: ZibaRoyan
+                birthday:
+                  type: string
+                  example: 2023-10-11T00:00:00Z
+                phoneNumber:
+                  type: string
+                  example: +17804246272
+                questionerId:
+                  type: string
+                  example: 072dbcb1-37de-45f8-9cea-04bd6bab2feb
+      responses:
+        '201':
+          description: Created Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: User Registered
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignUpUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+  /auth/forget-password:
+    post:
+      tags:
+      - Authentication
+      operationId: Forget Password
+      description: Send a Password Reset Link to Provided Email
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: John.Doe@gmail.com
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The password reset link sent to your email
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Provided credentials are incorrect
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForgetPasswordUnprocessableEntityError'
+  /auth/reset-password:
+    post:
+      tags:
+      - Authentication
+      operationId: Reset Password
+      description: Changes the Password of the User Who Requested to Reset the Password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - token
+                - password
+              type: object
+              properties:
+                token:
+                  type: string
+                  example: oFBwDNRFNENVU5mjAX1pd
+                password:
+                  type: string
+                  example: $123456788
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The password changed successfully
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Provided credentials are incorrect
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResetPasswordUnprocessableEntityError'
+  /users/{userId}/resend-invitation:
+    post:
+      tags:
+      - Users
+      operationId: Resend Invitation
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The invitation sent successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+      security:
+      - bearerAuth: []
+  /users/{userId}/resend-email-verification:
+    post:
+      tags:
+      - Users
+      operationId: Resend Email Verification
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The email verification sent successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+      security:
+      - bearerAuth: []
+  /users/me/update:
+    patch:
+      tags:
+      - Users
+      operationId: Update Profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
+                phoneNumber:
+                  type: string
+                  example: +17804246272
+                clinicName:
+                  type: string
+                  example: Doctor Jane Doe Clinic
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The user updated successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateProfileUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+  /users/{userId}/verify-email:
+    post:
+      tags:
+      - Users
+      operationId: Verify Email Verification
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - verificationToken
+              type: object
+              properties:
+                verificationToken:
+                  type: string
+                  example: '3093'
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The email verified successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyUserEmailUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+  /users/me:
+    get:
+      tags:
+      - Users
+      operationId: Fetch User Profile
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The data fetched successfully.
+                  data:
+                    $ref: "#/components/schemas/UserProfileData"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
   /newsletters:
     post:
       tags:
@@ -45,7 +553,7 @@ paths:
     get:
       tags:
         - Newsletter
-      operationId: Newsletter Email List
+      operationId: Fetch Newsletter Email List
       parameters:
         - name: page
           in: query
@@ -76,11 +584,3227 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: You are not authorized
+                    example: Unauthorized
       security:
         - bearerAuth: []
+  /contacts:
+    get:
+      tags:
+      - Contacts
+      operationId: Fetch Contacts List
+      parameters:
+        - name: page
+          in: query
+          description: Paginate Contacts list , If you want to show the Next, Previous and Last Page's button you can use "Meta" section in the response
+          schema:
+            type: integer
+          examples:
+            example:
+              value: 2
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ContactsData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Contacts
+      operationId: Create Contact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - email
+                - firstName
+                - lastName
+                - message
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: John.Doe@gmail.com
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
+                message:
+                  type: string
+                  example: This is Message
+                phoneNumber:
+                  type: string
+                  example: +16043655675
+            examples:
+              Create:
+                value:
+                  email: jafar@dk.com
+                  firstName: kazem
+                  lastName: davood
+                  message: this is message
+                  phoneNumber: '+16043655675'
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: You contact form submitted successfully.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateContactUnprocessableEntityError'
+  /tips:
+    get:
+      tags:
+      - Tips
+      operationId: Fetch Tips List
+      parameters:
+        - name: page
+          in: query
+          description: Paginate Tips list , If you want to show the Next, Previous and Last Page's button you can use "Meta" section in the response
+          schema:
+            type: integer
+          examples:
+            example:
+              value: 2
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/TipsData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Tips
+      operationId: Create Tip
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - categoryId
+                - description
+                - url
+              type: object
+              properties:
+                categoryId:
+                  type: string
+                  example: afe48fba-6da3-44fb-8281-922330ce08cb
+                description:
+                  type: string
+                  example: A Description for Tip
+                url:
+                  type: string
+                  example: https://example.com
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The tip created successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateTipUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+  /tips/{tipId}:
+    delete:
+      tags:
+      - Tips
+      operationId: Delete Tip
+      parameters:
+        - name: tipId
+          in: path
+          required: true
+          description: The ID of the tip
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The tip deleted successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Tips
+      operationId: Update Tip
+      parameters:
+        - name: tipId
+          in: path
+          required: true
+          description: The ID of the tip
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                categoryId:
+                  type: string
+                  example: afe48fba-6da3-44fb-8281-912330ce08ca
+                description:
+                  type: string
+                  example: A Description for Tip
+                url:
+                  type: string
+                  example: https://example.com
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The tip updated successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateTipUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+  /resources:
+    get:
+      tags:
+      - Resources
+      operationId: Fetch Resources List
+      parameters:
+        - name: page
+          in: query
+          description: Paginate Resources list , If you want to show the Next, Previous and Last Page's button you can use "Meta" section in the response
+          schema:
+            type: integer
+          examples:
+            example:
+              value: 2
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ResourcesData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Resources
+      operationId: Create Resources
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - categoryId
+                - title
+                - url
+              type: object
+              properties:
+                categoryId:
+                  type: string
+                  example: afe48fba-6da3-44fb-8281-922330ce08cc
+                title:
+                  type: string
+                  example: Title of the Resource
+                url:
+                  type: string
+                  example: https://example.com
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The resource created successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResourceUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+  /resources/{resourceId}:
+    patch:
+      tags:
+      - Resources
+      operationId: Update Resource
+      parameters:
+        - name: resourceId
+          in: path
+          required: true
+          description: The ID of the resource
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                categoryId:
+                  type: string
+                  example: afe48fba-6da3-44fb-8281-922330ce08ca
+                title:
+                  type: string
+                  example: Title of the Resource
+                url:
+                  type: string
+                  example: https://example.com
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The resource updated successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateResourceUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Resources
+      operationId: Delete Resource
+      parameters:
+        - name: resourceId
+          in: path
+          required: true
+          description: The ID of the resource
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The resource deleted successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+  /categories:
+    get:
+      tags:
+      - Categories
+      operationId: Fetch Categories List
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/CategoriesData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Categories
+      operationId: Create Category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                description:
+                  type: string
+                  example: this is description cat 3
+                name:
+                  type: string
+                  example: cat 1
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The category created successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCategoryUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+  /categories/{categoryId}:
+    patch:
+      tags:
+      - Categories
+      operationId: Update Category
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          description: The ID of the category
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                  example: i am description
+                name:
+                  type: string
+                  example: xxxx55
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The Category updated successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateCategoryUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Categories
+      operationId: Delete Category
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          description: The ID of the category
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The Category deleted successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+  /messages:
+    get:
+      tags:
+      - Messages
+      operationId: Fetch Message List
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/MessagesData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+  /messages/{messageId}:
+    delete:
+      tags:
+      - Messages
+      operationId: Delete Message
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          description: The ID of the message
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The message deleted successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+    get:
+      tags:
+      - Messages
+      operationId: Fetch Message List
+      parameters:
+        - name: messageId
+          in: path
+          required: true
+          description: The ID of the message
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The message fetched successfully.
+                  data:
+                    $ref: "#/components/schemas/MessageInfoData"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+  /faker/seed:
+    post:
+      tags:
+      - Faker
+      operationId: Fake Seeder
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The fake entities made.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+  /faker/flush:
+    post:
+      tags:
+      - Faker
+      operationId: Reset Faker
+      responses:
+        '200':
+          description: Successful Operation
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+  /patients:
+    get:
+      tags:
+      - Patients
+      operationId: Fetch Patients List
+      parameters:
+      - name: questionerStatus
+        in: query
+        schema:
+          type: string
+          example: NotStarted
+        description: NotStarted,InProgress,Completed
+      - name: questionerId
+        in: query
+        schema:
+          type: string
+          example: b317f39a-6b15-4dac-ab28-ca6b844c3453
+      - name: page
+        in: query
+        schema:
+          type: string
+          example: 1
+      - name: perPage
+        in: query
+        schema:
+          type: string
+          example: 31
+      - name: name
+        in: query
+        schema:
+          type: string
+          example: kri
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/PatientsData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+  /patients/{patientId}:
+    get:
+      tags:
+      - Patients
+      operationId: Fetch Patient's Info
+      parameters:
+        - name: patientId
+          in: path
+          required: true
+          description: The ID of the patient
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+        - name: questionerStatus
+          in: query
+          schema:
+            type: string
+            example: NotStarted
+          description: NotStarted,InProgress,Completed
+        - name: questionerId
+          in: query
+          schema:
+            type: string
+            example: cd8c6b23-e5e8-4015-9d54-ddd1d661255e
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: 1
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: 31
+        - name: name
+          in: query
+          schema:
+            type: string
+            example: Colby
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The data fetched successfully.
+                  data:
+                    $ref: "#/components/schemas/PatientInfoData"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Patients
+      operationId: Patient Delete
+      parameters:
+        - name: patientId
+          in: path
+          required: true
+          description: The ID of the patient
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The user deleted successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+  /patients/{patientId}/questioners:
+    get:
+      tags:
+      - Patients
+      operationId: Fetch Questioners List
+      parameters:
+        - name: patientId
+          in: path
+          required: true
+          description: The ID of the patient
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: 2
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: 10
+        - name: questionerName
+          in: query
+          schema:
+            type: string
+            example: d6b613fb-11dc-44e7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/PatientQuestionersData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+  /patients/{patientId}/questioners/stats:
+    get:
+      tags:
+      - Patients
+      operationId: Fetch Patient Questioner Stats
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The message fetched successfully.
+                  data:
+                    $ref: "#/components/schemas/PatientQuestionersStatsData"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+      security:
+      - bearerAuth: []
+  /practitioners:
+    get:
+      tags:
+      - Practitioner
+      operationId: Fetch Doctor Practitioners
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: string
+          example: 3
+      - name: perPage
+        in: query
+        schema:
+          type: string
+          example: 2
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/DoctorPractitionersData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+  /practitioners/{doctorId}:
+    get:
+      tags:
+      - Practitioner
+      operationId: Fetch Doctor Practitioners List By ID
+      parameters:
+        - name: doctorId
+          in: path
+          required: true
+          description: The ID of the doctor
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: 3
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: 2
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/DoctorPractitionersData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+  /practitioners/{practitionerId}:
+    delete:
+      tags:
+      - Practitioner
+      operationId: Remove Practitioner
+      parameters:
+        - name: practitionerId
+          in: path
+          required: true
+          description: The ID of the practitioner
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The user deleted successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Practitioner
+      operationId: Change Role Practitioner
+      parameters:
+        - name: practitionerId
+          in: path
+          required: true
+          description: The ID of the practitioner
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - practitionerType
+              properties:
+                practitionerType:
+                  type: string
+                  example: PractitionerFull
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The user updated successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResourceUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+  /questioners/doctors/me:
+    get:
+      tags:
+      - Doctors
+      operationId: Fetch Doctor Questioners List
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: 3
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: 2
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/DoctorQuestionersData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+  /questioners:
+    get:
+      tags:
+      - Questioner
+      operationId: Fetch Questionnaires List
+      parameters:
+      - name: title
+        in: query
+        schema:
+          type: string
+          example: This is title
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/QuestionnairesData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Questioner
+      operationId: Create Questioner
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - questioner
+              properties:
+                questioner:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The questionnaire created successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateQuestionerUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+  /questioners/all:
+    get:
+      tags:
+      - Questioner
+      operationId: Fetch All Questionnaires List
+      parameters:
+      - name: title
+        in: query
+        schema:
+          type: string
+          example: This is title
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/AllQuestionnairesData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+  /questioners/{questionnaireId}:
+    patch:
+      tags:
+      - Questioner
+      operationId: Update Questionnaire
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          description: The ID of the questionnaire
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - questioner
+              properties:
+                questioner:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The questionnaire updated successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateQuestionnaireUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+  /questioners/{questionerId}:
+    delete:
+      tags:
+      - Questioner
+      operationId: Delete Questioner
+      parameters:
+        - name: questionerId
+          in: path
+          required: true
+          description: The ID of the questioner
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The questionnaire deleted successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: You can not remove this questionnaire because it is assigned to a patient.
+      security:
+      - bearerAuth: []
+  /questioners/{questionerId}/next:
+    post:
+      tags:
+      - Questioner
+      operationId: Next Question
+      parameters:
+        - name: questionerId
+          in: path
+          required: true
+          description: The ID of the questioner
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - optionIds
+                - questionId
+              properties:
+                optionIds:
+                  type: array
+                  items:
+                    type: string
+                    example: b0f9f3e4-048e-46d0-a96f-aa2616739e9b
+                  example:
+                  - b0f9f3e4-048e-46d0-a96f-aa2616739e9b
+                questionId:
+                  type: string
+                  example: 594828bb-68ef-4a13-97a5-5952a13065f8
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/NextQuestionData"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResourceUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+  /questioners/{questionerId}/previous:
+    get:
+      tags:
+      - Questioner
+      operationId: Previous Question
+      parameters:
+        - name: questionerId
+          in: path
+          required: true
+          description: The ID of the questioner
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The data fetched successfully.
+                  data:
+                    $ref: "#/components/schemas/PreviousQuestionData"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+      security:
+      - bearerAuth: []
+  /questioners/{questionerId}/init:
+    get:
+      tags:
+      - Questioner
+      operationId: Init
+      parameters:
+        - name: questionerId
+          in: path
+          required: true
+          description: The ID of the questioner
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The data fetched successfully.
+                  data:
+                    $ref: "#/components/schemas/InitData"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+      security:
+      - bearerAuth: []
+  /questioners/{questionerId}/assign/{patientId}:
+    post:
+      tags:
+      - Questioner
+      operationId: Assign To Patient
+      parameters:
+        - name: questionerId
+          in: path
+          required: true
+          description: The ID of the questioner
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+        - name: patientId
+          in: path
+          required: true
+          description: The ID of the patient
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-55f6-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The questionnaire assigned successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+      security:
+      - bearerAuth: []
+  /doctors:
+    get:
+      tags:
+      - Doctors
+      operationId: Fetch Doctors List
+      parameters:
+      - name: page
+        in: query
+        schema:
+          type: string
+          example: ''
+      - name: perPage
+        in: query
+        schema:
+          type: string
+          example: '1'
+      - name: name
+        in: query
+        schema:
+          type: string
+          example: ald
+      - name: status
+        in: query
+        schema:
+          type: string
+          example: Decline
+        description: Decline,Active,Invited
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/DoctorsListData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+  /doctors/{doctorId}:
+    get:
+      tags:
+      - Doctors
+      operationId: Fetch Doctor Information
+      parameters:
+        - name: doctorId
+          in: path
+          required: true
+          description: The ID of the doctor
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: 2
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: 10
+        - name: name
+          in: query
+          schema:
+            type: string
+            example: ald
+        - name: status
+          in: query
+          schema:
+            type: string
+            example: Decline
+          description: Decline,Active,Invited
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The data fetched successfully.
+                  data:
+                    $ref: "#/components/schemas/DoctorInfoData"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+      security:
+      - bearerAuth: []
+    delete:
+      tags:
+      - Doctors
+      operationId: Remove Doctor
+      parameters:
+        - name: doctorId
+          in: path
+          required: true
+          description: The ID of the doctor
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The user deleted successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+      security:
+      - bearerAuth: []
+  /doctors/stats:
+    get:
+      tags:
+      - Doctors
+      operationId: Fetch Doctors Stats
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The data fetched successfully.
+                  data:
+                    $ref: "#/components/schemas/DoctorStatsData"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+  /doctors/patients-stats:
+    get:
+      tags:
+      - Doctors
+      operationId: Patient Stats
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The data fetched successfully.
+                  data:
+                    $ref: "#/components/schemas/DoctorPatientsStatsData"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+      - bearerAuth: []
+  /onboard/patients/birthday/verify:
+    post:
+      tags:
+      - Onboard
+      operationId: Verify Patient Birthday
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - birthday
+                - token
+              properties:
+                birthday:
+                  type: string
+                  example: 2023-10-11T00:00:00Z
+                token:
+                  type: string
+                  example: nek7PbzdXnv07LxG9WKeRlnC4spvBALvJCwxPcg6ahcfYkHN
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The patient birthday verified.
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Provided credentials are incorrect.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyPatientBirthdayUnprocessableEntityError'
+  /onboard/patients/representative:
+    patch:
+      tags:
+      - Onboard
+      operationId: Update Patient Representative
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+                - representativeFullname
+                - representativeType
+              properties:
+                representativeFullname:
+                  type: string
+                  example: abas ahgha
+                representativeType:
+                  type: string
+                  example: Caregiver
+                token:
+                  type: string
+                  example: f0wIPDWH2kqLhXIMa6I2tOknPTP8KIel3lujJuDodnDFWnEp
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The patient representative updated.
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Provided credentials are incorrect.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdatePatientRepresentativeUnprocessableEntityError'
+  /onboard/users/modify-fullname:
+    patch:
+      tags:
+      - Onboard
+      operationId: Modify User FullName
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - firstName
+                - lastName
+                - token
+              properties:
+                firstName:
+                  type: string
+                  example: mariz
+                lastName:
+                  type: string
+                  example: dastyar2
+                token:
+                  type: string
+                  example: f0wIPDWH2kqLhXIMa6I2tOknPTP8KIel3lujJuDodnDFWnEp
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The user info updated.
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Provided credentials are incorrect.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModifyUserFullNameUnprocessableEntityError'
+  /onboard/users/set-password:
+    post:
+      tags:
+      - Onboard
+      operationId: Set Password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+                - token
+              properties:
+                password:
+                  type: string
+                  example: '@12345678'
+                token:
+                  type: string
+                  example: f0wIPDWH2kqLhXIMa6I2tOknPTP8KIel3lujJuDodnDFWnEp
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The user registered.
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Provided credentials are incorrect.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetPasswordUnprocessableEntityError'
+  /onboard/users/resend-email-verification:
+    post:
+      tags:
+      - Onboard
+      operationId: Resened Email Verification
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+                - token
+              properties:
+                password:
+                  type: string
+                  example: '@12345678'
+                token:
+                  type: string
+                  example: f0wIPDWH2kqLhXIMa6I2tOknPTP8KIel3lujJuDodnDFWnEp
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The email verification sent successfully.
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Provided credentials are incorrect.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResendEmailVerificationUnprocessableEntityError'
+  /onboard/me/{token}:
+    get:
+      tags:
+      - Onboard
+      operationId: Fetch Onboard User Information
+      parameters:
+        - name: token
+          in: path
+          required: true
+          description: Token
+          schema:
+            type: string
+          examples:
+            example:
+              value: ou1H5eUDx6ZH4vDLkMZZvscpzvqQqydvtZoWhbxipubxYQ1Q
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The user info fetched.
+                  data:
+                    $ref: "#/components/schemas/OnboardUserInfoData"
+  /onboard/users/verify:
+    post:
+      tags:
+      - Onboard
+      operationId: Verify Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+              properties:
+                token:
+                  type: string
+                  example: JAO1yFfkhVQJUoEawSZPwLW1QCgPJ7v5QPMQy9lLQO9QbAqe
+            examples:
+              users/verify:
+                value:
+                  token: JAO1yFfkhVQJUoEawSZPwLW1QCgPJ7v5QPMQy9lLQO9QbAqe
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Token verified.
+                  data:
+                    $ref: "#/components/schemas/VerifyTokenData"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Provided credentials are incorrect.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyTokenUnprocessableEntityError'
+  /onboard/users/decline-invitation:
+    post:
+      tags:
+      - Onboard
+      operationId: Decline User Invitation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+              properties:
+                token:
+                  type: string
+                  example: 7HJCbhPcWf3BhaULx57rzVqNufVoRzYOmNXvBbPeR1AvKF8S
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The user declined.
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Provided credentials are incorrect.
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeclineUserInvitationUnprocessableEntityError'
+  /onboard/users/email-verify:
+    post:
+      tags:
+      - Onboard
+      operationId: Email Verify
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+                - verificationCode
+              properties:
+                token:
+                  type: string
+                  example: f0wIPDWH2kqLhXIMa6I2tOknPTP8KIel3lujJuDodnDFWnEp
+                verificationCode:
+                  type: string
+                  example: '4096'
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: You're logged in!
+                  data:
+                    $ref: "#/components/schemas/EmailVerifyData"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Provided credentials are incorrect.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailVerifyUnprocessableEntityError'
+  /reports:
+    get:
+      tags:
+      - Reports
+      operationId: Fetch Reports List
+      parameters:
+        - name: questioner_id
+          in: query
+          schema:
+            type: string
+            example: 072dbcb1-37de-45f8-9cea-04bd6bab2feb
+        - name: name
+          in: query
+          schema:
+            type: string
+            example: akas
+        - name: report_status
+          in: query
+          schema:
+            type: string
+            example: OnGoing
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/ReportsListData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+      security:
+      - bearerAuth: []
+  /reports/items/{itemId}/patient-response:
+    post:
+      tags:
+      - Reports
+      operationId: Save Patient Response To Report
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          description: The ID of the item
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44c7-b979-ded21a4df498
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                belongsTo:
+                  type: string
+                  example: None
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The patient response saved successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SavePatientResponseToReportUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+  /reports/{reportId}/generate:
+    post:
+      tags:
+      - Reports
+      operationId: Generate Report
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          description: The ID of the report
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-0adc-44e7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The report generated successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The report already generated.
+      security:
+      - bearerAuth: []
+  /reports/items/{itemId}/resources:
+    post:
+      tags:
+      - Reports
+      operationId: Save Resources To Report
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          description: The ID of the item
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b9a9-ded21a4df498
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                belongsTo:
+                  type: string
+                  example: Patient
+                resourceIds:
+                  type: array
+                  items:
+                    type: string
+                    example: fc65aa8f-9bf8-4b7f-b918-469f03203b25
+                  example:
+                  - fc65aa8f-9bf8-4b7f-b918-469f03203b25
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The resourced added to the report successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Report is already completed and cannot be updated
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaveResourcesToReportUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+  /reports/items/{itemId}/complete:
+    post:
+      tags:
+      - Reports
+      operationId: Complete Report Item
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          description: The ID of the item
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-0adc-44e7-b9a9-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The report item completed successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+      security:
+      - bearerAuth: []
+  /reports/items/{itemId}/notes:
+    post:
+      tags:
+      - Reports
+      operationId: Save Notes To Report
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          description: The ID of the item
+          schema:
+            type: string
+          examples:
+            example:
+              value: dab613fb-00dc-44e7-b9a9-ded21a4df498
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                belongsTo:
+                  type: string
+                  example: Patient
+                note:
+                  type: string
+                  example: FEXxxxx
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The notes added to the report successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaveNotesToReportUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+  /reports/items/{itemId}/suggestion:
+    put:
+      tags:
+      - Reports
+      operationId: Update Suggestion Note
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          description: The ID of the item
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613ab-00dc-44e7-b9a9-ded21a4df498
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                belongsTo:
+                  type: string
+                  example: Doctor
+                note:
+                  type: string
+                  example: "Matn suggestion aval. \n Matn Suggestion dovom"
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The notes added to the report successfully.
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateSuggestionNoteUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+  /reports/{reportId}:
+    get:
+      tags:
+      - Reports
+      operationId: Fetch Report Info
+      parameters:
+        - name: reportId
+          in: path
+          required: true
+          description: The ID of the report
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-a0dc-44c7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The data fetched successfully.
+                  data:
+                    $ref: "#/components/schemas/ReportInfoData"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
 components:
   schemas:
+    Login:
+      type: array
+      items:
+        type: object
+        properties:
+          accessToken:
+            type: string
+            example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImhzYW1pZC5hYWgwQGdtYWlsLmNvbSIsIklEIjoiMGFmMTI5ODMtODMzZS00ZDQ0LWJkMzAtNDczOWUyZjBjYmYyIiwiZXhwIjoxNzA5NDY3NjM2LCJpYXQiOjE3MDk0NjA0MzYsImlzcyI6Im1vaGFtbWFkIn0.eU6UyDmdVlIWnuOVQyLi8iVci6WQFa1Tjxl7FMEcQ2U
+    LoginUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+                example: The Email must be a valid email address
+              password:
+                type: string
+                example: The Password field is required
+    SignUpUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              firstName:
+                type: string
+                example: The firstName field is required.
+              lastName:
+                type: string
+                example: The lastName field is required.
+              email:
+                type: string
+                example: The Email must be a valid email address.
+              role:
+                type: string
+                example: Invalid role provided.
+              birthday:
+                type: string
+                example: The birthday field is required.
+              phoneNumber:
+                type: string
+                example: The phoneNumber must be a valid Canada phone number.
+              questionerId:
+                type: string
+                example: The questionerId must be a valid questioner.
+    ForgetPasswordUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+                example: The Email must be a valid email address
+    ResetPasswordUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              token:
+                type: string
+                example: The Token field is required
+              password:
+                type: string
+                example: The Password must contain the appropriate number of special characters
+    UpdateProfileUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              firstName:
+                type: string
+                example: The firstName must be greater than the specified value.
+              lastName:
+                type: string
+                example: The lastName must be greater than the specified value.
+              phoneNumber:
+                type: string
+                example: The phoneNumber must be a valid Canada phone number.
+              clinicName:
+                type: string
+                example: The clinicName must be greater than the specified value.
+    VerifyUserEmailUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              verificationToken:
+                type: string
+                example: The verificationToken field is required.
+    UserProfileData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                ID:
+                  type: string
+                  example: c360beee-78d4-417a-8f73-8d1e25f76502
+                FirstName:
+                  type: string
+                  example: John
+                LastName:
+                  type: string
+                  example: Doe
+                Role:
+                  type: string
+                  example: Patient
+                Birthday:
+                  type: string
+                  example: 2023-10-11T00:00:00Z
+                PhoneNumber:
+                  type: string
+                  example: 1615782970
+                Email:
+                  type: string
+                  example: John.Doe@gmail.com
+                EmailVerified:
+                  type: boolean
+                  example: true
+                RepresentativeSelected:
+                  type: boolean
+                  example: False
+                Status:
+                  type: string
+                  example: Active
+                CreatedAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.249535+03:30
+                DoctorInfo:
+                  type: string
+                AvatarURL:
+                  type: string
+                  example: /Avatar/Avatar.jpg
     NewsletterSubscribeUnprocessableEntityError:
       type: object
       properties:
@@ -111,6 +3835,1467 @@ components:
                 Email:
                   type: string
                   example: John.Doe@gmail.com
+    ContactsData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                ID:
+                  type: string
+                  example: c360beee-78d4-417a-8f73-8d1e25f76502
+                Email:
+                  type: string
+                  example: John.Doe@gmail.com
+                FirstName:
+                  type: string
+                  example: John
+                LastName:
+                  type: string
+                  example: Doe
+                PhoneNumber:
+                  type: string
+                  example: +16043655675
+                Message:
+                  type: string
+                  example: Some Message
+    CreateContactUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              email:
+                type: string
+                example: The Email must be a valid email address.
+              firstName:
+                type: string
+                example: The firstName field is required.
+              lastName:
+                type: string
+                example: The lastName field is required.
+              phoneNumber:
+                type: string
+                example: The phoneNumber must be a valid Canada phone number.
+              message:
+                type: string
+                example: The message field is required.
+    TipsData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                ID:
+                  type: string
+                  example: c360beee-78d4-417a-8f73-8d1e25f76502
+                Category:
+                  type: array
+                  items:
+                    properties:
+                      ID:
+                        type: string
+                        example: afe48fba-6da3-44fb-8281-922330ce08ca
+                      Name:
+                        type: string
+                        example: Medical History
+                      Description:
+                        type: string
+                        example: Description
+                      CreatedAt:
+                        type: string
+                        example: 2024-03-21T03:50:00.253695+03:30
+                Description:
+                  type: string
+                  example: Stay hydrated to boost concentration and energy levels.
+                URL:
+                  type: string
+                  example: https://www.healthline.com/nutrition/how-much-water-should-you-drink-per-day
+    CreateTipUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              categoryId:
+                type: string
+                example: The categoryId must be a valid category.
+              description:
+                type: string
+                example: The description field is required.
+              url:
+                type: string
+                example: The url field must be a valid URL.
+    UpdateTipUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              categoryId:
+                type: string
+                example: The categoryId must be a valid category.
+              url:
+                type: string
+                example: The url field must be a valid URL.
+    ResourcesData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                ID:
+                  type: string
+                  example: fc65aa8f-9bf8-4b7f-b918-469f03203b31
+                Category:
+                  type: array
+                  items:
+                    properties:
+                      ID:
+                        type: string
+                        example: afe48fba-6da3-44fb-8281-922330ce08ca
+                      Name:
+                        type: string
+                        example: Medical History
+                      Description:
+                        type: string
+                        example: Description
+                      CreatedAt:
+                        type: string
+                        example: 2024-03-21T03:50:00.253695+03:30
+                Title:
+                  type: string
+                  example: Water Intake Guidelines
+                URL:
+                  type: string
+                  example: https://www.healthline.com/nutrition/how-much-water-should-you-drink-per-day
+    CreateResourceUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              categoryId:
+                type: string
+                example: The categoryId must be a valid category.
+              title:
+                type: string
+                example: The title field is required.
+              url:
+                type: string
+                example: The url field must be a valid URL.
+    UpdateResourceUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              categoryId:
+                type: string
+                example: The categoryId must be a valid category.
+              url:
+                type: string
+                example: The url field must be a valid URL.
+    CategoriesData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: fc65aa8f-9bf8-4b7f-b918-469f03203b31
+                name:
+                  type: string
+                  example: Medical History
+                description:
+                  type: string
+                  example: Description
+                createdAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+    CreateCategoryUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: The token field is required
+    UpdateCategoryUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: The token field is required
+    MessagesData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: fc65aa8f-9bf8-4b7f-b918-469f03203b31
+                title:
+                  type: string
+                  example: Message Title
+                description:
+                  type: string
+                  example: Message Description
+                senderType:
+                  type: string
+                  example: System
+                from:
+                  type: string
+                  example: Dr. Jane Doe
+                status:
+                  type: string
+                  example: Unread
+                attachments:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      title:
+                        type: string
+                        example: Attachment Title
+                      link:
+                        type: string
+                        example: /upload/attachment.pdf
+                      type:
+                        type: string
+                        example: File
+                createdAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+    MessageInfoData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: fc65aa8f-9bf8-4b7f-b918-469f03203b31
+                title:
+                  type: string
+                  example: Message Title
+                description:
+                  type: string
+                  example: Message Description
+                senderType:
+                  type: string
+                  example: System
+                from:
+                  type: string
+                  example: Dr. Jane Doe
+                status:
+                  type: string
+                  example: Unread
+                attachments:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      title:
+                        type: string
+                        example: Attachment Title
+                      link:
+                        type: string
+                        example: /upload/attachment.pdf
+                      type:
+                        type: string
+                        example: File
+                createdAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+    PatientsData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: fc65aa9a-9bf8-4b7f-b918-469f03203b31
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
+                phoneNumber:
+                  type: string
+                  example: 1365358971
+                representativeType:
+                  type: string
+                  example: Caregiver
+                representativeFullname:
+                  type: string
+                  example: Jane Doe
+                email:
+                  type: string
+                  example: John.Doe@gmail.com
+                birthday:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+                status:
+                  type: string
+                  example: Active
+                doctorID:
+                  type: string
+                  example: fc65ac2a-9bf8-4b7f-b918-469f03203b31
+                createdAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+    PatientInfoData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: fc65aa9a-9bf8-4b7f-b918-469f03203b31
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
+                phoneNumber:
+                  type: string
+                  example: 1365358971
+                representativeType:
+                  type: string
+                  example: Caregiver
+                representativeFullname:
+                  type: string
+                  example: Jane Doe
+                email:
+                  type: string
+                  example: John.Doe@gmail.com
+                birthday:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+                status:
+                  type: string
+                  example: Active
+                doctorID:
+                  type: string
+                  example: fc65ac2a-9bf8-4b7f-b918-469f03203b31
+                createdAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+    PatientQuestionersData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: fc65aa8f-9bf8-4b7f-b918-469f08503b31
+                questionerId:
+                  type: string
+                  example: fc65aa8f-9bf8-4b7f-b918-469f08532b31
+                questionerTitle:
+                  type: string
+                  example: Title of Questioner
+                patientId:
+                  type: string
+                  example: afe48fba-6da3-44fb-8281-93a230ce08ca
+                patientInfo:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      firstName:
+                        type: string
+                        example: Johnny
+                      lastName:
+                        type: string
+                        example: Doe
+                status:
+                  type: string
+                  example: InProgress
+                completedAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+                reportStatus:
+                  type: string
+                  example: OnGoing
+                assignedAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+    PatientQuestionersStatsData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                totalQuestioners:
+                  type: integer
+                  example: 130
+                totalNumberOfInProgress:
+                  type: integer
+                  example: 59
+                totalNumberOfCompleted:
+                  type: integer
+                  example: 45
+                lastMonthInProgressQuestionerPercentage:
+                  type: integer
+                  example: 60
+                lastMonthCompletedQuestionerPercentage:
+                  type: integer
+                  example: 43
+                lastMonthTotalQuestionerPercentage:
+                  type: integer
+                  example: 37
+    DoctorPractitionersData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: fc65aa8f-1ae8-4b7f-b918-469f03203b31
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
+                phoneNumber:
+                  type: string
+                  example: 1354664978
+                role:
+                  type: string
+                  example: Practitioner
+                email:
+                  type: string
+                  example: John.Doe@gmail.com
+                status:
+                  type: string
+                  example: Active
+                doctorID:
+                  type: string
+                  example: fc65aa8f-1ae8-4b7f-b918-469f03203a79
+                createdAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+    DoctorQuestionersData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: fc65aa8f-9bf8-4b7f-b918-469f08503b31
+                questionerId:
+                  type: string
+                  example: fc65aa8f-9bf8-4b7f-b918-469f08532b31
+                questionerTitle:
+                  type: string
+                  example: Title of Questioner
+                patientId:
+                  type: string
+                  example: afe48fba-6da3-44fb-8281-93a230ce08ca
+                patientInfo:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      firstName:
+                        type: string
+                        example: Johnny
+                      lastName:
+                        type: string
+                        example: Doe
+                status:
+                  type: string
+                  example: InProgress
+                completedAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+                reportStatus:
+                  type: string
+                  example: OnGoing
+                assignedAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+    QuestionnairesData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: afe48fba-6dc9-66ab-8281-922330ce08ca
+                title:
+                  type: string
+                  example: Title
+                intro:
+                  type: string
+                  example: Intro Description
+                createdAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+                updatedAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+    CreateQuestionerUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+                example: The token field is required
+    AllQuestionnairesData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: afe48fba-6da3-66ab-8281-922330ce08ca
+                title:
+                  type: string
+                  example: Title
+                intro:
+                  type: string
+                  example: Intro Description
+                createdAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+                updatedAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+    UpdateQuestionnaireUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+                example: The title field is required
+    NextQuestionData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                isCompleted:
+                  type: boolean
+                  example: true
+                intro:
+                  type: string
+                  example: intro text
+                category:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: afe48fba-6da3-44fb-8281-922330ce08ca
+                      name:
+                        type: string
+                        example: Heart
+                      description:
+                        type: string
+                        example: Description about category
+                      createdAt:
+                        type: string
+                        example: 2024-03-21T03:50:00.253695+03:30
+                question:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: afe48fba-7ac6-44fb-8281-922330ce08ca
+                      questionerId:
+                        type: string
+                        example: afe48fba-6da3-44fb-8281-922330ce08ca
+                      questionNumber:
+                        type: integer
+                        example: 13
+                      title:
+                        type: string
+                        example: Question Title
+                      description:
+                        type: string
+                        example: Question Description
+                      type:
+                        type: string
+                        example: MultiSelectText
+                      minRequiredOptionNumber:
+                        type: integer
+                        example: 1
+                      maxRequiredOptionNumber:
+                        type: integer
+                        example: 5
+                options:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: afe48fba-6da3-44fb-5136-922330ce08ca
+                      title:
+                        type: string
+                        example: Option title
+                      description:
+                        type: string
+                        example: Option Description
+                      imageUrl:
+                        type: string
+                        example: /images/image.jpg
+                response:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      optionIds:
+                        type: string
+                        example: afe48fba-8fe4-44fb-8281-922330ce08ca
+                      text:
+                        type: string
+                        example: Response Text
+    PreviousQuestionData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                isCompleted:
+                  type: boolean
+                  example: true
+                intro:
+                  type: string
+                  example: intro text
+                category:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: afe48fba-6da3-44fb-8281-922330ce08ca
+                      name:
+                        type: string
+                        example: Heart
+                      description:
+                        type: string
+                        example: Description about category
+                      createdAt:
+                        type: string
+                        example: 2024-03-21T03:50:00.253695+03:30
+                question:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: afe48fba-7ac6-44fb-8281-922330ce08ca
+                      questionerId:
+                        type: string
+                        example: afe48fba-6da3-44fb-8281-922330ce08ca
+                      questionNumber:
+                        type: integer
+                        example: 10
+                      title:
+                        type: string
+                        example: Question Title
+                      description:
+                        type: string
+                        example: Question Description
+                      type:
+                        type: string
+                        example: MultiSelectText
+                      minRequiredOptionNumber:
+                        type: integer
+                        example: 1
+                      maxRequiredOptionNumber:
+                        type: integer
+                        example: 6
+                options:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: afe48fba-6da3-44fb-5136-922330ce08ca
+                      title:
+                        type: string
+                        example: Option title
+                      description:
+                        type: string
+                        example: Option Description
+                      imageUrl:
+                        type: string
+                        example: /images/image.jpg
+                response:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      optionIds:
+                        type: string
+                        example: afe48fba-8fe4-44fb-8281-922330ce08ca
+                      text:
+                        type: string
+                        example: Response Text
+    InitData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                isCompleted:
+                  type: boolean
+                  example: true
+                intro:
+                  type: string
+                  example: intro text
+                category:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: afe48fba-6da3-44fb-8281-922330ce08ca
+                      name:
+                        type: string
+                        example: Heart
+                      description:
+                        type: string
+                        example: Description about category
+                      createdAt:
+                        type: string
+                        example: 2024-03-21T03:50:00.253695+03:30
+                question:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: afe48fba-7ac6-44fb-8281-922330ce08ca
+                      questionerId:
+                        type: string
+                        example: afe48fba-6da3-44fb-8281-922330ce08ca
+                      questionNumber:
+                        type: integer
+                        example: 12
+                      title:
+                        type: string
+                        example: Question Title
+                      description:
+                        type: string
+                        example: Question Description
+                      type:
+                        type: string
+                        example: MultiSelectText
+                      minRequiredOptionNumber:
+                        type: integer
+                        example: 2
+                      maxRequiredOptionNumber:
+                        type: integer
+                        example: 10
+                options:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: afe48fba-6da3-44fb-5136-922330ce08ca
+                      title:
+                        type: string
+                        example: Option title
+                      description:
+                        type: string
+                        example: Option Description
+                      imageUrl:
+                        type: string
+                        example: /images/image.jpg
+                response:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      optionIds:
+                        type: string
+                        example: afe48fba-8fe4-44fb-8281-922330ce08ca
+                      text:
+                        type: string
+                        example: Response Text
+    DoctorsListData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: fc65aa8f-9bf8-4b7f-b918-469f03203b31
+                firstName:
+                  type: string
+                  example: Jane
+                lastName:
+                  type: string
+                  example: Doe
+                phoneNumber:
+                  type: string
+                  example: 15463154631
+                email:
+                  type: string
+                  example: Jane.Doe@gmail.com
+                clinicName:
+                  type: string
+                  example: Jane Doe Clinic
+                status:
+                  type: string
+                  example: Active
+                createdAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+    DoctorInfoData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: fc65aa8f-9bf8-4b7f-b918-469f03203b31
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
+                phoneNumber:
+                  type: string
+                  example: 13514463216
+                email:
+                  type: string
+                  example: John.Doe@gmail.com
+                clinicName:
+                  type: string
+                  example: Doctor Jane Doe Clinic
+                status:
+                  type: string
+                  example: Active
+                createdAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+    DoctorStatsData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                allDoctors:
+                  type: integer
+                  example: 100
+                totalNumberOfInvitedDoctors:
+                  type: integer
+                  example: 50
+                totalNumberOfActiveDoctors:
+                  type: integer
+                  example: 70
+                lastMonthInvitedDoctorsPercentage:
+                  type: integer
+                  example: 30
+                lastMonthActiveDoctorsPercentage:
+                  type: integer
+                  example: 50
+                lastMonthTotalDoctorsPercentage:
+                  type: integer
+                  example: 20
+    DoctorPatientsStatsData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                totalPatients:
+                  type: integer
+                  example: 300
+                totalNumberOfInvitedPatients:
+                  type: integer
+                  example: 70
+                totalNumberOfActivePatients:
+                  type: integer
+                  example: 60
+                lastMonthInvitedPatientsPercentage:
+                  type: integer
+                  example: 40
+                lastMonthActivePatientsPercentage:
+                  type: integer
+                  example: 30
+                lastMonthTotalPatientsPercentage:
+                  type: integer
+                  example: 60
+    VerifyPatientBirthdayUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              birthday:
+                type: string
+                example: The birthday must be a valid RFC3339 date.
+              token:
+                type: string
+                example: The token field is required
+    UpdatePatientRepresentativeUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              token:
+                type: string
+                example: The token field is required
+              representativeType:
+                type: string
+                example: Invalid representativeType provided.
+              representativeFullname:
+                type: string
+                example: The representativeFullname field is required
+    ModifyUserFullNameUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              token:
+                type: string
+                example: The token field is required
+              firstName:
+                type: string
+                example: The firstName field is required
+              lastName:
+                type: string
+                example: The lastName field is required
+    SetPasswordUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              token:
+                type: string
+                example: The token field is required
+              password:
+                type: string
+                example: The password field must contain the appropriate number of special characters.
+    ResendEmailVerificationUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              token:
+                type: string
+                example: The token field is required
+    OnboardUserInfoData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: fc65aa8f-9bf8-4b7f-b918-469f03203b31
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
+                role:
+                  type: string
+                  example: Patient
+                email:
+                  type: string
+                  example: John.Doe@gmail.com
+                emailVerified:
+                  type: boolean
+                  example: true
+                hasPassword:
+                  type: string
+                  example:
+                representativeSelected:
+                  type: boolean
+                  example: true
+                status:
+                  type: string
+                  example: Invited
+    VerifyTokenData:
+      type: array
+      items:
+        type: object
+        properties:
+          role:
+            type: string
+            example: Patient
+    VerifyTokenUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              token:
+                type: string
+                example: The token field is required
+    DeclineUserInvitationUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              token:
+                type: string
+                example: The token field is required
+    EmailVerifyData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                accessToken:
+                  type: string
+                  example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImhzYW1pZC5hYWgwQGdtYWlsLmNvbSIsIklEIjoiMGFmMTI5ODMtODMzZS00ZDQ0LWJkMzAtNDczOWUyZjBjYmYyIiwiZXhwIjoxNzA5NDY3NjM2LCJpYXQiOjE3MDk0NjA0MzYsImlzcyI6Im1vaGFtbWFkIn0.eU6UyDmdVlIWnuOVQyLi8iVci6WQFa1Tjxl7FMEcQ2U
+    EmailVerifyUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              token:
+                type: string
+                example: The token field is required
+              verificationCode:
+                type: string
+                example: The verificationCode must have the specified length.
+    ReportsListData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                reportId:
+                  type: string
+                  example: afe48fba-6da3-44fb-8281-922330ce08ca
+                patientFirstName:
+                  type: string
+                  example: Medical History
+                patientLastName:
+                  type: string
+                  example: Description
+                questionerTitle:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+                dataOfInvitation:
+                  type: string
+                  example: Medical History
+                dataOfSubmission:
+                  type: string
+                  example: Description
+                status:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+    SavePatientResponseToReportUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              belongsTo:
+                type: string
+                example: Invalid belongsTo provided.
+    SaveResourcesToReportUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              resourceIds:
+                type: string
+                example: The resourceIds must be a valid UUID list.
+              belongsTo:
+                type: string
+                example: Invalid belongsTo provided.
+    SaveNotesToReportUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              belongsTo:
+                type: string
+                example: Invalid belongsTo provided.
+    UpdateSuggestionNoteUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              belongsTo:
+                type: string
+                example: Invalid belongsTo provided.
+    ReportInfoData:
+      type: array
+      items:
+        type: object
+        properties:
+          ReportInfo:
+            type: array
+            items:
+              type: object
+              properties:
+                item:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: afe48fba-6da3-44fb-8281-922330ce08ca
+                      name:
+                        type: string
+                        example: Item Name
+                      categoryId:
+                        type: string
+                        example: afe48fba-6da3-44fb-9123-922330ce08ca
+                      isCompleted:
+                        type: boolean
+                        example: true
+                questionResponses:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example:
+                      question:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example:
+                            title:
+                              type: string
+                              example:
+                            description:
+                              type: string
+                              example:
+                            imageUrl:
+                              type: string
+                              example:
+                      selectedOptionIds:
+                        type: string
+                        example:
+                      textResponse:
+                        type: string
+                        example:
+                responsesAddTo:
+                  type: string
+                  example: Description
+                resources:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example:
+                      title:
+                        type: string
+                        example:
+                      url:
+                        type: string
+                        example:
+                resourceAddTo:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      resourceIds:
+                        type: string
+                        example: afe48fba-6a6e-44fb-8281-922330ce08ca
+                      belongsTo:
+                        type: string
+                        example: Belongs To Doctor
+                doctorNote:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      notes:
+                        type: string
+                        example: Some Notes from doctor
+                patientNote:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      notes:
+                        type: string
+                        example: Some Notes from patient
+                suggestion:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      notes:
+                        type: string
+                        example: Some Notes
+                      suggestionBelongsTo:
+                        type: string
+                        example: Belongs To Doctor
+          PatientInfo:
+            type: array
+            items:
+              properties:
+                ID:
+                  type: string
+                  example: afe48fba-6da3-44fb-8281-922330ce08ca
+                Name:
+                  type: string
+                  example: Medical History
+                Description:
+                  type: string
+                  example: Description
+                CreatedAt:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
     PaginationMeta:
       type: array
       items:
