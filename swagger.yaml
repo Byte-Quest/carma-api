@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   contact: {}
 servers:
-  - url: https://apicarma-dev.bytequest.solutions/api/v1
+  - url: https://apicarma.bytequest.solutions/api/v1
 tags:
   - name: Authentication
     description: Authentication Management
@@ -36,7 +36,7 @@ paths:
   /auth/login:
     post:
       tags:
-      - Authentication
+        - Authentication
       operationId: Login
       requestBody:
         content:
@@ -54,7 +54,7 @@ paths:
                   type: string
                   example: $12345678
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -66,7 +66,7 @@ paths:
                     example: You're logged in!
                   data:
                     $ref: "#/components/schemas/Login"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -76,16 +76,16 @@ paths:
                   message:
                     type: string
                     example: Provided credentials are incorrect
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginUnprocessableEntityError'
+                $ref: "#/components/schemas/LoginUnprocessableEntityError"
   /auth/signup:
     post:
       tags:
-      - Authentication
+        - Authentication
       operationId: Signup
       requestBody:
         content:
@@ -124,7 +124,7 @@ paths:
                   type: string
                   example: 072dbcb1-37de-45f8-9cea-04bd6bab2feb
       responses:
-        '201':
+        "201":
           description: Created Successfully
           content:
             application/json:
@@ -134,7 +134,7 @@ paths:
                   message:
                     type: string
                     example: User Registered
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -144,18 +144,18 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SignUpUnprocessableEntityError'
+                $ref: "#/components/schemas/SignUpUnprocessableEntityError"
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /auth/forget-password:
     post:
       tags:
-      - Authentication
+        - Authentication
       operationId: Forget Password
       description: Send a Password Reset Link to Provided Email
       requestBody:
@@ -170,7 +170,7 @@ paths:
                   type: string
                   example: John.Doe@gmail.com
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -180,7 +180,7 @@ paths:
                   message:
                     type: string
                     example: The password reset link sent to your email
-        '400':
+        "400":
           description: Bad Request
           content:
             application/json:
@@ -190,16 +190,16 @@ paths:
                   message:
                     type: string
                     example: Provided credentials are incorrect
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ForgetPasswordUnprocessableEntityError'
+                $ref: "#/components/schemas/ForgetPasswordUnprocessableEntityError"
   /auth/reset-password:
     post:
       tags:
-      - Authentication
+        - Authentication
       operationId: Reset Password
       description: Changes the Password of the User Who Requested to Reset the Password
       requestBody:
@@ -218,7 +218,7 @@ paths:
                   type: string
                   example: $123456788
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -228,7 +228,7 @@ paths:
                   message:
                     type: string
                     example: The password changed successfully
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -238,16 +238,16 @@ paths:
                   message:
                     type: string
                     example: Provided credentials are incorrect
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResetPasswordUnprocessableEntityError'
+                $ref: "#/components/schemas/ResetPasswordUnprocessableEntityError"
   /users/{userId}/resend-invitation:
     post:
       tags:
-      - Users
+        - Users
       operationId: Resend Invitation
       parameters:
         - name: userId
@@ -260,7 +260,7 @@ paths:
             example:
               value: d6b613fb-00dc-44e7-b979-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -270,7 +270,7 @@ paths:
                   message:
                     type: string
                     example: The invitation sent successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -280,7 +280,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -290,7 +290,7 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -301,11 +301,11 @@ paths:
                     type: string
                     example: The requested resource not found.
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /users/{userId}/resend-email-verification:
     post:
       tags:
-      - Users
+        - Users
       operationId: Resend Email Verification
       parameters:
         - name: userId
@@ -318,7 +318,7 @@ paths:
             example:
               value: d6b613fb-00dc-44e7-b979-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -328,7 +328,7 @@ paths:
                   message:
                     type: string
                     example: The email verification sent successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -338,7 +338,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -348,7 +348,7 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -359,11 +359,11 @@ paths:
                     type: string
                     example: The requested resource not found.
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /users/me/update:
     patch:
       tags:
-      - Users
+        - Users
       operationId: Update Profile
       requestBody:
         content:
@@ -384,7 +384,7 @@ paths:
                   type: string
                   example: Doctor Jane Doe Clinic
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -394,7 +394,7 @@ paths:
                   message:
                     type: string
                     example: The user updated successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -404,18 +404,18 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateProfileUnprocessableEntityError'
+                $ref: "#/components/schemas/UpdateProfileUnprocessableEntityError"
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /users/{userId}/verify-email:
     post:
       tags:
-      - Users
+        - Users
       operationId: Verify Email Verification
       parameters:
         - name: userId
@@ -437,9 +437,9 @@ paths:
               properties:
                 verificationToken:
                   type: string
-                  example: '3093'
+                  example: "3093"
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -449,7 +449,7 @@ paths:
                   message:
                     type: string
                     example: The email verified successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -459,7 +459,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -469,7 +469,7 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -479,21 +479,21 @@ paths:
                   message:
                     type: string
                     example: The requested resource not found.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VerifyUserEmailUnprocessableEntityError'
+                $ref: "#/components/schemas/VerifyUserEmailUnprocessableEntityError"
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /users/me:
     get:
       tags:
-      - Users
+        - Users
       operationId: Fetch User Profile
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -505,7 +505,7 @@ paths:
                     example: The data fetched successfully.
                   data:
                     $ref: "#/components/schemas/UserProfileData"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -516,7 +516,7 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /newsletters:
     post:
       tags:
@@ -534,7 +534,7 @@ paths:
                   type: string
                   example: John.Doe@gmail.com
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -544,12 +544,12 @@ paths:
                   message:
                     type: string
                     example: You successfully subscribed to the newsletter.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NewsletterSubscribeUnprocessableEntityError'
+                $ref: "#/components/schemas/NewsletterSubscribeUnprocessableEntityError"
     get:
       tags:
         - Newsletter
@@ -564,7 +564,7 @@ paths:
             example:
               value: 2
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -575,7 +575,7 @@ paths:
                     $ref: "#/components/schemas/NewslettersData"
                   meta:
                     $ref: "#/components/schemas/PaginationMeta"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -590,7 +590,7 @@ paths:
   /contacts:
     get:
       tags:
-      - Contacts
+        - Contacts
       operationId: Fetch Contacts List
       parameters:
         - name: page
@@ -602,7 +602,7 @@ paths:
             example:
               value: 2
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -613,7 +613,7 @@ paths:
                     $ref: "#/components/schemas/ContactsData"
                   meta:
                     $ref: "#/components/schemas/PaginationMeta"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -624,10 +624,10 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
     post:
       tags:
-      - Contacts
+        - Contacts
       operationId: Create Contact
       requestBody:
         content:
@@ -662,9 +662,9 @@ paths:
                   firstName: kazem
                   lastName: davood
                   message: this is message
-                  phoneNumber: '+16043655675'
+                  phoneNumber: "+16043655675"
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -674,16 +674,16 @@ paths:
                   message:
                     type: string
                     example: You contact form submitted successfully.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateContactUnprocessableEntityError'
+                $ref: "#/components/schemas/CreateContactUnprocessableEntityError"
   /tips:
     get:
       tags:
-      - Tips
+        - Tips
       operationId: Fetch Tips List
       parameters:
         - name: page
@@ -695,7 +695,7 @@ paths:
             example:
               value: 2
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -706,7 +706,7 @@ paths:
                     $ref: "#/components/schemas/TipsData"
                   meta:
                     $ref: "#/components/schemas/PaginationMeta"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -717,10 +717,10 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
     post:
       tags:
-      - Tips
+        - Tips
       operationId: Create Tip
       requestBody:
         content:
@@ -742,7 +742,7 @@ paths:
                   type: string
                   example: https://example.com
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -752,7 +752,7 @@ paths:
                   message:
                     type: string
                     example: The tip created successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -762,18 +762,18 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateTipUnprocessableEntityError'
+                $ref: "#/components/schemas/CreateTipUnprocessableEntityError"
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /tips/{tipId}:
     delete:
       tags:
-      - Tips
+        - Tips
       operationId: Delete Tip
       parameters:
         - name: tipId
@@ -786,7 +786,7 @@ paths:
             example:
               value: d6b613fb-00dc-44e7-b979-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -796,7 +796,7 @@ paths:
                   message:
                     type: string
                     example: The tip deleted successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -807,10 +807,10 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
     patch:
       tags:
-      - Tips
+        - Tips
       operationId: Update Tip
       parameters:
         - name: tipId
@@ -838,7 +838,7 @@ paths:
                   type: string
                   example: https://example.com
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -848,7 +848,7 @@ paths:
                   message:
                     type: string
                     example: The tip updated successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -858,18 +858,18 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateTipUnprocessableEntityError'
+                $ref: "#/components/schemas/UpdateTipUnprocessableEntityError"
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /resources:
     get:
       tags:
-      - Resources
+        - Resources
       operationId: Fetch Resources List
       parameters:
         - name: page
@@ -881,7 +881,7 @@ paths:
             example:
               value: 2
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -892,7 +892,7 @@ paths:
                     $ref: "#/components/schemas/ResourcesData"
                   meta:
                     $ref: "#/components/schemas/PaginationMeta"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -903,10 +903,10 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
     post:
       tags:
-      - Resources
+        - Resources
       operationId: Create Resources
       requestBody:
         content:
@@ -928,7 +928,7 @@ paths:
                   type: string
                   example: https://example.com
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -938,7 +938,7 @@ paths:
                   message:
                     type: string
                     example: The resource created successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -948,18 +948,18 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateResourceUnprocessableEntityError'
+                $ref: "#/components/schemas/CreateResourceUnprocessableEntityError"
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /resources/{resourceId}:
     patch:
       tags:
-      - Resources
+        - Resources
       operationId: Update Resource
       parameters:
         - name: resourceId
@@ -987,7 +987,7 @@ paths:
                   type: string
                   example: https://example.com
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -997,7 +997,7 @@ paths:
                   message:
                     type: string
                     example: The resource updated successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1007,17 +1007,17 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateResourceUnprocessableEntityError'
+                $ref: "#/components/schemas/UpdateResourceUnprocessableEntityError"
       security:
-      - bearerAuth: []
+        - bearerAuth: []
     delete:
       tags:
-      - Resources
+        - Resources
       operationId: Delete Resource
       parameters:
         - name: resourceId
@@ -1030,7 +1030,7 @@ paths:
             example:
               value: d6b613fb-00dc-44e7-b979-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1040,7 +1040,7 @@ paths:
                   message:
                     type: string
                     example: The resource deleted successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1051,14 +1051,14 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /categories:
     get:
       tags:
-      - Categories
+        - Categories
       operationId: Fetch Categories List
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1069,7 +1069,7 @@ paths:
                     $ref: "#/components/schemas/CategoriesData"
                   meta:
                     $ref: "#/components/schemas/PaginationMeta"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1080,10 +1080,10 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
     post:
       tags:
-      - Categories
+        - Categories
       operationId: Create Category
       requestBody:
         content:
@@ -1100,7 +1100,7 @@ paths:
                   type: string
                   example: cat 1
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1110,7 +1110,7 @@ paths:
                   message:
                     type: string
                     example: The category created successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1120,18 +1120,18 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateCategoryUnprocessableEntityError'
+                $ref: "#/components/schemas/CreateCategoryUnprocessableEntityError"
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /categories/{categoryId}:
     patch:
       tags:
-      - Categories
+        - Categories
       operationId: Update Category
       parameters:
         - name: categoryId
@@ -1156,7 +1156,7 @@ paths:
                   type: string
                   example: xxxx55
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1166,7 +1166,7 @@ paths:
                   message:
                     type: string
                     example: The Category updated successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1176,17 +1176,17 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateCategoryUnprocessableEntityError'
+                $ref: "#/components/schemas/UpdateCategoryUnprocessableEntityError"
       security:
-      - bearerAuth: []
+        - bearerAuth: []
     delete:
       tags:
-      - Categories
+        - Categories
       operationId: Delete Category
       parameters:
         - name: categoryId
@@ -1199,7 +1199,7 @@ paths:
             example:
               value: d6b613fb-00dc-44e7-b979-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1209,7 +1209,7 @@ paths:
                   message:
                     type: string
                     example: The Category deleted successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1220,14 +1220,14 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /messages:
     get:
       tags:
-      - Messages
+        - Messages
       operationId: Fetch Message List
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1238,7 +1238,7 @@ paths:
                     $ref: "#/components/schemas/MessagesData"
                   meta:
                     $ref: "#/components/schemas/PaginationMeta"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1249,11 +1249,11 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /messages/{messageId}:
     delete:
       tags:
-      - Messages
+        - Messages
       operationId: Delete Message
       parameters:
         - name: messageId
@@ -1266,7 +1266,7 @@ paths:
             example:
               value: d6b613fb-00dc-44e7-b979-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1276,7 +1276,7 @@ paths:
                   message:
                     type: string
                     example: The message deleted successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1287,10 +1287,10 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
     get:
       tags:
-      - Messages
+        - Messages
       operationId: Fetch Message List
       parameters:
         - name: messageId
@@ -1303,7 +1303,7 @@ paths:
             example:
               value: d6b613fb-00dc-44e7-b979-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1315,7 +1315,7 @@ paths:
                     example: The message fetched successfully.
                   data:
                     $ref: "#/components/schemas/MessageInfoData"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1326,14 +1326,14 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /faker/seed:
     post:
       tags:
-      - Faker
+        - Faker
       operationId: Fake Seeder
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1343,7 +1343,7 @@ paths:
                   message:
                     type: string
                     example: The fake entities made.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1354,16 +1354,16 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /faker/flush:
     post:
       tags:
-      - Faker
+        - Faker
       operationId: Reset Faker
       responses:
-        '200':
+        "200":
           description: Successful Operation
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1374,41 +1374,41 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /patients:
     get:
       tags:
-      - Patients
+        - Patients
       operationId: Fetch Patients List
       parameters:
-      - name: questionerStatus
-        in: query
-        schema:
-          type: string
-          example: NotStarted
-        description: NotStarted,InProgress,Completed
-      - name: questionerId
-        in: query
-        schema:
-          type: string
-          example: b317f39a-6b15-4dac-ab28-ca6b844c3453
-      - name: page
-        in: query
-        schema:
-          type: string
-          example: 1
-      - name: perPage
-        in: query
-        schema:
-          type: string
-          example: 31
-      - name: name
-        in: query
-        schema:
-          type: string
-          example: kri
+        - name: questionerStatus
+          in: query
+          schema:
+            type: string
+            example: NotStarted
+          description: NotStarted,InProgress,Completed
+        - name: questionerId
+          in: query
+          schema:
+            type: string
+            example: b317f39a-6b15-4dac-ab28-ca6b844c3453
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: 1
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: 31
+        - name: name
+          in: query
+          schema:
+            type: string
+            example: kri
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1419,7 +1419,7 @@ paths:
                     $ref: "#/components/schemas/PatientsData"
                   meta:
                     $ref: "#/components/schemas/PaginationMeta"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1430,11 +1430,11 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /patients/{patientId}:
     get:
       tags:
-      - Patients
+        - Patients
       operationId: Fetch Patient's Info
       parameters:
         - name: patientId
@@ -1473,7 +1473,7 @@ paths:
             type: string
             example: Colby
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1485,7 +1485,7 @@ paths:
                     example: The data fetched successfully.
                   data:
                     $ref: "#/components/schemas/PatientInfoData"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1495,7 +1495,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -1506,10 +1506,10 @@ paths:
                     type: string
                     example: The requested resource not found.
       security:
-      - bearerAuth: []
+        - bearerAuth: []
     delete:
       tags:
-      - Patients
+        - Patients
       operationId: Patient Delete
       parameters:
         - name: patientId
@@ -1522,7 +1522,7 @@ paths:
             example:
               value: d6b613fb-00dc-44e7-b979-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1532,7 +1532,7 @@ paths:
                   message:
                     type: string
                     example: The user deleted successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1543,11 +1543,11 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /patients/{patientId}/questioners:
     get:
       tags:
-      - Patients
+        - Patients
       operationId: Fetch Questioners List
       parameters:
         - name: patientId
@@ -1575,7 +1575,7 @@ paths:
             type: string
             example: d6b613fb-11dc-44e7-b979-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1586,7 +1586,7 @@ paths:
                     $ref: "#/components/schemas/PatientQuestionersData"
                   meta:
                     $ref: "#/components/schemas/PaginationMeta"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1597,14 +1597,14 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /patients/{patientId}/questioners/stats:
     get:
       tags:
-      - Patients
+        - Patients
       operationId: Fetch Patient Questioner Stats
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1616,7 +1616,7 @@ paths:
                     example: The message fetched successfully.
                   data:
                     $ref: "#/components/schemas/PatientQuestionersStatsData"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1626,7 +1626,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -1636,7 +1636,7 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -1647,25 +1647,25 @@ paths:
                     type: string
                     example: The requested resource not found.
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /practitioners:
     get:
       tags:
-      - Practitioner
+        - Practitioner
       operationId: Fetch Doctor Practitioners
       parameters:
-      - name: page
-        in: query
-        schema:
-          type: string
-          example: 3
-      - name: perPage
-        in: query
-        schema:
-          type: string
-          example: 2
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: 3
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: 2
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1676,7 +1676,7 @@ paths:
                     $ref: "#/components/schemas/DoctorPractitionersData"
                   meta:
                     $ref: "#/components/schemas/PaginationMeta"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1687,11 +1687,11 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /practitioners/{doctorId}:
     get:
       tags:
-      - Practitioner
+        - Practitioner
       operationId: Fetch Doctor Practitioners List By ID
       parameters:
         - name: doctorId
@@ -1714,7 +1714,7 @@ paths:
             type: string
             example: 2
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1725,7 +1725,7 @@ paths:
                     $ref: "#/components/schemas/DoctorPractitionersData"
                   meta:
                     $ref: "#/components/schemas/PaginationMeta"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1736,11 +1736,11 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /practitioners/{practitionerId}:
     delete:
       tags:
-      - Practitioner
+        - Practitioner
       operationId: Remove Practitioner
       parameters:
         - name: practitionerId
@@ -1753,7 +1753,7 @@ paths:
             example:
               value: d6b613fb-00dc-44e7-b979-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1763,7 +1763,7 @@ paths:
                   message:
                     type: string
                     example: The user deleted successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1773,7 +1773,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -1783,7 +1783,7 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -1794,10 +1794,10 @@ paths:
                     type: string
                     example: The requested resource not found.
       security:
-      - bearerAuth: []
+        - bearerAuth: []
     patch:
       tags:
-      - Practitioner
+        - Practitioner
       operationId: Change Role Practitioner
       parameters:
         - name: practitionerId
@@ -1821,7 +1821,7 @@ paths:
                   type: string
                   example: PractitionerFull
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1831,7 +1831,7 @@ paths:
                   message:
                     type: string
                     example: The user updated successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1841,7 +1841,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -1851,7 +1851,7 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -1861,18 +1861,18 @@ paths:
                   message:
                     type: string
                     example: The requested resource not found.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateResourceUnprocessableEntityError'
+                $ref: "#/components/schemas/CreateResourceUnprocessableEntityError"
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /questioners/doctors/me:
     get:
       tags:
-      - Doctors
+        - Doctors
       operationId: Fetch Doctor Questioners List
       parameters:
         - name: page
@@ -1886,7 +1886,7 @@ paths:
             type: string
             example: 2
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1897,7 +1897,7 @@ paths:
                     $ref: "#/components/schemas/DoctorQuestionersData"
                   meta:
                     $ref: "#/components/schemas/PaginationMeta"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1908,20 +1908,20 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /questioners:
     get:
       tags:
-      - Questioner
+        - Questioner
       operationId: Fetch Questionnaires List
       parameters:
-      - name: title
-        in: query
-        schema:
-          type: string
-          example: This is title
+        - name: title
+          in: query
+          schema:
+            type: string
+            example: This is title
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1932,7 +1932,7 @@ paths:
                     $ref: "#/components/schemas/QuestionnairesData"
                   meta:
                     $ref: "#/components/schemas/PaginationMeta"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1943,10 +1943,10 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
     post:
       tags:
-      - Questioner
+        - Questioner
       operationId: Create Questioner
       requestBody:
         content:
@@ -1960,7 +1960,7 @@ paths:
                   type: string
                   format: binary
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -1970,7 +1970,7 @@ paths:
                   message:
                     type: string
                     example: The questionnaire created successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -1980,27 +1980,27 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateQuestionerUnprocessableEntityError'
+                $ref: "#/components/schemas/CreateQuestionerUnprocessableEntityError"
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /questioners/all:
     get:
       tags:
-      - Questioner
+        - Questioner
       operationId: Fetch All Questionnaires List
       parameters:
-      - name: title
-        in: query
-        schema:
-          type: string
-          example: This is title
+        - name: title
+          in: query
+          schema:
+            type: string
+            example: This is title
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2011,7 +2011,7 @@ paths:
                     $ref: "#/components/schemas/AllQuestionnairesData"
                   meta:
                     $ref: "#/components/schemas/PaginationMeta"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -2022,11 +2022,11 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /questioners/{questionnaireId}:
     patch:
       tags:
-      - Questioner
+        - Questioner
       operationId: Update Questionnaire
       parameters:
         - name: questionnaireId
@@ -2050,7 +2050,7 @@ paths:
                   type: string
                   format: binary
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2060,7 +2060,7 @@ paths:
                   message:
                     type: string
                     example: The questionnaire updated successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -2070,7 +2070,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -2080,18 +2080,18 @@ paths:
                   message:
                     type: string
                     example: The requested resource not found.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateQuestionnaireUnprocessableEntityError'
+                $ref: "#/components/schemas/UpdateQuestionnaireUnprocessableEntityError"
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /questioners/{questionerId}:
     delete:
       tags:
-      - Questioner
+        - Questioner
       operationId: Delete Questioner
       parameters:
         - name: questionerId
@@ -2104,7 +2104,7 @@ paths:
             example:
               value: d6b613fb-00dc-44e7-b979-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2114,7 +2114,7 @@ paths:
                   message:
                     type: string
                     example: The questionnaire deleted successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -2124,7 +2124,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -2134,7 +2134,7 @@ paths:
                   message:
                     type: string
                     example: The requested resource not found.
-        '409':
+        "409":
           description: Conflict
           content:
             application/json:
@@ -2145,11 +2145,11 @@ paths:
                     type: string
                     example: You can not remove this questionnaire because it is assigned to a patient.
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /questioners/{questionerId}/next:
     post:
       tags:
-      - Questioner
+        - Questioner
       operationId: Next Question
       parameters:
         - name: questionerId
@@ -2176,12 +2176,12 @@ paths:
                     type: string
                     example: b0f9f3e4-048e-46d0-a96f-aa2616739e9b
                   example:
-                  - b0f9f3e4-048e-46d0-a96f-aa2616739e9b
+                    - b0f9f3e4-048e-46d0-a96f-aa2616739e9b
                 questionId:
                   type: string
                   example: 594828bb-68ef-4a13-97a5-5952a13065f8
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2190,7 +2190,7 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/NextQuestionData"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -2200,18 +2200,18 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateResourceUnprocessableEntityError'
+                $ref: "#/components/schemas/CreateResourceUnprocessableEntityError"
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /questioners/{questionerId}/previous:
     get:
       tags:
-      - Questioner
+        - Questioner
       operationId: Previous Question
       parameters:
         - name: questionerId
@@ -2224,7 +2224,7 @@ paths:
             example:
               value: d6b613fb-00dc-44e7-b979-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2236,7 +2236,7 @@ paths:
                     example: The data fetched successfully.
                   data:
                     $ref: "#/components/schemas/PreviousQuestionData"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -2246,7 +2246,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -2256,7 +2256,7 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -2267,11 +2267,11 @@ paths:
                     type: string
                     example: The requested resource not found.
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /questioners/{questionerId}/init:
     get:
       tags:
-      - Questioner
+        - Questioner
       operationId: Init
       parameters:
         - name: questionerId
@@ -2284,7 +2284,7 @@ paths:
             example:
               value: d6b613fb-00dc-44e7-b979-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2296,7 +2296,7 @@ paths:
                     example: The data fetched successfully.
                   data:
                     $ref: "#/components/schemas/InitData"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -2306,7 +2306,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -2317,11 +2317,11 @@ paths:
                     type: string
                     example: The requested resource not found.
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /questioners/{questionerId}/assign/{patientId}:
     post:
       tags:
-      - Questioner
+        - Questioner
       operationId: Assign To Patient
       parameters:
         - name: questionerId
@@ -2343,7 +2343,7 @@ paths:
             example:
               value: d6b613fb-00dc-55f6-b979-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2353,7 +2353,7 @@ paths:
                   message:
                     type: string
                     example: The questionnaire assigned successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -2363,7 +2363,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -2373,7 +2373,7 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -2384,36 +2384,36 @@ paths:
                     type: string
                     example: The requested resource not found.
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /doctors:
     get:
       tags:
-      - Doctors
+        - Doctors
       operationId: Fetch Doctors List
       parameters:
-      - name: page
-        in: query
-        schema:
-          type: string
-          example: ''
-      - name: perPage
-        in: query
-        schema:
-          type: string
-          example: '1'
-      - name: name
-        in: query
-        schema:
-          type: string
-          example: ald
-      - name: status
-        in: query
-        schema:
-          type: string
-          example: Decline
-        description: Decline,Active,Invited
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: ""
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: "1"
+        - name: name
+          in: query
+          schema:
+            type: string
+            example: ald
+        - name: status
+          in: query
+          schema:
+            type: string
+            example: Decline
+          description: Decline,Active,Invited
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2424,7 +2424,7 @@ paths:
                     $ref: "#/components/schemas/DoctorsListData"
                   meta:
                     $ref: "#/components/schemas/PaginationMeta"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -2435,11 +2435,11 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /doctors/{doctorId}:
     get:
       tags:
-      - Doctors
+        - Doctors
       operationId: Fetch Doctor Information
       parameters:
         - name: doctorId
@@ -2473,7 +2473,7 @@ paths:
             example: Decline
           description: Decline,Active,Invited
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2485,7 +2485,7 @@ paths:
                     example: The data fetched successfully.
                   data:
                     $ref: "#/components/schemas/DoctorInfoData"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -2495,7 +2495,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -2506,10 +2506,10 @@ paths:
                     type: string
                     example: The requested resource not found.
       security:
-      - bearerAuth: []
+        - bearerAuth: []
     delete:
       tags:
-      - Doctors
+        - Doctors
       operationId: Remove Doctor
       parameters:
         - name: doctorId
@@ -2522,7 +2522,7 @@ paths:
             example:
               value: d6b613fb-00dc-44e7-b979-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2532,7 +2532,7 @@ paths:
                   message:
                     type: string
                     example: The user deleted successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -2542,7 +2542,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -2553,14 +2553,14 @@ paths:
                     type: string
                     example: The requested resource not found.
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /doctors/stats:
     get:
       tags:
-      - Doctors
+        - Doctors
       operationId: Fetch Doctors Stats
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2572,7 +2572,7 @@ paths:
                     example: The data fetched successfully.
                   data:
                     $ref: "#/components/schemas/DoctorStatsData"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -2583,14 +2583,14 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /doctors/patients-stats:
     get:
       tags:
-      - Doctors
+        - Doctors
       operationId: Patient Stats
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2602,7 +2602,7 @@ paths:
                     example: The data fetched successfully.
                   data:
                     $ref: "#/components/schemas/DoctorPatientsStatsData"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -2613,11 +2613,11 @@ paths:
                     type: string
                     example: Unauthorized
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /onboard/patients/birthday/verify:
     post:
       tags:
-      - Onboard
+        - Onboard
       operationId: Verify Patient Birthday
       requestBody:
         content:
@@ -2635,7 +2635,7 @@ paths:
                   type: string
                   example: nek7PbzdXnv07LxG9WKeRlnC4spvBALvJCwxPcg6ahcfYkHN
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2645,7 +2645,7 @@ paths:
                   message:
                     type: string
                     example: The patient birthday verified.
-        '400':
+        "400":
           description: Bad Request
           content:
             application/json:
@@ -2655,7 +2655,7 @@ paths:
                   message:
                     type: string
                     example: Provided credentials are incorrect.
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -2665,16 +2665,16 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VerifyPatientBirthdayUnprocessableEntityError'
+                $ref: "#/components/schemas/VerifyPatientBirthdayUnprocessableEntityError"
   /onboard/patients/representative:
     patch:
       tags:
-      - Onboard
+        - Onboard
       operationId: Update Patient Representative
       requestBody:
         content:
@@ -2696,7 +2696,7 @@ paths:
                   type: string
                   example: f0wIPDWH2kqLhXIMa6I2tOknPTP8KIel3lujJuDodnDFWnEp
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2706,7 +2706,7 @@ paths:
                   message:
                     type: string
                     example: The patient representative updated.
-        '400':
+        "400":
           description: Bad Request
           content:
             application/json:
@@ -2716,7 +2716,7 @@ paths:
                   message:
                     type: string
                     example: Provided credentials are incorrect.
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -2726,16 +2726,16 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdatePatientRepresentativeUnprocessableEntityError'
+                $ref: "#/components/schemas/UpdatePatientRepresentativeUnprocessableEntityError"
   /onboard/users/modify-fullname:
     patch:
       tags:
-      - Onboard
+        - Onboard
       operationId: Modify User FullName
       requestBody:
         content:
@@ -2757,7 +2757,7 @@ paths:
                   type: string
                   example: f0wIPDWH2kqLhXIMa6I2tOknPTP8KIel3lujJuDodnDFWnEp
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2767,7 +2767,7 @@ paths:
                   message:
                     type: string
                     example: The user info updated.
-        '400':
+        "400":
           description: Bad Request
           content:
             application/json:
@@ -2777,7 +2777,7 @@ paths:
                   message:
                     type: string
                     example: Provided credentials are incorrect.
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -2787,16 +2787,16 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ModifyUserFullNameUnprocessableEntityError'
+                $ref: "#/components/schemas/ModifyUserFullNameUnprocessableEntityError"
   /onboard/users/set-password:
     post:
       tags:
-      - Onboard
+        - Onboard
       operationId: Set Password
       requestBody:
         content:
@@ -2809,12 +2809,12 @@ paths:
               properties:
                 password:
                   type: string
-                  example: '@12345678'
+                  example: "@12345678"
                 token:
                   type: string
                   example: f0wIPDWH2kqLhXIMa6I2tOknPTP8KIel3lujJuDodnDFWnEp
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2824,7 +2824,7 @@ paths:
                   message:
                     type: string
                     example: The user registered.
-        '400':
+        "400":
           description: Bad Request
           content:
             application/json:
@@ -2834,16 +2834,16 @@ paths:
                   message:
                     type: string
                     example: Provided credentials are incorrect.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SetPasswordUnprocessableEntityError'
+                $ref: "#/components/schemas/SetPasswordUnprocessableEntityError"
   /onboard/users/resend-email-verification:
     post:
       tags:
-      - Onboard
+        - Onboard
       operationId: Resened Email Verification
       requestBody:
         content:
@@ -2856,12 +2856,12 @@ paths:
               properties:
                 password:
                   type: string
-                  example: '@12345678'
+                  example: "@12345678"
                 token:
                   type: string
                   example: f0wIPDWH2kqLhXIMa6I2tOknPTP8KIel3lujJuDodnDFWnEp
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2871,7 +2871,7 @@ paths:
                   message:
                     type: string
                     example: The email verification sent successfully.
-        '400':
+        "400":
           description: Bad Request
           content:
             application/json:
@@ -2881,7 +2881,7 @@ paths:
                   message:
                     type: string
                     example: Provided credentials are incorrect.
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -2891,16 +2891,16 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResendEmailVerificationUnprocessableEntityError'
+                $ref: "#/components/schemas/ResendEmailVerificationUnprocessableEntityError"
   /onboard/me/{token}:
     get:
       tags:
-      - Onboard
+        - Onboard
       operationId: Fetch Onboard User Information
       parameters:
         - name: token
@@ -2913,7 +2913,7 @@ paths:
             example:
               value: ou1H5eUDx6ZH4vDLkMZZvscpzvqQqydvtZoWhbxipubxYQ1Q
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2928,7 +2928,7 @@ paths:
   /onboard/users/verify:
     post:
       tags:
-      - Onboard
+        - Onboard
       operationId: Verify Token
       requestBody:
         content:
@@ -2946,7 +2946,7 @@ paths:
                 value:
                   token: JAO1yFfkhVQJUoEawSZPwLW1QCgPJ7v5QPMQy9lLQO9QbAqe
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -2958,7 +2958,7 @@ paths:
                     example: Token verified.
                   data:
                     $ref: "#/components/schemas/VerifyTokenData"
-        '400':
+        "400":
           description: Bad Request
           content:
             application/json:
@@ -2968,16 +2968,16 @@ paths:
                   message:
                     type: string
                     example: Provided credentials are incorrect.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VerifyTokenUnprocessableEntityError'
+                $ref: "#/components/schemas/VerifyTokenUnprocessableEntityError"
   /onboard/users/decline-invitation:
     post:
       tags:
-      - Onboard
+        - Onboard
       operationId: Decline User Invitation
       requestBody:
         content:
@@ -2991,7 +2991,7 @@ paths:
                   type: string
                   example: 7HJCbhPcWf3BhaULx57rzVqNufVoRzYOmNXvBbPeR1AvKF8S
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -3001,7 +3001,7 @@ paths:
                   message:
                     type: string
                     example: The user declined.
-        '400':
+        "400":
           description: Bad Request
           content:
             application/json:
@@ -3011,7 +3011,7 @@ paths:
                   message:
                     type: string
                     example: Provided credentials are incorrect.
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -3021,16 +3021,16 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DeclineUserInvitationUnprocessableEntityError'
+                $ref: "#/components/schemas/DeclineUserInvitationUnprocessableEntityError"
   /onboard/users/email-verify:
     post:
       tags:
-      - Onboard
+        - Onboard
       operationId: Email Verify
       requestBody:
         content:
@@ -3046,9 +3046,9 @@ paths:
                   example: f0wIPDWH2kqLhXIMa6I2tOknPTP8KIel3lujJuDodnDFWnEp
                 verificationCode:
                   type: string
-                  example: '4096'
+                  example: "4096"
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -3060,7 +3060,7 @@ paths:
                     example: You're logged in!
                   data:
                     $ref: "#/components/schemas/EmailVerifyData"
-        '400':
+        "400":
           description: Bad Request
           content:
             application/json:
@@ -3070,16 +3070,16 @@ paths:
                   message:
                     type: string
                     example: Provided credentials are incorrect.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EmailVerifyUnprocessableEntityError'
+                $ref: "#/components/schemas/EmailVerifyUnprocessableEntityError"
   /reports:
     get:
       tags:
-      - Reports
+        - Reports
       operationId: Fetch Reports List
       parameters:
         - name: questioner_id
@@ -3098,7 +3098,7 @@ paths:
             type: string
             example: OnGoing
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -3109,7 +3109,7 @@ paths:
                     $ref: "#/components/schemas/ReportsListData"
                   meta:
                     $ref: "#/components/schemas/PaginationMeta"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -3119,7 +3119,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -3130,11 +3130,11 @@ paths:
                     type: string
                     example: The requested resource not found.
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /reports/items/{itemId}/patient-response:
     post:
       tags:
-      - Reports
+        - Reports
       operationId: Save Patient Response To Report
       parameters:
         - name: itemId
@@ -3156,7 +3156,7 @@ paths:
                   type: string
                   example: None
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -3166,7 +3166,7 @@ paths:
                   message:
                     type: string
                     example: The patient response saved successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -3176,7 +3176,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -3186,7 +3186,7 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -3196,18 +3196,18 @@ paths:
                   message:
                     type: string
                     example: The requested resource not found.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SavePatientResponseToReportUnprocessableEntityError'
+                $ref: "#/components/schemas/SavePatientResponseToReportUnprocessableEntityError"
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /reports/{reportId}/generate:
     post:
       tags:
-      - Reports
+        - Reports
       operationId: Generate Report
       parameters:
         - name: reportId
@@ -3220,7 +3220,7 @@ paths:
             example:
               value: d6b613fb-0adc-44e7-b979-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -3230,7 +3230,7 @@ paths:
                   message:
                     type: string
                     example: The report generated successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -3240,7 +3240,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -3250,7 +3250,7 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -3260,7 +3260,7 @@ paths:
                   message:
                     type: string
                     example: The requested resource not found.
-        '409':
+        "409":
           description: Conflict
           content:
             application/json:
@@ -3271,11 +3271,11 @@ paths:
                     type: string
                     example: The report already generated.
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /reports/items/{itemId}/resources:
     post:
       tags:
-      - Reports
+        - Reports
       operationId: Save Resources To Report
       parameters:
         - name: itemId
@@ -3302,9 +3302,9 @@ paths:
                     type: string
                     example: fc65aa8f-9bf8-4b7f-b918-469f03203b25
                   example:
-                  - fc65aa8f-9bf8-4b7f-b918-469f03203b25
+                    - fc65aa8f-9bf8-4b7f-b918-469f03203b25
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -3314,7 +3314,7 @@ paths:
                   message:
                     type: string
                     example: The resourced added to the report successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -3324,7 +3324,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -3334,7 +3334,7 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -3344,7 +3344,7 @@ paths:
                   message:
                     type: string
                     example: The requested resource not found.
-        '409':
+        "409":
           description: Conflict
           content:
             application/json:
@@ -3354,18 +3354,18 @@ paths:
                   message:
                     type: string
                     example: Report is already completed and cannot be updated
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SaveResourcesToReportUnprocessableEntityError'
+                $ref: "#/components/schemas/SaveResourcesToReportUnprocessableEntityError"
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /reports/items/{itemId}/complete:
     post:
       tags:
-      - Reports
+        - Reports
       operationId: Complete Report Item
       parameters:
         - name: itemId
@@ -3378,7 +3378,7 @@ paths:
             example:
               value: d6b613fb-0adc-44e7-b9a9-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -3388,7 +3388,7 @@ paths:
                   message:
                     type: string
                     example: The report item completed successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -3398,7 +3398,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -3408,7 +3408,7 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -3419,11 +3419,11 @@ paths:
                     type: string
                     example: The requested resource not found.
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /reports/items/{itemId}/notes:
     post:
       tags:
-      - Reports
+        - Reports
       operationId: Save Notes To Report
       parameters:
         - name: itemId
@@ -3448,7 +3448,7 @@ paths:
                   type: string
                   example: FEXxxxx
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -3458,7 +3458,7 @@ paths:
                   message:
                     type: string
                     example: The notes added to the report successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -3468,7 +3468,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -3478,7 +3478,7 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -3488,18 +3488,18 @@ paths:
                   message:
                     type: string
                     example: The requested resource not found.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SaveNotesToReportUnprocessableEntityError'
+                $ref: "#/components/schemas/SaveNotesToReportUnprocessableEntityError"
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /reports/items/{itemId}/suggestion:
     put:
       tags:
-      - Reports
+        - Reports
       operationId: Update Suggestion Note
       parameters:
         - name: itemId
@@ -3524,7 +3524,7 @@ paths:
                   type: string
                   example: "Matn suggestion aval. \n Matn Suggestion dovom"
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -3534,7 +3534,7 @@ paths:
                   message:
                     type: string
                     example: The notes added to the report successfully.
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -3544,7 +3544,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -3554,7 +3554,7 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
@@ -3564,18 +3564,18 @@ paths:
                   message:
                     type: string
                     example: The requested resource not found.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UpdateSuggestionNoteUnprocessableEntityError'
+                $ref: "#/components/schemas/UpdateSuggestionNoteUnprocessableEntityError"
       security:
-      - bearerAuth: []
+        - bearerAuth: []
   /reports/{reportId}:
     get:
       tags:
-      - Reports
+        - Reports
       operationId: Fetch Report Info
       parameters:
         - name: reportId
@@ -3588,7 +3588,7 @@ paths:
             example:
               value: d6b613fb-a0dc-44c7-b979-ded21a4df498
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -3600,7 +3600,7 @@ paths:
                     example: The data fetched successfully.
                   data:
                     $ref: "#/components/schemas/ReportInfoData"
-        '401':
+        "401":
           description: Unauthorized
           content:
             application/json:
@@ -3610,7 +3610,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        '403':
+        "403":
           description: Forbidden
           content:
             application/json:
@@ -3620,7 +3620,7 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        '404':
+        "404":
           description: Not Found
           content:
             application/json:
