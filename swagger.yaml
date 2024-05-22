@@ -1954,8 +1954,15 @@ paths:
             schema:
               type: object
               required:
+                - title
                 - questioner
               properties:
+                title:
+                  type: string
+                  example: Title of Questioner
+                intro:
+                  type: string
+                  example: Intro
                 questioner:
                   type: string
                   format: binary
@@ -2040,15 +2047,18 @@ paths:
               value: d6b613fb-00dc-44e7-b979-ded21a4df498
       requestBody:
         content:
-          multipart/form-data:
+          application/json:
             schema:
               type: object
               required:
-                - questioner
+                - title
               properties:
-                questioner:
+                title:
                   type: string
-                  format: binary
+                  example: Title of Questioner
+                intro:
+                  type: string
+                  example: Intro
       responses:
         "200":
           description: Successful Operation
