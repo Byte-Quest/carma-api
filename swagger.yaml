@@ -120,7 +120,7 @@ paths:
                 phoneNumber:
                   type: string
                   example: +17804246272
-                questionerId:
+                questionnaireId:
                   type: string
                   example: 072dbcb1-37de-45f8-9cea-04bd6bab2feb
       responses:
@@ -1381,13 +1381,13 @@ paths:
         - Patients
       operationId: Fetch Patients List
       parameters:
-        - name: questionerStatus
+        - name: questionnaireStatus
           in: query
           schema:
             type: string
             example: NotStarted
           description: NotStarted,InProgress,Completed
-        - name: questionerId
+        - name: questionnaireId
           in: query
           schema:
             type: string
@@ -1446,13 +1446,13 @@ paths:
           examples:
             example:
               value: d6b613fb-00dc-44e7-b979-ded21a4df498
-        - name: questionerStatus
+        - name: questionnaireStatus
           in: query
           schema:
             type: string
             example: NotStarted
           description: NotStarted,InProgress,Completed
-        - name: questionerId
+        - name: questionnaireId
           in: query
           schema:
             type: string
@@ -1544,11 +1544,11 @@ paths:
                     example: Unauthorized
       security:
         - bearerAuth: []
-  /patients/{patientId}/questioners:
+  /patients/{patientId}/questionnaires:
     get:
       tags:
         - Patients
-      operationId: Fetch Questioners List
+      operationId: Fetch Questionnaires List
       parameters:
         - name: patientId
           in: path
@@ -1569,7 +1569,7 @@ paths:
           schema:
             type: string
             example: 10
-        - name: questionerName
+        - name: questionnaireName
           in: query
           schema:
             type: string
@@ -1583,7 +1583,7 @@ paths:
                 type: object
                 properties:
                   data:
-                    $ref: "#/components/schemas/PatientQuestionersData"
+                    $ref: "#/components/schemas/PatientQuestionnairesData"
                   meta:
                     $ref: "#/components/schemas/PaginationMeta"
         "401":
@@ -1598,11 +1598,11 @@ paths:
                     example: Unauthorized
       security:
         - bearerAuth: []
-  /patients/{patientId}/questioners/stats:
+  /patients/{patientId}/questionnaires/stats:
     get:
       tags:
         - Patients
-      operationId: Fetch Patient Questioner Stats
+      operationId: Fetch Patient Questionnaire Stats
       responses:
         "200":
           description: Successful Operation
@@ -1615,7 +1615,7 @@ paths:
                     type: string
                     example: The message fetched successfully.
                   data:
-                    $ref: "#/components/schemas/PatientQuestionersStatsData"
+                    $ref: "#/components/schemas/PatientQuestionnairesStatsData"
         "401":
           description: Unauthorized
           content:
@@ -1869,50 +1869,10 @@ paths:
                 $ref: "#/components/schemas/CreateResourceUnprocessableEntityError"
       security:
         - bearerAuth: []
-  /questioners/doctors/me:
+  /questionnaires:
     get:
       tags:
-        - Doctors
-      operationId: Fetch Doctor Questioners List
-      parameters:
-        - name: page
-          in: query
-          schema:
-            type: string
-            example: 3
-        - name: perPage
-          in: query
-          schema:
-            type: string
-            example: 2
-      responses:
-        "200":
-          description: Successful Operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: "#/components/schemas/DoctorQuestionersData"
-                  meta:
-                    $ref: "#/components/schemas/PaginationMeta"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Unauthorized
-      security:
-        - bearerAuth: []
-  /questioners:
-    get:
-      tags:
-        - Questioner
+        - Questionnaire
       operationId: Fetch Questionnaires List
       parameters:
         - name: title
@@ -1946,8 +1906,8 @@ paths:
         - bearerAuth: []
     post:
       tags:
-        - Questioner
-      operationId: Create Questioner
+        - Questionnaire
+      operationId: Create Questionnaire
       requestBody:
         content:
           multipart/form-data:
@@ -1955,15 +1915,16 @@ paths:
               type: object
               required:
                 - title
-                - questioner
+                - intro
+                - questionnaire
               properties:
                 title:
                   type: string
-                  example: Title of Questioner
+                  example: Title of Questionnaire
                 intro:
                   type: string
                   example: Intro
-                questioner:
+                questionnaire:
                   type: string
                   format: binary
       responses:
@@ -1992,13 +1953,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreateQuestionerUnprocessableEntityError"
+                $ref: "#/components/schemas/CreateQuestionnaireUnprocessableEntityError"
       security:
         - bearerAuth: []
-  /questioners/all:
+  /questionnaires/all:
     get:
       tags:
-        - Questioner
+        - Questionnaire
       operationId: Fetch All Questionnaires List
       parameters:
         - name: title
@@ -2030,10 +1991,10 @@ paths:
                     example: Unauthorized
       security:
         - bearerAuth: []
-  /questioners/{questionnaireId}:
+  /questionnaires/{questionnaireId}:
     patch:
       tags:
-        - Questioner
+        - Questionnaire
       operationId: Update Questionnaire
       parameters:
         - name: questionnaireId
@@ -2055,7 +2016,7 @@ paths:
               properties:
                 title:
                   type: string
-                  example: Title of Questioner
+                  example: Title of Questionnaire
                 intro:
                   type: string
                   example: Intro
@@ -2098,16 +2059,15 @@ paths:
                 $ref: "#/components/schemas/UpdateQuestionnaireUnprocessableEntityError"
       security:
         - bearerAuth: []
-  /questioners/{questionerId}:
     delete:
       tags:
-        - Questioner
-      operationId: Delete Questioner
+        - Questionnaire
+      operationId: Delete Questionnaire
       parameters:
-        - name: questionerId
+        - name: questionnaireId
           in: path
           required: true
-          description: The ID of the questioner
+          description: The ID of the questionnaire
           schema:
             type: string
           examples:
@@ -2156,16 +2116,76 @@ paths:
                     example: You can not remove this questionnaire because it is assigned to a patient.
       security:
         - bearerAuth: []
-  /questioners/{questionerId}/next:
-    post:
+  /questionnaires/{questionnaireId}/init:
+    get:
       tags:
-        - Questioner
-      operationId: Next Question
+      - Questionnaire
+      operationId: Init Questionnaire By Patient
       parameters:
-        - name: questionerId
+        - name: questionnaireId
           in: path
           required: true
-          description: The ID of the questioner
+          description: The ID of the questionnaire
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The data fetched successfully.
+                  data:
+                    $ref: "#/components/schemas/InitData"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+      security:
+      - bearerAuth: []
+  /questionnaires/{questionnaireId}/next:
+    post:
+      tags:
+      - Questionnaire
+      operationId: Next Question By Patient
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          description: The ID of the questionnaire
           schema:
             type: string
           examples:
@@ -2186,12 +2206,12 @@ paths:
                     type: string
                     example: b0f9f3e4-048e-46d0-a96f-aa2616739e9b
                   example:
-                    - b0f9f3e4-048e-46d0-a96f-aa2616739e9b
+                  - b0f9f3e4-048e-46d0-a96f-aa2616739e9b
                 questionId:
                   type: string
                   example: 594828bb-68ef-4a13-97a5-5952a13065f8
       responses:
-        "200":
+        '200':
           description: Successful Operation
           content:
             application/json:
@@ -2200,7 +2220,7 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/NextQuestionData"
-        "401":
+        '401':
           description: Unauthorized
           content:
             application/json:
@@ -2210,31 +2230,31 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        "422":
+        '422':
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/CreateResourceUnprocessableEntityError"
+                $ref: '#/components/schemas/CreateResourceUnprocessableEntityError'
       security:
-        - bearerAuth: []
-  /questioners/{questionerId}/previous:
+      - bearerAuth: []
+  /questionnaires/{questionnaireId}/previous:
     get:
       tags:
-        - Questioner
-      operationId: Previous Question
+      - Questionnaire
+      operationId: Previous Question By Patient
       parameters:
-        - name: questionerId
+        - name: questionnaireId
           in: path
           required: true
-          description: The ID of the questioner
+          description: The ID of the questionnaire
           schema:
             type: string
           examples:
             example:
               value: d6b613fb-00dc-44e7-b979-ded21a4df498
       responses:
-        "200":
+        '200':
           description: Successful Operation
           content:
             application/json:
@@ -2246,7 +2266,7 @@ paths:
                     example: The data fetched successfully.
                   data:
                     $ref: "#/components/schemas/PreviousQuestionData"
-        "401":
+        '401':
           description: Unauthorized
           content:
             application/json:
@@ -2256,7 +2276,7 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        "403":
+        '403':
           description: Forbidden
           content:
             application/json:
@@ -2266,7 +2286,7 @@ paths:
                   message:
                     type: string
                     example: Access denied.
-        "404":
+        '404':
           description: Not Found
           content:
             application/json:
@@ -2277,24 +2297,33 @@ paths:
                     type: string
                     example: The requested resource not found.
       security:
-        - bearerAuth: []
-  /questioners/{questionerId}/init:
+      - bearerAuth: []
+  /questionnaires/{questionnaireId}/init/{patientId}:
     get:
       tags:
-        - Questioner
-      operationId: Init
+      - Questionnaire
+      operationId: Init Questionnaire By Doctor
       parameters:
-        - name: questionerId
+        - name: questionnaireId
           in: path
           required: true
-          description: The ID of the questioner
+          description: The ID of the questionnaire
           schema:
             type: string
           examples:
             example:
               value: d6b613fb-00dc-44e7-b979-ded21a4df498
+        - name: patientId
+          in: path
+          required: true
+          description: The ID of the patient
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-21dc-44e7-b979-ded21a4df498
       responses:
-        "200":
+        '200':
           description: Successful Operation
           content:
             application/json:
@@ -2306,7 +2335,7 @@ paths:
                     example: The data fetched successfully.
                   data:
                     $ref: "#/components/schemas/InitData"
-        "401":
+        '401':
           description: Unauthorized
           content:
             application/json:
@@ -2316,7 +2345,17 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
-        "404":
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
           description: Not Found
           content:
             application/json:
@@ -2327,17 +2366,157 @@ paths:
                     type: string
                     example: The requested resource not found.
       security:
-        - bearerAuth: []
-  /questioners/{questionerId}/assign/{patientId}:
+      - bearerAuth: []
+  /questionnaires/{questionnaireId}/next/{patientId}:
     post:
       tags:
-        - Questioner
-      operationId: Assign To Patient
+      - Questionnaire
+      operationId: Next Question By Doctor
       parameters:
-        - name: questionerId
+        - name: questionnaireId
           in: path
           required: true
-          description: The ID of the questioner
+          description: The ID of the questionnaire
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+        - name: patientId
+          in: path
+          required: true
+          description: The ID of the patient
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-21dc-44e7-b979-ded21a4df498
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - optionIds
+                - questionId
+              properties:
+                optionIds:
+                  type: array
+                  items:
+                    type: string
+                    example: b0f9f3e4-048e-46d0-a96f-aa2616739e9b
+                  example:
+                  - b0f9f3e4-048e-46d0-a96f-aa2616739e9b
+                questionId:
+                  type: string
+                  example: 594828bb-68ef-4a13-97a5-5952a13065f8
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/NextQuestionData"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateResourceUnprocessableEntityError'
+      security:
+      - bearerAuth: []
+  /questionnaires/{questionnaireId}/previous/{patientId}:
+    get:
+      tags:
+      - Questionnaire
+      operationId: Previous Question By Doctor
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          description: The ID of the questionnaire
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+        - name: patientId
+          in: path
+          required: true
+          description: The ID of the patient
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-21dc-44e7-b979-ded21a4df498
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The data fetched successfully.
+                  data:
+                    $ref: "#/components/schemas/PreviousQuestionData"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+      security:
+      - bearerAuth: []
+  /questionnaires/{questionnaireId}/assign/{patientId}:
+    post:
+      tags:
+        - Questionnaire
+      operationId: Assign To Patient
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          description: The ID of the questionnaire
           schema:
             type: string
           examples:
@@ -2393,6 +2572,46 @@ paths:
                   message:
                     type: string
                     example: The requested resource not found.
+      security:
+        - bearerAuth: []
+  /questionnaires/doctors/me:
+    get:
+      tags:
+        - Doctors
+      operationId: Fetch Doctor Questionnaires List
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: 3
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: 2
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/DoctorQuestionnairesData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
       security:
         - bearerAuth: []
   /doctors:
@@ -3092,7 +3311,7 @@ paths:
         - Reports
       operationId: Fetch Reports List
       parameters:
-        - name: questioner_id
+        - name: questionnaire_id
           in: query
           schema:
             type: string
@@ -3607,7 +3826,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: The data fetched successfully.
+                    example: The report fetched successfully.
                   data:
                     $ref: "#/components/schemas/ReportInfoData"
         "401":
@@ -3696,9 +3915,9 @@ components:
               phoneNumber:
                 type: string
                 example: The phoneNumber must be a valid Canada phone number.
-              questionerId:
+              questionnaireId:
                 type: string
-                example: The questionerId must be a valid questioner.
+                example: The questionnaireId must be a valid questionnaire.
     ForgetPasswordUnprocessableEntityError:
       type: object
       properties:
@@ -4078,7 +4297,7 @@ components:
             properties:
               name:
                 type: string
-                example: The token field is required
+                example: The name field is required
     UpdateCategoryUnprocessableEntityError:
       type: object
       properties:
@@ -4092,7 +4311,7 @@ components:
             properties:
               name:
                 type: string
-                example: The token field is required
+                example: The name field is required
     MessagesData:
       type: array
       items:
@@ -4269,7 +4488,7 @@ components:
                 createdAt:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
-    PatientQuestionersData:
+    PatientQuestionnairesData:
       type: array
       items:
         type: object
@@ -4282,12 +4501,12 @@ components:
                 id:
                   type: string
                   example: fc65aa8f-9bf8-4b7f-b918-469f08503b31
-                questionerId:
+                questionnaireId:
                   type: string
                   example: fc65aa8f-9bf8-4b7f-b918-469f08532b31
-                questionerTitle:
+                questionnaireTitle:
                   type: string
-                  example: Title of Questioner
+                  example: Title of Questionnaire
                 patientId:
                   type: string
                   example: afe48fba-6da3-44fb-8281-93a230ce08ca
@@ -4314,7 +4533,7 @@ components:
                 assignedAt:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
-    PatientQuestionersStatsData:
+    PatientQuestionnairesStatsData:
       type: array
       items:
         type: object
@@ -4324,7 +4543,7 @@ components:
             items:
               type: object
               properties:
-                totalQuestioners:
+                totalQuestionnaires:
                   type: integer
                   example: 130
                 totalNumberOfInProgress:
@@ -4333,13 +4552,13 @@ components:
                 totalNumberOfCompleted:
                   type: integer
                   example: 45
-                lastMonthInProgressQuestionerPercentage:
+                lastMonthInProgressQuestionnairePercentage:
                   type: integer
                   example: 60
-                lastMonthCompletedQuestionerPercentage:
+                lastMonthCompletedQuestionnairePercentage:
                   type: integer
                   example: 43
-                lastMonthTotalQuestionerPercentage:
+                lastMonthTotalQuestionnairePercentage:
                   type: integer
                   example: 37
     DoctorPractitionersData:
@@ -4379,7 +4598,7 @@ components:
                 createdAt:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
-    DoctorQuestionersData:
+    DoctorQuestionnairesData:
       type: array
       items:
         type: object
@@ -4392,12 +4611,12 @@ components:
                 id:
                   type: string
                   example: fc65aa8f-9bf8-4b7f-b918-469f08503b31
-                questionerId:
+                questionnaireId:
                   type: string
                   example: fc65aa8f-9bf8-4b7f-b918-469f08532b31
-                questionerTitle:
+                questionnaireTitle:
                   type: string
-                  example: Title of Questioner
+                  example: Title of Questionnaire
                 patientId:
                   type: string
                   example: afe48fba-6da3-44fb-8281-93a230ce08ca
@@ -4449,7 +4668,7 @@ components:
                 updatedAt:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
-    CreateQuestionerUnprocessableEntityError:
+    CreateQuestionnaireUnprocessableEntityError:
       type: object
       properties:
         message:
@@ -4462,7 +4681,13 @@ components:
             properties:
               title:
                 type: string
-                example: The token field is required
+                example: The title field is required
+              intro:
+                type: string
+                example: The intro field is required
+              questionnaire:
+                type: string
+                example: The questionnaire must be a valid JSON file.
     AllQuestionnairesData:
       type: array
       items:
@@ -4543,7 +4768,7 @@ components:
                       id:
                         type: string
                         example: afe48fba-7ac6-44fb-8281-922330ce08ca
-                      questionerId:
+                      questionnaireId:
                         type: string
                         example: afe48fba-6da3-44fb-8281-922330ce08ca
                       questionNumber:
@@ -4633,7 +4858,7 @@ components:
                       id:
                         type: string
                         example: afe48fba-7ac6-44fb-8281-922330ce08ca
-                      questionerId:
+                      questionnaireId:
                         type: string
                         example: afe48fba-6da3-44fb-8281-922330ce08ca
                       questionNumber:
@@ -4723,7 +4948,7 @@ components:
                       id:
                         type: string
                         example: afe48fba-7ac6-44fb-8281-922330ce08ca
-                      questionerId:
+                      questionnaireId:
                         type: string
                         example: afe48fba-6da3-44fb-8281-922330ce08ca
                       questionNumber:
@@ -5099,25 +5324,25 @@ components:
               properties:
                 reportId:
                   type: string
-                  example: afe48fba-6da3-44fb-8281-922330ce08ca
+                  example: afe48fba-6da3-43fb-8281-922330ce08ca
                 patientFirstName:
                   type: string
-                  example: Medical History
+                  example: Johnny
                 patientLastName:
                   type: string
-                  example: Description
-                questionerTitle:
+                  example: Doe
+                questionnaireTitle:
                   type: string
-                  example: 2024-03-21T03:50:00.253695+03:30
+                  example: Title of Questionnaire
                 dataOfInvitation:
                   type: string
-                  example: Medical History
+                  example: 2024-03-21T03:50:00.253695+03:30
                 dataOfSubmission:
                   type: string
-                  example: Description
+                  example: 2024-03-21T03:50:00.253695+03:30
                 status:
                   type: string
-                  example: 2024-03-21T03:50:00.253695+03:30
+                  example: OnGoing
     SavePatientResponseToReportUnprocessableEntityError:
       type: object
       properties:
@@ -5211,7 +5436,7 @@ components:
                     properties:
                       id:
                         type: string
-                        example:
+                        example: ece48fba-6da3-44fb-9123-922330ce08ca
                       question:
                         type: array
                         items:
@@ -5219,22 +5444,39 @@ components:
                           properties:
                             id:
                               type: string
-                              example:
+                              example: afe48fba-6ac3-44fb-9123-922330ce08ca
                             title:
                               type: string
-                              example:
+                              example: Title of the Question
                             description:
                               type: string
-                              example:
-                            imageUrl:
+                              example: Description of the Question
+                            type:
                               type: string
-                              example:
+                              example: Question Type
+                            options:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                    example: ece48fba-6da3-44fb-9123-922330ca98ca
+                                  title:
+                                    type: string
+                                    example: Title of the Options
+                                  description:
+                                    type: string
+                                    example: Description of the Option
+                                  imageUrl:
+                                    type: string
+                                    example: https://example.com
                       selectedOptionIds:
                         type: string
-                        example:
+                        example: ece48aca-6da3-44fb-9123-922330ce08ca
                       textResponse:
                         type: string
-                        example:
+                        example: Text of Response
                 responsesAddTo:
                   type: string
                   example: Description
@@ -5245,13 +5487,13 @@ components:
                     properties:
                       id:
                         type: string
-                        example:
+                        example: aca48fba-6da3-44fb-9123-922330ce08ca
                       title:
                         type: string
-                        example:
+                        example: Title of the Resource
                       url:
                         type: string
-                        example:
+                        example: https://example.com
                 resourceAddTo:
                   type: array
                   items:
@@ -5297,15 +5539,34 @@ components:
                 ID:
                   type: string
                   example: afe48fba-6da3-44fb-8281-922330ce08ca
-                Name:
+                AvatarURL:
                   type: string
-                  example: Medical History
-                Description:
+                  example: /Avatar/Avatar.jpg
+                Fullname:
                   type: string
-                  example: Description
-                CreatedAt:
+                  example: Johnny Doe
+                BirthDay:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
+                CompletedBy:
+                  type: string
+                  example: Jane Doe
+                RiskScore:
+                  type: integer
+                  example: 41
+                DataOfSubmission:
+                  type: string
+                  example: 2024-03-21T03:50:00.253695+03:30
+          ResponderInfo:
+            type: array
+            items:
+              properties:
+                Fullname:
+                  type: string
+                  example: Johnny Doe
+                Role:
+                  type: string
+                  example: Patient
     PaginationMeta:
       type: array
       items:
