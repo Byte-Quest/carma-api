@@ -2577,7 +2577,7 @@ paths:
   /questionnaires/doctors/me:
     get:
       tags:
-        - Doctors
+        - Questionnaire
       operationId: Fetch Doctor Questionnaires List
       parameters:
         - name: page
