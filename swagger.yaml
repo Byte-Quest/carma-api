@@ -1561,7 +1561,7 @@ paths:
     get:
       tags:
         - Patients
-      operationId: Fetch Questionnaires List
+      operationId: Fetch Patient Questionnaires List
       parameters:
         - name: patientId
           in: path
