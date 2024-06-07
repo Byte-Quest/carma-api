@@ -123,6 +123,9 @@ paths:
                 questionnaireId:
                   type: string
                   example: 072dbcb1-37de-45f8-9cea-04bd6bab2feb
+                phn:
+                  type: string
+                  example: 13365116
       responses:
         "201":
           description: Created Successfully
@@ -1392,6 +1395,11 @@ paths:
           schema:
             type: string
             example: b317f39a-6b15-4dac-ab28-ca6b844c3453
+        - name: phn
+          in: query
+          schema:
+            type: string
+            example: 13365116
         - name: page
           in: query
           schema:
@@ -1457,6 +1465,11 @@ paths:
           schema:
             type: string
             example: cd8c6b23-e5e8-4015-9d54-ddd1d661255e
+        - name: phn
+          in: query
+          schema:
+            type: string
+            example: 13365116
         - name: page
           in: query
           schema:
@@ -4436,6 +4449,9 @@ components:
                 birthday:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
+                phn:
+                  type: integer
+                  example: 13365116
                 status:
                   type: string
                   example: Active
@@ -4479,6 +4495,9 @@ components:
                 birthday:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
+                phn:
+                  type: integer
+                  example: 13365116
                 status:
                   type: string
                   example: Active
