@@ -1228,7 +1228,7 @@ paths:
     get:
       tags:
         - Messages
-      operationId: Fetch Message List
+      operationId: Fetch User Messages List
       responses:
         "200":
           description: Successful Operation
@@ -1294,7 +1294,7 @@ paths:
     get:
       tags:
         - Messages
-      operationId: Fetch Message List
+      operationId: Fetch Message Info
       parameters:
         - name: messageId
           in: path
@@ -1616,6 +1616,16 @@ paths:
       tags:
         - Patients
       operationId: Fetch Patient Questionnaire Stats
+      parameters:
+        - name: patientId
+          in: path
+          required: true
+          description: The ID of the patient
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
       responses:
         "200":
           description: Successful Operation
