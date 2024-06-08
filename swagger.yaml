@@ -6,6 +6,8 @@ info:
 servers:
   - url: https://apicarma.bytequest.solutions/api/v1
 tags:
+  - name: Health
+    description: Health Check
   - name: Authentication
     description: Authentication Management
   - name: Users
@@ -33,6 +35,23 @@ tags:
   - name: Onboard
     description: Onboard Users Management
 paths:
+  /health:
+    get:
+      tags:
+        - Health
+      operationId: Health Check
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/HealthCheckData"
+      security:
+        - bearerAuth: []
   /auth/login:
     post:
       tags:
@@ -3986,6 +4005,43 @@ paths:
                     example: The requested resource not found.
 components:
   schemas:
+    HealthCheckData:
+      type: array
+      items:
+        type: object
+        properties:
+          serviceName:
+            type: string
+            example: Carma-api
+          status:
+            type: string
+            example: healthy
+          description:
+            type: string
+            example: CARM&A Health where care and vitality connect
+          version:
+            type: string
+            example: latest
+          env:
+            type: string
+            example: development
+          totalDuration:
+            type: integer
+            example: 0.002581604
+          entities:
+             type: array
+             items:
+                type: object
+                properties:
+                    name:
+                      type: string
+                      example: redis
+                    status:
+                      type: string
+                      example: healthy
+                    duration:
+                      type: integer
+                      example: 0.000885067
     Login:
       type: array
       items:
