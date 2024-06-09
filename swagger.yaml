@@ -4192,6 +4192,7 @@ components:
                   example: 2023-10-11T00:00:00Z
                 PhoneNumber:
                   type: string
+                  nullable: true
                   example: 1615782970
                 Email:
                   type: string
@@ -4209,7 +4210,19 @@ components:
                   type: string
                   example: 2024-03-21T03:50:00.249535+03:30
                 DoctorInfo:
-                  type: string
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      doctorID:
+                        type: string
+                        example: c360beee-78d5-417a-8f73-8d1e25f76502
+                      doctorName:
+                        type: string
+                        example: c360beee-78d5-417a-8f73-8d1e25f76502
+                      doctorClinicName:
+                        type: string
+                        example: c360beee-78d5-417a-8f73-8d1e25f76502
                 AvatarURL:
                   type: string
                   example: /Avatar/Avatar.jpg
@@ -4267,6 +4280,7 @@ components:
                   example: Doe
                 PhoneNumber:
                   type: string
+                  nullable: true
                   example: +16043655675
                 Message:
                   type: string
@@ -4322,6 +4336,7 @@ components:
                         example: Medical History
                       Description:
                         type: string
+                        nullable: true
                         example: Description
                       CreatedAt:
                         type: string
@@ -4394,6 +4409,7 @@ components:
                         example: Medical History
                       Description:
                         type: string
+                        nullable: true
                         example: Description
                       CreatedAt:
                         type: string
@@ -4459,6 +4475,7 @@ components:
                   example: Medical History
                 description:
                   type: string
+                  nullable: true
                   example: Description
                 createdAt:
                   type: string
@@ -4509,6 +4526,7 @@ components:
                   example: Message Title
                 description:
                   type: string
+                  nullable: true
                   example: Message Description
                 senderType:
                   type: string
@@ -4554,6 +4572,7 @@ components:
                   example: Message Title
                 description:
                   type: string
+                  nullable: true
                   example: Message Description
                 senderType:
                   type: string
@@ -4602,6 +4621,7 @@ components:
                   example: Doe
                 phoneNumber:
                   type: string
+                  nullable: true
                   example: 1365358971
                 representativeType:
                   type: string
@@ -4617,6 +4637,7 @@ components:
                   example: 2024-03-21T03:50:00.253695+03:30
                 phn:
                   type: integer
+                  nullable: true
                   example: 13365116
                 status:
                   type: string
@@ -4648,6 +4669,7 @@ components:
                   example: Doe
                 phoneNumber:
                   type: string
+                  nullable: true
                   example: 1365358971
                 representativeType:
                   type: string
@@ -4663,6 +4685,7 @@ components:
                   example: 2024-03-21T03:50:00.253695+03:30
                 phn:
                   type: integer
+                  nullable: true
                   example: 13365116
                 status:
                   type: string
@@ -4767,6 +4790,7 @@ components:
                   example: Doe
                 phoneNumber:
                   type: string
+                  nullable: true
                   example: 1354664978
                 role:
                   type: string
@@ -4846,6 +4870,7 @@ components:
                   example: Title
                 intro:
                   type: string
+                  nullable: true
                   example: Intro Description
                 createdAt:
                   type: string
@@ -4927,6 +4952,7 @@ components:
                   example: true
                 intro:
                   type: string
+                  nullable: true
                   example: intro text
                 category:
                   type: array
@@ -4941,6 +4967,7 @@ components:
                         example: Heart
                       description:
                         type: string
+                        nullable: true
                         example: Description about category
                       createdAt:
                         type: string
@@ -4964,6 +4991,7 @@ components:
                         example: Question Title
                       description:
                         type: string
+                        nullable: true
                         example: Question Description
                       type:
                         type: string
@@ -4987,6 +5015,7 @@ components:
                         example: Option title
                       description:
                         type: string
+                        nullable: true
                         example: Option Description
                       imageUrl:
                         type: string
@@ -5017,6 +5046,7 @@ components:
                   example: true
                 intro:
                   type: string
+                  nullable: true
                   example: intro text
                 category:
                   type: array
@@ -5031,6 +5061,7 @@ components:
                         example: Heart
                       description:
                         type: string
+                        nullable: true
                         example: Description about category
                       createdAt:
                         type: string
@@ -5054,6 +5085,7 @@ components:
                         example: Question Title
                       description:
                         type: string
+                        nullable: true
                         example: Question Description
                       type:
                         type: string
@@ -5077,6 +5109,7 @@ components:
                         example: Option title
                       description:
                         type: string
+                        nullable: true
                         example: Option Description
                       imageUrl:
                         type: string
@@ -5107,6 +5140,7 @@ components:
                   example: true
                 intro:
                   type: string
+                  nullable: true
                   example: intro text
                 category:
                   type: array
@@ -5121,6 +5155,7 @@ components:
                         example: Heart
                       description:
                         type: string
+                        nullable: true
                         example: Description about category
                       createdAt:
                         type: string
@@ -5144,6 +5179,7 @@ components:
                         example: Question Title
                       description:
                         type: string
+                        nullable: true
                         example: Question Description
                       type:
                         type: string
@@ -5167,6 +5203,7 @@ components:
                         example: Option title
                       description:
                         type: string
+                        nullable: true
                         example: Option Description
                       imageUrl:
                         type: string
@@ -5203,6 +5240,7 @@ components:
                   example: Doe
                 phoneNumber:
                   type: string
+                  nullable: true
                   example: 15463154631
                 email:
                   type: string
@@ -5237,6 +5275,7 @@ components:
                   example: Doe
                 phoneNumber:
                   type: string
+                  nullable: true
                   example: 13514463216
                 email:
                   type: string
@@ -5635,6 +5674,7 @@ components:
                               example: Title of the Question
                             description:
                               type: string
+                              nullable: true
                               example: Description of the Question
                             type:
                               type: string
@@ -5652,6 +5692,7 @@ components:
                                     example: Title of the Options
                                   description:
                                     type: string
+                                    nullable: true
                                     example: Description of the Option
                                   imageUrl:
                                     type: string
@@ -5675,9 +5716,11 @@ components:
                         example: aca48fba-6da3-44fb-9123-922330ce08ca
                       title:
                         type: string
+                        nullable: true
                         example: Title of the Resource
                       url:
                         type: string
+                        nullable: true
                         example: https://example.com
                 resourceAddTo:
                   type: array
@@ -5697,6 +5740,7 @@ components:
                     properties:
                       notes:
                         type: string
+                        nullable: true
                         example: Some Notes from doctor
                 patientNote:
                   type: array
@@ -5705,6 +5749,7 @@ components:
                     properties:
                       notes:
                         type: string
+                        nullable: true
                         example: Some Notes from patient
                 patientNoteAddTo:
                   type: string
@@ -5716,6 +5761,7 @@ components:
                     properties:
                       notes:
                         type: string
+                        nullable: true
                         example: Some Notes
                       suggestionBelongsTo:
                         type: string
