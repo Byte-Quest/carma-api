@@ -50,8 +50,6 @@ paths:
                 properties:
                   data:
                     $ref: "#/components/schemas/HealthCheckData"
-      security:
-        - bearerAuth: []
   /auth/login:
     post:
       tags:
