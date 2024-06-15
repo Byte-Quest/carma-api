@@ -127,7 +127,11 @@ paths:
                   example: John.Doe@gmail.com
                 role:
                   type: string
-                  example: Patient
+                  enum:
+                    - Doctor
+                    - PractitionerFull
+                    - PractitionerLimited
+                    - Patient
                 clinicName:
                   type: string
                   example: ZibaRoyan
@@ -1859,7 +1863,9 @@ paths:
               properties:
                 practitionerType:
                   type: string
-                  example: PractitionerFull
+                  enum:
+                    - PractitionerFull
+                    - PractitionerLimited
       responses:
         "200":
           description: Successful Operation
@@ -2960,7 +2966,11 @@ paths:
                   example: abas ahgha
                 representativeType:
                   type: string
-                  example: Caregiver
+                  enum:
+                    - Themselves
+                    - Caregiver
+                    - FamilyMember
+                    - NoRelation
                 token:
                   type: string
                   example: f0wIPDWH2kqLhXIMa6I2tOknPTP8KIel3lujJuDodnDFWnEp
@@ -3425,7 +3435,11 @@ paths:
               properties:
                 belongsTo:
                   type: string
-                  example: None
+                  enum:
+                    - Doctor
+                    - Patient
+                    - Both
+                    - None
       responses:
         "200":
           description: Successful Operation
@@ -3569,7 +3583,11 @@ paths:
               properties:
                 belongsTo:
                   type: string
-                  example: Patient
+                  enum:
+                    - Doctor
+                    - Patient
+                    - Both
+                    - None
                 resourceIds:
                   type: array
                   items:
@@ -3719,7 +3737,9 @@ paths:
               properties:
                 belongsTo:
                   type: string
-                  example: Patient
+                  enum:
+                    - Doctor
+                    - Patient
                 note:
                   type: string
                   example: FEXxxxx
@@ -3797,7 +3817,9 @@ paths:
               properties:
                 belongsTo:
                   type: string
-                  example: Patient
+                  enum:
+                    - Patient
+                    - Both
       responses:
         "200":
           description: Successful Operation
@@ -3890,10 +3912,14 @@ paths:
               properties:
                 belongsTo:
                   type: string
-                  example: Doctor
+                  enum:
+                    - Doctor
+                    - Patient
+                    - Both
+                    - None
                 note:
                   type: string
-                  example: "Matn suggestion aval. \n Matn Suggestion dovom"
+                  example: "Suggestion Text"
       responses:
         "200":
           description: Successful Operation
@@ -4094,6 +4120,9 @@ components:
               phoneNumber:
                 type: string
                 example: The phoneNumber must be a valid Canada phone number.
+              phn:
+                type: string
+                example: Invalid phn provided.
               questionnaireId:
                 type: string
                 example: The questionnaireId must be a valid questionnaire.
@@ -5732,7 +5761,7 @@ components:
                         example: afe48fba-6a6e-44fb-8281-922330ce08ca
                       belongsTo:
                         type: string
-                        example: Belongs To Doctor
+                        example: Doctor
                 doctorNote:
                   type: array
                   items:
@@ -5765,7 +5794,7 @@ components:
                         example: Some Notes
                       suggestionBelongsTo:
                         type: string
-                        example: Belongs To Doctor
+                        example: Doctor
           PatientInfo:
             type: array
             items:
@@ -5782,6 +5811,9 @@ components:
                 BirthDay:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
+                PHN:
+                  type: integer
+                  example: 13365116
                 CompletedBy:
                   type: string
                   example: Jane Doe
