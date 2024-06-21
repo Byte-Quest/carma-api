@@ -176,6 +176,79 @@ paths:
                 $ref: "#/components/schemas/SignUpUnprocessableEntityError"
       security:
         - bearerAuth: []
+  /auth/google:
+    get:
+      tags:
+        - Authentication
+      operationId: Google Redirect URL
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      url:
+                        type: string
+                        example: https://accounts.google.com/o/oauth2/auth?client_id=285806515631-lk9mm12bsvsq75st28ov8fujn2ojqc9l.apps.googleusercontent.com&prompt=consent&redirect_uri=https%3A%2F%2Felearning-dev.bytequest.solutions%2Foauth&response_type=code&scope=openid+profile+email&state=are5s3dftyu3jjkhb9nvwqfrgh3gd5E3sd5f
+    post:
+      tags:
+        - Authentication
+      operationId: Google Login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - code
+              type: object
+              properties:
+                code:
+                  type: string
+                  example: 4/0AeaYSHCoSLQlzCvmwNfx_purqgyrLWJ2l2JvhmpRW9-amog1Suymw6HL64lKDfOYadviPg
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Login"
+                  message:
+                    type: string
+                    example: You're logged in!
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad request error occurred
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The provided credentials are incorrect.
+        '422':
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleLoginUnprocessableEntityError'
   /auth/forget-password:
     post:
       tags:
@@ -4360,6 +4433,20 @@ components:
               questionnaireId:
                 type: string
                 example: The questionnaireId must be a valid questionnaire.
+    GoogleLoginUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                example: The Code field is required
     ForgetPasswordUnprocessableEntityError:
       type: object
       properties:
