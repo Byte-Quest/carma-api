@@ -69,7 +69,7 @@ paths:
                   example: John.Doe@gmail.com
                 password:
                   type: string
-                  example: $12345678
+                  example: $123abc456E
       responses:
         "200":
           description: Successful Operation
@@ -313,7 +313,7 @@ paths:
                   example: oFBwDNRFNENVU5mjAX1pd
                 password:
                   type: string
-                  example: $123456788
+                  example: $123abc456E
       responses:
         "200":
           description: Successful Operation
@@ -3395,7 +3395,7 @@ paths:
               properties:
                 password:
                   type: string
-                  example: "@12345678"
+                  example: $123abc456E
                 token:
                   type: string
                   example: f0wIPDWH2kqLhXIMa6I2tOknPTP8KIel3lujJuDodnDFWnEp
@@ -3442,7 +3442,7 @@ paths:
               properties:
                 password:
                   type: string
-                  example: "@12345678"
+                  example: $123abc456E
                 token:
                   type: string
                   example: f0wIPDWH2kqLhXIMa6I2tOknPTP8KIel3lujJuDodnDFWnEp
@@ -4477,7 +4477,7 @@ components:
                 example: The Token field is required
               password:
                 type: string
-                example: The Password must contain the appropriate number of special characters
+                example: The password must be combine of upper and lower case letters, number and special character
     UpdateProfileUnprocessableEntityError:
       type: object
       properties:
@@ -5788,7 +5788,7 @@ components:
                 example: The token field is required
               password:
                 type: string
-                example: The password field must contain the appropriate number of special characters.
+                example: The password must be combine of upper and lower case letters, number and special character
     ResendEmailVerificationUnprocessableEntityError:
       type: object
       properties:
