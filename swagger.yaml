@@ -147,6 +147,9 @@ paths:
                 phn:
                   type: string
                   example: 13365116
+                faxNumber:
+                  type: string
+                  example: 1780424627
       responses:
         "201":
           description: Created Successfully
@@ -480,6 +483,9 @@ paths:
                 clinicName:
                   type: string
                   example: Doctor Jane Doe Clinic
+                faxNumber:
+                  type: string
+                  example: 1780424627
       responses:
         "200":
           description: Successful Operation
@@ -4433,6 +4439,9 @@ components:
               questionnaireId:
                 type: string
                 example: The questionnaireId must be a valid questionnaire.
+              faxNumber:
+                type: string
+                example: The faxNumber must be 10-digit number
     GoogleLoginUnprocessableEntityError:
       type: object
       properties:
@@ -4501,6 +4510,9 @@ components:
               clinicName:
                 type: string
                 example: The clinicName must be greater than the specified value.
+              faxNumber:
+                type: string
+                example: The faxNumber must be 10-digit number
     VerifyUserEmailUnprocessableEntityError:
       type: object
       properties:
@@ -4573,6 +4585,9 @@ components:
                       doctorClinicName:
                         type: string
                         example: c360beee-78d5-417a-8f73-8d1e25f76502
+                      doctorFaxNumber:
+                        type: string
+                        example: 1780424627
                 AvatarURL:
                   type: string
                   example: /Avatar/Avatar.jpg
@@ -5618,6 +5633,9 @@ components:
                 clinicName:
                   type: string
                   example: Jane Doe Clinic
+                faxNumber:
+                  type: string
+                  example: 1780424627
                 status:
                   type: string
                   example: Active
