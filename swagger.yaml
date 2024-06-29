@@ -197,7 +197,7 @@ paths:
                     properties:
                       url:
                         type: string
-                        example: https://accounts.google.com/o/oauth2/auth?client_id=285806515631-lk9mm12bsvsq75st28ov8fujn2ojqc9l.apps.googleusercontent.com&prompt=consent&redirect_uri=https%3A%2F%2Felearning-dev.bytequest.solutions%2Foauth&response_type=code&scope=openid+profile+email&state=are5s3dftyu3jjkhb9nvwqfrgh3gd5E3sd5f
+                        example: https://accounts.google.com/o/oauth2/auth?client_id=264215023812-9mrclslq3hhug6ksiscovfnpdl2oo5ga.apps.googleusercontent.com&prompt=consent&redirect_uri=https%3A%2F%2Fcarma-dev.bytequest.solutions%2Fauth%2Fsso%2Fgoogle&response_type=code&scope=openid+profile+email&state=are5s3dftyu3jjkhb9nvwqfrgh3gd5E3sd5f
     post:
       tags:
         - Authentication
