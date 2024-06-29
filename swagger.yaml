@@ -2041,6 +2041,7 @@ paths:
               required:
                 - title
                 - intro
+                - visibility
                 - questionnaire
               properties:
                 title:
@@ -2049,6 +2050,26 @@ paths:
                 intro:
                   type: string
                   example: Intro
+                visibility:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      communityResourcesStatus:
+                        type: boolean
+                        example: true
+                      careProviderTipsStatus:
+                        type: boolean
+                        example: false
+                      summaryOfFindingsStatus:
+                        type: boolean
+                        example: true
+                      assessmentAndPlanStatus:
+                        type: boolean
+                        example: false
+                      carePlanNotesStatus:
+                        type: boolean
+                        example: true
                 questionnaire:
                   type: string
                   format: binary
@@ -2138,6 +2159,7 @@ paths:
               type: object
               required:
                 - title
+                - visibility
               properties:
                 title:
                   type: string
@@ -2145,6 +2167,26 @@ paths:
                 intro:
                   type: string
                   example: Intro
+                visibility:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      communityResourcesStatus:
+                        type: boolean
+                        example: true
+                      careProviderTipsStatus:
+                        type: boolean
+                        example: false
+                      summaryOfFindingsStatus:
+                        type: boolean
+                        example: true
+                      assessmentAndPlanStatus:
+                        type: boolean
+                        example: false
+                      carePlanNotesStatus:
+                        type: boolean
+                        example: true
       responses:
         "200":
           description: Successful Operation
@@ -4055,7 +4097,7 @@ paths:
                     - Patient
                 note:
                   type: string
-                  example: FEXxxxx
+                  example: Suggestion Text
       responses:
         "200":
           description: Successful Operation
@@ -5237,6 +5279,26 @@ components:
                   type: string
                   nullable: true
                   example: Intro Description
+                visibility:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      communityResourcesStatus:
+                        type: boolean
+                        example: true
+                      careProviderTipsStatus:
+                        type: boolean
+                        example: false
+                      summaryOfFindingsStatus:
+                        type: boolean
+                        example: true
+                      assessmentAndPlanStatus:
+                        type: boolean
+                        example: false
+                      carePlanNotesStatus:
+                        type: boolean
+                        example: true
                 createdAt:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
@@ -5260,6 +5322,26 @@ components:
               intro:
                 type: string
                 example: The intro field is required
+              visibility:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      communityResourcesStatus:
+                        type: string
+                        example: The communityResourcesStatus field is required
+                      careProviderTipsStatus:
+                        type: string
+                        example: The careProviderTipsStatus field is required
+                      summaryOfFindingsStatus:
+                        type: string
+                        example: The summaryOfFindingsStatus field is required
+                      assessmentAndPlanStatus:
+                        type: string
+                        example: The assessmentAndPlanStatus field is required
+                      carePlanNotesStatus:
+                        type: string
+                        example: The carePlanNotesStatus field is required
               questionnaire:
                 type: string
                 example: The questionnaire must be a valid JSON file.
@@ -5282,6 +5364,26 @@ components:
                 intro:
                   type: string
                   example: Intro Description
+                visibility:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      communityResourcesStatus:
+                        type: boolean
+                        example: true
+                      careProviderTipsStatus:
+                        type: boolean
+                        example: false
+                      summaryOfFindingsStatus:
+                        type: boolean
+                        example: true
+                      assessmentAndPlanStatus:
+                        type: boolean
+                        example: false
+                      carePlanNotesStatus:
+                        type: boolean
+                        example: true
                 createdAt:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
@@ -5302,6 +5404,26 @@ components:
               title:
                 type: string
                 example: The title field is required
+              visibility:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      communityResourcesStatus:
+                        type: string
+                        example: The communityResourcesStatus field is required
+                      careProviderTipsStatus:
+                        type: string
+                        example: The careProviderTipsStatus field is required
+                      summaryOfFindingsStatus:
+                        type: string
+                        example: The summaryOfFindingsStatus field is required
+                      assessmentAndPlanStatus:
+                        type: string
+                        example: The assessmentAndPlanStatus field is required
+                      carePlanNotesStatus:
+                        type: string
+                        example: The carePlanNotesStatus field is required
     NextQuestionUnprocessableEntityError:
       type: object
       properties:
@@ -6195,6 +6317,26 @@ components:
           Status:
             type: string
             example: unknown
+          Visibility:
+            type: array
+            items:
+              type: object
+              properties:
+                communityResourcesStatus:
+                  type: boolean
+                  example: true
+                careProviderTipsStatus:
+                  type: boolean
+                  example: false
+                summaryOfFindingsStatus:
+                  type: boolean
+                  example: true
+                assessmentAndPlanStatus:
+                  type: boolean
+                  example: false
+                carePlanNotesStatus:
+                  type: boolean
+                  example: true
     PaginationMeta:
       type: array
       items:
