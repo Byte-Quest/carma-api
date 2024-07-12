@@ -1771,6 +1771,75 @@ paths:
                     example: The requested resource not found.
       security:
         - bearerAuth: []
+  /patients/questionnaires/assign:
+    post:
+      tags:
+        - Patients
+      operationId: Assign Questionnaire To Patient
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - patientId
+                - questionnaireIds
+              type: object
+              properties:
+                patientId:
+                  type: string
+                  example: a9b613fb-ac13-55f6-b979-ded21a4df498
+                questionnaireIds:
+                  type: string
+                  example: d6b687ce-11dc-55f6-b979-ded21a4df498
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The questionnaire has been assigned successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssignQuestionnaireToPatientUnprocessableEntityError"
+      security:
+        - bearerAuth: []
   /practitioners:
     get:
       tags:
@@ -2005,6 +2074,16 @@ paths:
           schema:
             type: string
             example: This is title
+        - name: doctorID
+          in: query
+          schema:
+            type: string
+            example: f2b613fb-ac13-55f6-b979-ded21a4df498
+        - name: unassignedToPatientID
+          in: query
+          schema:
+            type: string
+            example: e5b613fb-ac13-55f6-b979-ded21a4df498
       responses:
         "200":
           description: Successful Operation
@@ -2674,73 +2753,6 @@ paths:
                     example: The requested resource not found.
       security:
         - bearerAuth: []
-  /questionnaires/{questionnaireId}/assign/{patientId}:
-    post:
-      tags:
-        - Questionnaire
-      operationId: Assign To Patient
-      parameters:
-        - name: questionnaireId
-          in: path
-          required: true
-          description: The ID of the questionnaire
-          schema:
-            type: string
-          examples:
-            example:
-              value: d6b613fb-00dc-44e7-b979-ded21a4df498
-        - name: patientId
-          in: path
-          required: true
-          description: The ID of the patient
-          schema:
-            type: string
-          examples:
-            example:
-              value: d6b613fb-00dc-55f6-b979-ded21a4df498
-      responses:
-        "200":
-          description: Successful Operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: The questionnaire assigned successfully.
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Unauthorized
-        "403":
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Access denied.
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: The requested resource not found.
-      security:
-        - bearerAuth: []
   /questionnaires/doctors/me:
     get:
       tags:
@@ -3242,6 +3254,144 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
+      security:
+        - bearerAuth: []
+  /doctors/questionnaires/assign:
+    post:
+      tags:
+        - Doctors
+      operationId: Assign Questionnaire To Doctor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - doctorId
+                - questionnaireIds
+              type: object
+              properties:
+                doctorId:
+                  type: string
+                  example: a9b613fb-ac13-55f6-b979-ded21a4df498
+                questionnaireIds:
+                  type: string
+                  example: d6b687ce-11dc-55f6-b979-ded21a4df498
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The questionnaires have been assigned to the doctor successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: This questionnaire has already been assigned to the doctor.
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssignQuestionnaireToDoctorUnprocessableEntityError"
+      security:
+        - bearerAuth: []
+  /doctors/questionnaires/unassign:
+    post:
+      tags:
+        - Doctors
+      operationId: Unassign Questionnaire From Doctor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - doctorId
+                - questionnaireIds
+              type: object
+              properties:
+                doctorId:
+                  type: string
+                  example: a9b613fb-ac13-55f6-b979-ded21a4df498
+                questionnaireIds:
+                  type: string
+                  example: d6b687ce-11dc-55f6-b979-ded21a4df498
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The questionnaires have been unassigned from the doctor successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The doctor has already assigned this questionnaire to a patient and you cannot unassign it
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssignQuestionnaireToDoctorUnprocessableEntityError"
       security:
         - bearerAuth: []
   /onboard/patients/birthday/verify:
@@ -5176,6 +5326,23 @@ components:
                 lastMonthTotalQuestionnairePercentage:
                   type: integer
                   example: 37
+    AssignQuestionnaireToPatientUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              patientId:
+                type: string
+                example: The patientId must be a valid UUID.
+              questionnaireIds:
+                type: string
+                example: The questionnaireIds must be a valid UUID list.
     DoctorPractitionersData:
       type: array
       items:
@@ -5855,6 +6022,23 @@ components:
                 lastMonthTotalPatientsPercentage:
                   type: integer
                   example: 60
+    AssignQuestionnaireToDoctorUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              patientId:
+                type: string
+                example: The patientId must be a valid UUID.
+              questionnaireIds:
+                type: string
+                example: The questionnaireIds must be a valid UUID list.
     VerifyPatientBirthdayUnprocessableEntityError:
       type: object
       properties:
