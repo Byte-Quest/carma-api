@@ -1552,6 +1552,87 @@ paths:
                     example: Unauthorized
       security:
         - bearerAuth: []
+    post:
+      tags:
+        - Patients
+      operationId: Create Patient
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - firstName
+                - lastName
+                - phoneNumber
+                - email
+                - phn
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
+                birthday:
+                  type: string
+                  example: 2023-10-11T00:00:00Z
+                email:
+                  type: string
+                  example: John.Doe@gmail.com
+                  x-validate:
+                    required_without_all: [PhoneNumber, PHN]
+                phoneNumber:
+                  type: string
+                  example: +17804246272
+                  x-validate:
+                    required_without_all: [Email, PHN]
+                phn:
+                  type: string
+                  example: 13365116
+                  x-validate:
+                    required_without_all: [PhoneNumber, Email]
+              x-validate:
+                oneOf: [phoneNumber, email, phn]
+      responses:
+        "201":
+          description: Created Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The patient has been registered successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreatePatientUnprocessableEntityError"
+      security:
+        - bearerAuth: []
   /patients/{patientId}:
     get:
       tags:
@@ -5158,6 +5239,32 @@ components:
                 createdAt:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
+    CreatePatientUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              firstName:
+                type: string
+                example: The firstName field is required.
+              lastName:
+                type: string
+                example: The lastName field is required.
+              email:
+                type: string
+                example: The Email must be a valid email address.
+              phoneNumber:
+                type: string
+                example: The phoneNumber must be a valid Canada phone number.
+              phn:
+                type: string
+                example: Invalid phn provided.
     PatientsData:
       type: array
       items:
