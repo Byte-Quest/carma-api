@@ -660,12 +660,14 @@ paths:
       parameters:
         - name: page
           in: query
-          description: Paginate Newsletters' email list , If you want to show the Next, Previous and Last Page's button you can use "Meta" section in the response
           schema:
-            type: integer
-          examples:
-            example:
-              value: 2
+            type: string
+            example: 1
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: 31
       responses:
         "200":
           description: Successful Operation
@@ -698,12 +700,14 @@ paths:
       parameters:
         - name: page
           in: query
-          description: Paginate Contacts list , If you want to show the Next, Previous and Last Page's button you can use "Meta" section in the response
           schema:
-            type: integer
-          examples:
-            example:
-              value: 2
+            type: string
+            example: 1
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: 31
       responses:
         "200":
           description: Successful Operation
@@ -791,12 +795,14 @@ paths:
       parameters:
         - name: page
           in: query
-          description: Paginate Tips list , If you want to show the Next, Previous and Last Page's button you can use "Meta" section in the response
           schema:
-            type: integer
-          examples:
-            example:
-              value: 2
+            type: string
+            example: 1
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: 31
       responses:
         "200":
           description: Successful Operation
@@ -977,12 +983,14 @@ paths:
       parameters:
         - name: page
           in: query
-          description: Paginate Resources list , If you want to show the Next, Previous and Last Page's button you can use "Meta" section in the response
           schema:
-            type: integer
-          examples:
-            example:
-              value: 2
+            type: string
+            example: 1
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: 31
       responses:
         "200":
           description: Successful Operation
@@ -1160,6 +1168,17 @@ paths:
       tags:
         - Categories
       operationId: Fetch Categories List
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: 1
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: 31
       responses:
         "200":
           description: Successful Operation
@@ -1329,6 +1348,17 @@ paths:
       tags:
         - Messages
       operationId: Fetch User Messages List
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: 1
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: 31
       responses:
         "200":
           description: Successful Operation
@@ -1514,7 +1544,7 @@ paths:
           in: query
           schema:
             type: string
-            example: kri
+            example: Joe
       responses:
         "200":
           description: Successful Operation
@@ -1850,12 +1880,12 @@ paths:
           in: query
           schema:
             type: string
-            example: 3
+            example: 1
         - name: perPage
           in: query
           schema:
             type: string
-            example: 2
+            example: 31
       responses:
         "200":
           description: Successful Operation
@@ -2074,16 +2104,16 @@ paths:
           schema:
             type: string
             example: This is title
-        - name: doctorID
+        - name: page
           in: query
           schema:
             type: string
-            example: f2b613fb-ac13-55f6-b979-ded21a4df498
-        - name: unassignedToPatientID
+            example: 1
+        - name: perPage
           in: query
           schema:
             type: string
-            example: e5b613fb-ac13-55f6-b979-ded21a4df498
+            example: 31
       responses:
         "200":
           description: Successful Operation
@@ -2179,41 +2209,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CreateQuestionnaireUnprocessableEntityError"
-      security:
-        - bearerAuth: []
-  /questionnaires/all:
-    get:
-      tags:
-        - Questionnaire
-      operationId: Fetch All Questionnaires List
-      parameters:
-        - name: title
-          in: query
-          schema:
-            type: string
-            example: This is title
-      responses:
-        "200":
-          description: Successful Operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: "#/components/schemas/AllQuestionnairesData"
-                  meta:
-                    $ref: "#/components/schemas/PaginationMeta"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Unauthorized
       security:
         - bearerAuth: []
   /questionnaires/{questionnaireId}:
@@ -2753,46 +2748,6 @@ paths:
                     example: The requested resource not found.
       security:
         - bearerAuth: []
-  /questionnaires/doctors/me:
-    get:
-      tags:
-        - Questionnaire
-      operationId: Fetch Doctor Questionnaires List
-      parameters:
-        - name: page
-          in: query
-          schema:
-            type: string
-            example: 3
-        - name: perPage
-          in: query
-          schema:
-            type: string
-            example: 2
-      responses:
-        "200":
-          description: Successful Operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: "#/components/schemas/DoctorQuestionnairesData"
-                  meta:
-                    $ref: "#/components/schemas/PaginationMeta"
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Unauthorized
-      security:
-        - bearerAuth: []
   /questionnaires/{questionnaireId}/preview/init:
     get:
       tags:
@@ -3037,17 +2992,17 @@ paths:
           in: query
           schema:
             type: string
-            example: ""
+            example: 1
         - name: perPage
           in: query
           schema:
             type: string
-            example: "1"
+            example: 31
         - name: name
           in: query
           schema:
             type: string
-            example: ald
+            example: Ostwald
         - name: status
           in: query
           schema:
@@ -3107,7 +3062,7 @@ paths:
           in: query
           schema:
             type: string
-            example: ald
+            example: Bernard
         - name: status
           in: query
           schema:
@@ -3244,6 +3199,56 @@ paths:
                     example: The data fetched successfully.
                   data:
                     $ref: "#/components/schemas/DoctorPatientsStatsData"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+        - bearerAuth: []
+  /doctors/{doctorId}/questionnaires:
+    get:
+      tags:
+        - Doctors
+      operationId: Fetch Available Questionnaires' for Doctor
+      parameters:
+        - name: title
+          in: query
+          schema:
+            type: string
+            example: This is title
+        - name: IsNotAssigned
+          in: query
+          schema:
+            type: boolean
+            example: true
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: 1
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: 31
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/QuestionnairesData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
         "401":
           description: Unauthorized
           content:
@@ -3875,12 +3880,22 @@ paths:
           in: query
           schema:
             type: string
-            example: akas
+            example: Sia
         - name: report_status
           in: query
           schema:
             type: string
             example: OnGoing
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: 1
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: 31
       responses:
         "200":
           description: Successful Operation
