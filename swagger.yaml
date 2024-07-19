@@ -5203,6 +5203,9 @@ components:
                 doctorID:
                   type: string
                   example: fc65ac2a-9bf8-4b7f-b918-469f03203b31
+                avatarUrl:
+                  type: string
+                  example: https://carmax-avatar-buckets.s1.ca-central-1.amazonaws.com/avatars/avatar.jpg
                 createdAt:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
@@ -5251,6 +5254,9 @@ components:
                 doctorID:
                   type: string
                   example: fc65ac2a-9bf8-4b7f-b918-469f03203b31
+                avatarUrl:
+                  type: string
+                  example: https://carmax-avatar-buckets.s1.ca-central-1.amazonaws.com/avatars/avatar.jpg
                 createdAt:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
@@ -5929,6 +5935,9 @@ components:
                 status:
                   type: string
                   example: Active
+                avatarUrl:
+                  type: string
+                  example: https://carmax-avatar-buckets.s1.ca-central-1.amazonaws.com/avatars/avatar.jpg
                 createdAt:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
@@ -5964,6 +5973,9 @@ components:
                 status:
                   type: string
                   example: Active
+                avatarUrl:
+                  type: string
+                  example: https://carmax-avatar-buckets.s1.ca-central-1.amazonaws.com/avatars/avatar.jpg
                 createdAt:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
