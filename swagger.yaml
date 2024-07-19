@@ -6,8 +6,6 @@ info:
 servers:
   - url: https://apicarma.bytequest.solutions/api/v1
 tags:
-  - name: Health
-    description: Health Check
   - name: Authentication
     description: Authentication Management
   - name: Users
@@ -35,21 +33,6 @@ tags:
   - name: Onboard
     description: Onboard Users Management
 paths:
-  /health:
-    get:
-      tags:
-        - Health
-      operationId: Health Check
-      responses:
-        "200":
-          description: Successful Operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: "#/components/schemas/HealthCheckData"
   /auth/login:
     post:
       tags:
@@ -4594,6 +4577,9 @@ components:
           accessToken:
             type: string
             example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFbWFpbCI6ImhzYW1pZC5hYWgwQGdtYWlsLmNvbSIsIklEIjoiMGFmMTI5ODMtODMzZS00ZDQ0LWJkMzAtNDczOWUyZjBjYmYyIiwiZXhwIjoxNzA5NDY3NjM2LCJpYXQiOjE3MDk0NjA0MzYsImlzcyI6Im1vaGFtbWFkIn0.eU6UyDmdVlIWnuOVQyLi8iVci6WQFa1Tjxl7FMEcQ2U
+          expireTime:
+            type: string
+            example: 2024-07-22T03:46:01.166316322+03:30
     LoginUnprocessableEntityError:
       type: object
       properties:
