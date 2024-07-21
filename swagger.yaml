@@ -96,7 +96,6 @@ paths:
                 - lastName
                 - email
                 - role
-                - birthday
               type: object
               properties:
                 firstName:
@@ -137,8 +136,8 @@ paths:
                 - required: [role]
                 - properties:
                     role:
-                      const: Patient
-                  required: [phn]
+                      - const: Patient
+                  required: [phn, birthday]
       responses:
         "201":
           description: Created Successfully
