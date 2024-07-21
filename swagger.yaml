@@ -133,6 +133,12 @@ paths:
                 faxNumber:
                   type: string
                   example: 1780424627
+              anyOf:
+                - required: [role]
+                - properties:
+                    role:
+                      const: Patient
+                  required: [phn]
       responses:
         "201":
           description: Created Successfully
@@ -1564,6 +1570,7 @@ paths:
                 - firstName
                 - lastName
                 - phoneNumber
+                - birthday
                 - email
                 - phn
               type: object
@@ -1581,19 +1588,20 @@ paths:
                   type: string
                   example: John.Doe@gmail.com
                   x-validate:
-                    required_without_all: [PhoneNumber, PHN]
+                    required_without_all: [PhoneNumber]
                 phoneNumber:
                   type: string
                   example: +17804246272
                   x-validate:
-                    required_without_all: [Email, PHN]
+                    required_without_all: [Email]
                 phn:
                   type: string
                   example: 13365116
-                  x-validate:
-                    required_without_all: [PhoneNumber, Email]
+                questionnaireId:
+                  type: string
+                  example: 072dbcb1-37de-45f8-9cea-04bd6bab2feb
               x-validate:
-                oneOf: [phoneNumber, email, phn]
+                oneOf: [phoneNumber, email]
       responses:
         "201":
           description: Created Successfully
@@ -5256,6 +5264,9 @@ components:
               lastName:
                 type: string
                 example: The lastName field is required.
+              birthday:
+                type: string
+                example: The birthday field is required.
               email:
                 type: string
                 example: The Email must be a valid email address.
@@ -5265,6 +5276,9 @@ components:
               phn:
                 type: string
                 example: Invalid phn provided.
+              questionnaireId:
+                type: string
+                example: The questionnaireId must be a valid questionnaire.
     PatientsData:
       type: array
       items:
