@@ -132,12 +132,13 @@ paths:
                 faxNumber:
                   type: string
                   example: 1780424627
-              anyOf:
-                - required: [role]
-                - properties:
-                    role:
-                      - const: Patient
-                  required: [phn, birthday]
+              allOf:
+                - if:
+                    properties:
+                      role:
+                        const: Patient
+                  then:
+                    required: [phn, birthday]
       responses:
         "201":
           description: Created Successfully
@@ -1568,9 +1569,7 @@ paths:
               required:
                 - firstName
                 - lastName
-                - phoneNumber
                 - birthday
-                - email
                 - phn
               type: object
               properties:
@@ -1586,21 +1585,20 @@ paths:
                 email:
                   type: string
                   example: John.Doe@gmail.com
-                  x-validate:
-                    required_without_all: [PhoneNumber]
+                  description: If Phone Number isn't provided Email is required
                 phoneNumber:
                   type: string
                   example: +17804246272
-                  x-validate:
-                    required_without_all: [Email]
+                  description: If Email isn't provided Phone Number is required
                 phn:
                   type: string
                   example: 13365116
                 questionnaireId:
                   type: string
                   example: 072dbcb1-37de-45f8-9cea-04bd6bab2feb
-              x-validate:
-                oneOf: [phoneNumber, email]
+              oneOf:
+                - required: [phoneNumber]
+                - required: [email]
       responses:
         "201":
           description: Created Successfully
