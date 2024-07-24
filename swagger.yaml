@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   contact: {}
 servers:
-  - url: http://localhost:8585/api/v1
+  - url: https://apicarma.bytequest.solutions/api/v1
 tags:
   - name: Authentication
     description: Authentication Management
@@ -333,6 +333,48 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ResetPasswordUnprocessableEntityError"
+  /users:
+    get:
+      tags:
+        - Users
+      operationId: Fetch all Users' List
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: string
+            example: 1
+        - name: perPage
+          in: query
+          schema:
+            type: string
+            example: 3
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/UsersData"
+                  meta:
+                    $ref: "#/components/schemas/PaginationMeta"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "403":
+          description: Forbidden
+      security:
+        - bearerAuth: []
   /users/{userId}/resend-invitation:
     post:
       tags:
@@ -609,6 +651,57 @@ paths:
                     example: Unauthorized
       security:
         - bearerAuth: []
+  /users/upload-avatar:
+    post:
+      tags:
+        - Users
+      operationId: Upload User's Avatar
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - avatar
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Your avatar has been updated successfully.
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    enum:
+                      - The uploaded file type or size is incorrect. Please try again.
+                      - The uploaded file is missing or invalid. Please check and try again.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+        - bearerAuth: []
   /newsletters:
     post:
       tags:
@@ -679,6 +772,8 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
+        "403":
+          description: Forbidden
       security:
         - bearerAuth: []
   /contacts:
@@ -719,6 +814,8 @@ paths:
                   message:
                     type: string
                     example: Unauthorized
+        "403":
+          description: Forbidden
       security:
         - bearerAuth: []
     post:
@@ -4740,6 +4837,56 @@ components:
               password:
                 type: string
                 example: The password must be combine of upper and lower case letters, number and special character
+    UsersData:
+      type: array
+      items:
+        type: object
+        properties:
+          Items:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: c360beee-79d4-417a-8f73-8d1e25f76502
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
+                role:
+                  type: string
+                  enum:
+                    - Doctor
+                    - PractitionerFull
+                    - PractitionerLimited
+                    - Patient
+                birthday:
+                  type: string
+                  example: 1908-06-07T09:07:19.14555+03:25
+                phoneNumber:
+                  type: string
+                  example: 1076129200
+                email:
+                  type: string
+                  example: John.Doe@gmail.com
+                emailVerified:
+                  type: boolean
+                  example: true
+                representativeSelected:
+                  type: boolean
+                  example: false
+                status:
+                  type: string
+                  enum:
+                    - Invited
+                    - Decline
+                    - Active
+                createdAt:
+                  type: string
+                  example: 2024-07-23T18:11:32.225621+03:30
     UpdateProfileUnprocessableEntityError:
       type: object
       properties:
