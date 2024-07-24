@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   contact: {}
 servers:
-  - url: https://apicarma.bytequest.solutions/api/v1
+  - url: http://localhost:8585/api/v1
 tags:
   - name: Authentication
     description: Authentication Management
@@ -1529,11 +1529,15 @@ paths:
           schema:
             type: string
             example: 31
-        - name: name
+        - name: status
           in: query
           schema:
             type: string
-            example: Joe
+            enum:
+              - Invited
+              - Registered
+              - Decline
+              - Active
       responses:
         "200":
           description: Successful Operation
@@ -3076,8 +3080,10 @@ paths:
           in: query
           schema:
             type: string
-            example: Decline
-          description: Decline,Active,Invited
+            enum:
+              - Invited
+              - Decline
+              - Active
       responses:
         "200":
           description: Successful Operation
@@ -3136,8 +3142,10 @@ paths:
           in: query
           schema:
             type: string
-            example: Decline
-          description: Decline,Active,Invited
+            enum:
+              - Invited
+              - Decline
+              - Active
       responses:
         "200":
           description: Successful Operation
@@ -3954,7 +3962,10 @@ paths:
           in: query
           schema:
             type: string
-            example: OnGoing
+            enum:
+              - Unknown
+              - OnGoing
+              - Ready
         - name: page
           in: query
           schema:
@@ -5143,7 +5154,9 @@ components:
                   example: Dr. Jane Doe
                 status:
                   type: string
-                  example: Unread
+                  enum:
+                    - Read
+                    - Unread
                 attachments:
                   type: array
                   items:
@@ -5189,7 +5202,9 @@ components:
                   example: Dr. Jane Doe
                 status:
                   type: string
-                  example: Unread
+                  enum:
+                    - Read
+                    - Unread
                 attachments:
                   type: array
                   items:
@@ -5335,7 +5350,11 @@ components:
                   example: 13365116
                 status:
                   type: string
-                  example: Active
+                  enum:
+                    - Invited
+                    - Registered
+                    - Decline
+                    - Active
                 doctorID:
                   type: string
                   example: fc65ac2a-9bf8-4b7f-b918-469f03203b31
@@ -5380,7 +5399,10 @@ components:
                         example: Doe
                 status:
                   type: string
-                  example: InProgress
+                  enum:
+                    - NotStarted
+                    - InProgress
+                    - Completed
                 completedAt:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
@@ -5466,7 +5488,10 @@ components:
                   example: John.Doe@gmail.com
                 status:
                   type: string
-                  example: Active
+                  enum:
+                    - Invited
+                    - Decline
+                    - Active
                 doctorID:
                   type: string
                   example: fc65aa8f-1ae8-4b7f-b918-469f03203a79
@@ -5508,7 +5533,10 @@ components:
                         example: Doe
                 status:
                   type: string
-                  example: InProgress
+                  enum:
+                    - NotStarted
+                    - InProgress
+                    - Completed
                 completedAt:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
@@ -6019,7 +6047,10 @@ components:
                   example: 1780424627
                 status:
                   type: string
-                  example: Active
+                  enum:
+                    - Invited
+                    - Decline
+                    - Active
                 avatarUrl:
                   type: string
                   example: https://carmax-avatar-buckets.s1.ca-central-1.amazonaws.com/avatars/avatar.jpg
@@ -6057,7 +6088,10 @@ components:
                   example: Doctor Jane Doe Clinic
                 status:
                   type: string
-                  example: Active
+                  enum:
+                    - Invited
+                    - Decline
+                    - Active
                 avatarUrl:
                   type: string
                   example: https://carmax-avatar-buckets.s1.ca-central-1.amazonaws.com/avatars/avatar.jpg
@@ -6261,7 +6295,10 @@ components:
                   example: true
                 status:
                   type: string
-                  example: Invited
+                  enum:
+                    - Invited
+                    - Decline
+                    - Active
     VerifyTokenData:
       type: array
       items:
@@ -6358,7 +6395,10 @@ components:
                   example: 2024-03-21T03:50:00.253695+03:30
                 status:
                   type: string
-                  example: OnGoing
+                  enum:
+                    - Unknown
+                    - OnGoing
+                    - Ready
     SavePatientResponseToReportUnprocessableEntityError:
       type: object
       properties:
