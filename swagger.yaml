@@ -1820,6 +1820,91 @@ paths:
                     example: The requested resource not found.
       security:
         - bearerAuth: []
+    put:
+      tags:
+        - Patients
+      operationId: Update Patient Info By Doctor
+      parameters:
+        - name: patientId
+          in: path
+          required: true
+          description: The ID of the patient
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - firstName
+                - lastName
+                - phn
+              type: object
+              properties:
+                firstName:
+                  type: string
+                  example: John
+                lastName:
+                  type: string
+                  example: Doe
+                phoneNumber:
+                  type: string
+                  example: 1076129200
+                phn:
+                  type: string
+                  example: 1246129345
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The user's information has been updated successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdatePatientByDoctorUnprocessableEntityError"
+      security:
+        - bearerAuth: []
     delete:
       tags:
         - Patients
@@ -4785,7 +4870,7 @@ components:
                 example: The phoneNumber must be a valid Canada phone number.
               phn:
                 type: string
-                example: Invalid phn provided.
+                example: The phn is already exists.
               questionnaireId:
                 type: string
                 example: The questionnaireId must be a valid questionnaire.
@@ -5397,10 +5482,33 @@ components:
                 example: The phoneNumber must be a valid Canada phone number.
               phn:
                 type: string
-                example: Invalid phn provided.
+                example: The phn is already exists.
               questionnaireId:
                 type: string
                 example: The questionnaireId must be a valid questionnaire.
+    UpdatePatientByDoctorUnprocessableEntityError:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              firstName:
+                type: string
+                example: The firstName field is required.
+              lastName:
+                type: string
+                example: The lastName field is required.
+              phoneNumber:
+                type: string
+                example: The phoneNumber must be a valid Canada phone number.
+              phn:
+                type: string
+                example: The phn is already exists.
     PatientsData:
       type: array
       items:
