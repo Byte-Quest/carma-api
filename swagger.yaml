@@ -174,7 +174,7 @@ paths:
         - Authentication
       operationId: Google Redirect URL
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -203,7 +203,7 @@ paths:
                   type: string
                   example: 4/0AeaYSHCoSLQlzCvmwNfx_purqgyrLWJ2l2JvhmpRW9-amog1Suymw6HL64lKDfOYadviPg
       responses:
-        '200':
+        "200":
           description: Successful Operation
           content:
             application/json:
@@ -215,7 +215,7 @@ paths:
                   message:
                     type: string
                     example: You're logged in!
-        '400':
+        "400":
           description: Bad Request
           content:
             application/json:
@@ -235,12 +235,12 @@ paths:
                   message:
                     type: string
                     example: The provided credentials are incorrect.
-        '422':
+        "422":
           description: Unprocessable Entity
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GoogleLoginUnprocessableEntityError'
+                $ref: "#/components/schemas/GoogleLoginUnprocessableEntityError"
   /auth/forget-password:
     post:
       tags:
@@ -5865,25 +5865,25 @@ components:
                 type: string
                 example: The intro field is required
               visibility:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      communityResourcesStatus:
-                        type: string
-                        example: The communityResourcesStatus field is required
-                      careProviderTipsStatus:
-                        type: string
-                        example: The careProviderTipsStatus field is required
-                      summaryOfFindingsStatus:
-                        type: string
-                        example: The summaryOfFindingsStatus field is required
-                      assessmentAndPlanStatus:
-                        type: string
-                        example: The assessmentAndPlanStatus field is required
-                      carePlanNotesStatus:
-                        type: string
-                        example: The carePlanNotesStatus field is required
+                type: array
+                items:
+                  type: object
+                  properties:
+                    communityResourcesStatus:
+                      type: string
+                      example: The communityResourcesStatus field is required
+                    careProviderTipsStatus:
+                      type: string
+                      example: The careProviderTipsStatus field is required
+                    summaryOfFindingsStatus:
+                      type: string
+                      example: The summaryOfFindingsStatus field is required
+                    assessmentAndPlanStatus:
+                      type: string
+                      example: The assessmentAndPlanStatus field is required
+                    carePlanNotesStatus:
+                      type: string
+                      example: The carePlanNotesStatus field is required
               questionnaire:
                 type: string
                 example: The questionnaire must be a valid JSON file.
@@ -5947,25 +5947,25 @@ components:
                 type: string
                 example: The title field is required
               visibility:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      communityResourcesStatus:
-                        type: string
-                        example: The communityResourcesStatus field is required
-                      careProviderTipsStatus:
-                        type: string
-                        example: The careProviderTipsStatus field is required
-                      summaryOfFindingsStatus:
-                        type: string
-                        example: The summaryOfFindingsStatus field is required
-                      assessmentAndPlanStatus:
-                        type: string
-                        example: The assessmentAndPlanStatus field is required
-                      carePlanNotesStatus:
-                        type: string
-                        example: The carePlanNotesStatus field is required
+                type: array
+                items:
+                  type: object
+                  properties:
+                    communityResourcesStatus:
+                      type: string
+                      example: The communityResourcesStatus field is required
+                    careProviderTipsStatus:
+                      type: string
+                      example: The careProviderTipsStatus field is required
+                    summaryOfFindingsStatus:
+                      type: string
+                      example: The summaryOfFindingsStatus field is required
+                    assessmentAndPlanStatus:
+                      type: string
+                      example: The assessmentAndPlanStatus field is required
+                    carePlanNotesStatus:
+                      type: string
+                      example: The carePlanNotesStatus field is required
     NextQuestionUnprocessableEntityError:
       type: object
       properties:
@@ -6353,6 +6353,9 @@ components:
                 createdAt:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
+                patientCount:
+                  type: integer
+                  example: 54
     DoctorStatsData:
       type: array
       items:
