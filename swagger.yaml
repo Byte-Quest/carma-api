@@ -3295,39 +3295,6 @@ paths:
       tags:
         - Doctors
       operationId: Fetch Doctor Information
-      parameters:
-        - name: doctorId
-          in: path
-          required: true
-          description: The ID of the doctor
-          schema:
-            type: string
-          examples:
-            example:
-              value: d6b613fb-00dc-44e7-b979-ded21a4df498
-        - name: page
-          in: query
-          schema:
-            type: string
-            example: 2
-        - name: perPage
-          in: query
-          schema:
-            type: string
-            example: 10
-        - name: name
-          in: query
-          schema:
-            type: string
-            example: Bernard
-        - name: status
-          in: query
-          schema:
-            type: string
-            enum:
-              - Invited
-              - Decline
-              - Active
       responses:
         "200":
           description: Successful Operation
@@ -3340,7 +3307,41 @@ paths:
                     type: string
                     example: The data fetched successfully.
                   data:
-                    $ref: "#/components/schemas/DoctorInfoData"
+                          properties:
+                            id:
+                              type: string
+                              example: fc65aa8f-9bf8-4b7f-b918-469f03203b31
+                            firstName:
+                              type: string
+                              example: John
+                            lastName:
+                              type: string
+                              example: Doe
+                            phoneNumber:
+                              type: string
+                              nullable: true
+                              example: 13514463216
+                            email:
+                              type: string
+                              example: John.Doe@gmail.com
+                            clinicName:
+                              type: string
+                              example: Doctor Jane Doe Clinic
+                            status:
+                              type: string
+                              enum:
+                                - Invited
+                                - Decline
+                                - Active
+                            avatarUrl:
+                              type: string
+                              example: https://carmax-avatar-buckets.s1.ca-central-1.amazonaws.com/avatars/avatar.jpg
+                            createdAt:
+                              type: string
+                              example: 2024-03-21T03:50:00.253695+03:30
+                            patientCount:
+                              type: integer
+                              example: 54
         "401":
           description: Unauthorized
           content:
@@ -6353,9 +6354,6 @@ components:
                 createdAt:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
-                patientCount:
-                  type: integer
-                  example: 54
     DoctorStatsData:
       type: array
       items:
