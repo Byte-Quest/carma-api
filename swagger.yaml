@@ -2612,16 +2612,16 @@ paths:
                     example: You can not remove this questionnaire because it is assigned to a patient.
       security:
         - bearerAuth: []
-  /questionnaires/{questionnaireId}/init:
+  /progress/{progressId}/init:
     get:
       tags:
-        - Questionnaire
+        - Progress
       operationId: Init Questionnaire By Patient
       parameters:
-        - name: questionnaireId
+        - name: progressId
           in: path
           required: true
-          description: The ID of the questionnaire
+          description: The ID of the questionnaire progress
           schema:
             type: string
           examples:
@@ -2672,16 +2672,18 @@ paths:
                     example: The requested resource not found.
       security:
         - bearerAuth: []
-  /questionnaires/{questionnaireId}/next:
+        - QRToken: []
+
+  /progress/{progressId}/next:
     post:
       tags:
-        - Questionnaire
+        - Progress
       operationId: Next Question By Patient
       parameters:
-        - name: questionnaireId
+        - name: progressId
           in: path
           required: true
-          description: The ID of the questionnaire
+          description: The ID of the questionnaire progress
           schema:
             type: string
           examples:
@@ -2734,16 +2736,151 @@ paths:
                 $ref: "#/components/schemas/NextQuestionUnprocessableEntityError"
       security:
         - bearerAuth: []
-  /questionnaires/{questionnaireId}/previous:
+        - QRToken: []
+  /progress/qr/generate:
+    post:
+      tags:
+        - Progress
+        - QR
+      operationId: Generate QR Code
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - questionnaireProgressId
+              properties:
+                questionnaireProgressId:
+                  type: string
+                  example: 594828bb-68ef-4a13-97a5-5952a13065f8
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      qrToken:
+                        type: string
+                        example: 594828bb-68ef-4a13-97a5-5952a13065f8
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Validation error occurred
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        questionnaireProgressId:
+                          type: string
+                          example: The questionnaireProgressId field is required
+      security:
+        - bearerAuth: []
+  /progress/qr/verify:
+    post:
+      tags:
+        - Progress
+        - QR
+      operationId: Verify QR Code
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+                - birthday
+              properties:
+                token:
+                  type: string
+                  example: 594828bb-68ef-4a13-97a5-5952a13065f8
+                birthday:
+                  type: string
+                  example: 1908-06-07T09:07:19.14555+03:25
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      questionnaireProgressId:
+                        type: string
+                        example: 594828bb-68ef-4a13-97a5-5952a13065f8
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Validation error occurred
+                  errors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        token:
+                          type: string
+                          example: The token field is required
+                        birthday:
+                            type: string
+                            example: The birthday field is required
+      security:
+        - bearerAuth: []
+        - QRToken: []
+  /progress/{progressId}/previous:
     get:
       tags:
-        - Questionnaire
+        - Progress
       operationId: Previous Question By Patient
       parameters:
-        - name: questionnaireId
+        - name: progressId
           in: path
           required: true
-          description: The ID of the questionnaire
+          description: The ID of the questionnaire progress
           schema:
             type: string
           examples:
@@ -2794,16 +2931,17 @@ paths:
                     example: The requested resource not found.
       security:
         - bearerAuth: []
-  /questionnaires/{questionnaireId}/init/{patientId}:
+        - QRToken: []
+  /progress/{progressId}/init/{patientId}:
     get:
       tags:
-        - Questionnaire
+        - Progress
       operationId: Init Questionnaire By Doctor
       parameters:
-        - name: questionnaireId
+        - name: progressId
           in: path
           required: true
-          description: The ID of the questionnaire
+          description: The ID of the questionnaire progress
           schema:
             type: string
           examples:
@@ -2863,16 +3001,16 @@ paths:
                     example: The requested resource not found.
       security:
         - bearerAuth: []
-  /questionnaires/{questionnaireId}/next/{patientId}:
+  /progress/{progressId}/next/{patientId}:
     post:
       tags:
-        - Questionnaire
+        - Progress
       operationId: Next Question By Doctor
       parameters:
-        - name: questionnaireId
+        - name: progressId
           in: path
           required: true
-          description: The ID of the questionnaire
+          description: The ID of the questionnaire  progress
           schema:
             type: string
           examples:
@@ -2934,16 +3072,16 @@ paths:
                 $ref: "#/components/schemas/NextQuestionUnprocessableEntityError"
       security:
         - bearerAuth: []
-  /questionnaires/{questionnaireId}/previous/{patientId}:
+  /progress/{progressId}/previous/{patientId}:
     get:
       tags:
-        - Questionnaire
+        - Progress
       operationId: Previous Question By Doctor
       parameters:
-        - name: questionnaireId
+        - name: progressId
           in: path
           required: true
-          description: The ID of the questionnaire
+          description: The ID of the questionnaire progress
           schema:
             type: string
           examples:
@@ -6953,3 +7091,7 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+    QRToken:
+      type: token
+      in: header
+      name: QR-Token
