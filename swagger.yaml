@@ -2415,25 +2415,24 @@ paths:
                   type: string
                   example: Intro
                 visibility:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      communityResourcesStatus:
-                        type: boolean
-                        example: true
-                      careProviderTipsStatus:
-                        type: boolean
-                        example: false
-                      summaryOfFindingsStatus:
-                        type: boolean
-                        example: true
-                      assessmentAndPlanStatus:
-                        type: boolean
-                        example: false
-                      carePlanNotesStatus:
-                        type: boolean
-                        example: true
+                  type: object
+                  properties:
+                    communityResourcesStatus:
+                      type: boolean
+                      example: true
+                    careProviderTipsStatus:
+                      type: boolean
+                      example: false
+                    summaryOfFindingsStatus:
+                      type: boolean
+                      example: true
+                    assessmentAndPlanStatus:
+                      type: boolean
+                      example: false
+                    carePlanNotesStatus:
+                      type: boolean
+                      example: true
+
                 questionnaire:
                   type: string
                   format: binary
@@ -2866,8 +2865,8 @@ paths:
                           type: string
                           example: The token field is required
                         birthday:
-                            type: string
-                            example: The birthday field is required
+                          type: string
+                          example: The birthday field is required
       security:
         - bearerAuth: []
         - QRToken: []
