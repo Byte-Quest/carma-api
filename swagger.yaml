@@ -333,6 +333,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ResetPasswordUnprocessableEntityError"
+
   /users:
     get:
       tags:
@@ -702,6 +703,7 @@ paths:
                     example: Unauthorized
       security:
         - bearerAuth: []
+
   /newsletters:
     post:
       tags:
@@ -776,6 +778,7 @@ paths:
           description: Forbidden
       security:
         - bearerAuth: []
+
   /contacts:
     get:
       tags:
@@ -873,6 +876,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CreateContactUnprocessableEntityError"
+
   /tips:
     get:
       tags:
@@ -1061,6 +1065,7 @@ paths:
                 $ref: "#/components/schemas/UpdateTipUnprocessableEntityError"
       security:
         - bearerAuth: []
+
   /resources:
     get:
       tags:
@@ -1249,6 +1254,7 @@ paths:
                     example: Unauthorized
       security:
         - bearerAuth: []
+
   /categories:
     get:
       tags:
@@ -1429,6 +1435,7 @@ paths:
                     example: Unauthorized
       security:
         - bearerAuth: []
+
   /messages:
     get:
       tags:
@@ -1546,6 +1553,7 @@ paths:
                     example: Unauthorized
       security:
         - bearerAuth: []
+
   /faker/seed:
     post:
       tags:
@@ -1594,6 +1602,7 @@ paths:
                     example: Unauthorized
       security:
         - bearerAuth: []
+
   /patients:
     get:
       tags:
@@ -2125,6 +2134,7 @@ paths:
                 $ref: "#/components/schemas/AssignQuestionnaireToPatientUnprocessableEntityError"
       security:
         - bearerAuth: []
+
   /practitioners:
     get:
       tags:
@@ -2348,6 +2358,7 @@ paths:
                 $ref: "#/components/schemas/CreateResourceUnprocessableEntityError"
       security:
         - bearerAuth: []
+
   /questionnaires:
     get:
       tags:
@@ -2414,6 +2425,9 @@ paths:
                 intro:
                   type: string
                   example: Intro
+                prompt:
+                  type: string
+                  example: prompt
                 visibility:
                   type: object
                   properties:
@@ -2432,7 +2446,9 @@ paths:
                     carePlanNotesStatus:
                       type: boolean
                       example: true
-
+                    genAiStatus:
+                      type: boolean
+                      example: true
                 questionnaire:
                   type: string
                   format: binary
@@ -2611,6 +2627,7 @@ paths:
                     example: You can not remove this questionnaire because it is assigned to a patient.
       security:
         - bearerAuth: []
+
   /progress/{progressId}/init:
     get:
       tags:
@@ -2672,7 +2689,6 @@ paths:
       security:
         - bearerAuth: []
         - QRToken: []
-
   /progress/{progressId}/next:
     post:
       tags:
@@ -3140,6 +3156,7 @@ paths:
                     example: The requested resource not found.
       security:
         - bearerAuth: []
+
   /questionnaires/{questionnaireId}/preview/init:
     get:
       tags:
@@ -3351,7 +3368,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: The responses deleted successfully.
+                    example: The responses created successfully.
         "401":
           description: Unauthorized
           content:
@@ -3374,6 +3391,330 @@ paths:
                     example: The requested resource not found.
       security:
         - bearerAuth: []
+  /questionnaires/{questionnaireId}/prompts:
+    patch:
+      tags:
+        - Questionnaire
+      summary: Update the prompt for a questionnaire
+      operationId: updateQuestionnairePrompt
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the questionnaire
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                prompt:
+                  type: string
+                  description: The updated prompt for the questionnaire
+              required:
+                - prompt
+      responses:
+        "200":
+          description: Successfully updated the prompt
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Prompt updated successfully
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+
+  /questionnaires/{questionnaireId}/attachments:
+    post:
+      tags:
+        - Questionnaire Attachments
+      summary: Upload an attachment to a questionnaire
+      operationId: uploadAttachment
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the questionnaire
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: The title of the attachment
+                type:
+                  type: string
+                  enum: [Link, Pdf, Doc, Docx, Txt]
+                  description: The type of attachment. If `Link`, the link field is required, otherwise a file is required.
+                link:
+                  type: string
+                  format: uri
+                  description: URL of the link, required when type is `Link`
+                file:
+                  type: string
+                  format: binary
+                  description: File upload, required when type is `Pdf`, `Doc`, `Docx`, or `Txt`
+              required:
+                - title
+                - type
+      responses:
+        "201":
+          description: Created Successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The Attachment has been uploaded successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+    get:
+      tags:
+        - Questionnaire Attachments
+      summary: Get a list of attachments for a questionnaire
+      operationId: getAttachments
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the questionnaire
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+          description: The page number for pagination
+        - name: perPage
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+          description: Number of items per page
+      responses:
+        "200":
+          description: A list of attachments
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          format: uuid
+                          description: The attachment's unique identifier
+                        questionnaireId:
+                          type: string
+                          format: uuid
+                          description: The associated questionnaire's UUID
+                        title:
+                          type: string
+                          description: The title of the attachment
+                        content:
+                          type: string
+                          description: The content (e.g., a link or file path)
+                        type:
+                          type: string
+                          description: The type of the attachment (e.g., Link)
+                        createdAt:
+                          type: string
+                          format: date-time
+                          description: The creation timestamp of the attachment
+                  meta:
+                    type: object
+                    properties:
+                      pagination:
+                        type: object
+                        properties:
+                          totalItems:
+                            type: integer
+                            description: Total number of items
+                          totalPages:
+                            type: integer
+                            description: Total number of pages
+                          current:
+                            type: integer
+                            description: Current page number
+                          next:
+                            type: integer
+                            description: The next page number, if any
+                          previous:
+                            type: integer
+                            description: The previous page number, if any
+                          perPage:
+                            type: integer
+                            description: Items per page
+                      questionnaireInfo:
+                        type: object
+                        properties:
+                          ID:
+                            type: string
+                            format: uuid
+                            description: The questionnaire's unique identifier
+                          Title:
+                            type: string
+                            description: The title of the questionnaire
+                          IntroDescription:
+                            type: string
+                            description: The introduction description of the questionnaire
+                          Prompt:
+                            type: string
+                            description: The prompt or extra info for the questionnaire
+                          Visibility:
+                            type: object
+                            properties:
+                              communityResourcesStatus:
+                                type: boolean
+                                description: Visibility of community resources
+                              careProviderTipsStatus:
+                                type: boolean
+                                description: Visibility of care provider tips
+                              summaryOfFindingsStatus:
+                                type: boolean
+                                description: Visibility of summary of findings
+                              assessmentAndPlanStatus:
+                                type: boolean
+                                description: Visibility of assessment and plan
+                              carePlanNotesStatus:
+                                type: boolean
+                                description: Visibility of care plan notes
+                              genAiStatus:
+                                type: boolean
+                                description: Visibility of Gen AI status
+                          CreatedAt:
+                            type: string
+                            format: date-time
+                            description: The creation timestamp of the questionnaire
+                          UpdatedAt:
+                            type: string
+                            format: date-time
+                            description: The last update timestamp of the questionnaire
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+  /questionnaires/attachments/{attachmentId}:
+    delete:
+      tags:
+        - Questionnaire Attachments
+      summary: Delete an attachment by ID
+      operationId: deleteAttachment
+      parameters:
+        - name: attachmentId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the attachment to be deleted
+      responses:
+        "200":
+          description: Attachment deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The questionnaire attachment has been deleted successfully
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+
   /doctors:
     get:
       tags:
@@ -3806,6 +4147,7 @@ paths:
                 $ref: "#/components/schemas/AssignQuestionnaireToDoctorUnprocessableEntityError"
       security:
         - bearerAuth: []
+
   /onboard/patients/birthday/verify:
     post:
       tags:
@@ -4272,6 +4614,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/EmailVerifyUnprocessableEntityError"
+
   /reports:
     get:
       tags:
