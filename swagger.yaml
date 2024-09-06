@@ -2531,6 +2531,9 @@ paths:
                       carePlanNotesStatus:
                         type: boolean
                         example: true
+                      genAiUpdate:
+                        type: boolean
+                        example: true
       responses:
         "200":
           description: Successful Operation
