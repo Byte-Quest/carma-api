@@ -2531,7 +2531,7 @@ paths:
                       carePlanNotesStatus:
                         type: boolean
                         example: true
-                      genAiUpdate:
+                      genAiStatus:
                         type: boolean
                         example: true
       responses:
@@ -4833,6 +4833,73 @@ paths:
                     example: The report already generated.
       security:
         - bearerAuth: []
+  /reports/items/{itemId}/ai-generate:
+    post:
+      tags:
+        - Reports
+      operationId: Generate ai response
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          description: The ID of the item
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-0adc-44e7-b979-ded21a4df498
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      response:
+                        type: string
+                        example: example ai response
+                      responseBelongsTo:
+                        type: string
+                        example: none
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+      security:
+        - bearerAuth: []
+
   /reports/items/{itemId}/resources:
     post:
       tags:
@@ -7336,17 +7403,25 @@ components:
                   type: string
                   example: string
                 suggestion:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      notes:
-                        type: string
-                        nullable: true
-                        example: Some Notes
-                      suggestionBelongsTo:
-                        type: string
-                        example: Doctor
+                  type: object
+                  properties:
+                    notes:
+                      type: string
+                      nullable: true
+                      example: Some Notes
+                    suggestionBelongsTo:
+                      type: string
+                      example: Doctor
+                aiResponse:
+                  type: object
+                  properties:
+                    response:
+                      type: string
+                      nullable: true
+                      example: Some Notes
+                    responseBelongsTo:
+                      type: string
+                      example: Doctor
           PatientInfo:
             type: array
             items:
