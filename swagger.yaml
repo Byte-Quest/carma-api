@@ -5135,6 +5135,89 @@ paths:
                 $ref: "#/components/schemas/SaveNotesToReportUnprocessableEntityError"
       security:
         - bearerAuth: []
+  /reports/items/{itemId}/notes/ai:
+    post:
+      tags:
+        - Reports
+      operationId: Save AI Response Notes To Report
+      parameters:
+        - name: itemId
+          in: path
+          required: true
+          description: The ID of the item
+          schema:
+            type: string
+          examples:
+            example:
+              value: dab613fb-00dc-44e7-b9a9-ded21a4df498
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - belongsTo
+              properties:
+                belongsTo:
+                  type: string
+                  enum:
+                    - Doctor
+                    - Patient
+                    - None
+                    - Both
+                response:
+                  type: string
+                  example: ai response Text
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The notes added to the report successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SaveNotesToReportUnprocessableEntityError"
+      security:
+        - bearerAuth: []
+
   /reports/items/{itemId}/notes/patients/display-mode:
     post:
       tags:
