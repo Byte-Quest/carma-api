@@ -1424,6 +1424,9 @@ paths:
                 description:
                   type: string
                   example: i am description
+                score:
+                  type: integer
+                  example: 5
                 name:
                   type: string
                   example: xxxx55
@@ -1493,6 +1496,64 @@ paths:
                     example: Unauthorized
       security:
         - bearerAuth: []
+  /categories/{categoryId}/prompts:
+    put:
+      tags:
+        - Categories
+      operationId: UpdateCategoryPrompt
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          description: The ID of the category
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                prompt:
+                  type: string
+                  description: The updated prompt for the category
+              required:
+                - prompt
+      responses:
+        "200":
+          description: Successfully updated the prompt
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Prompt updated successfully
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
 
   /messages:
     get:
@@ -3452,64 +3513,6 @@ paths:
                     example: The requested resource not found.
       security:
         - bearerAuth: []
-  /questionnaires/{questionnaireId}/prompts:
-    patch:
-      tags:
-        - Questionnaire
-      summary: Update the prompt for a questionnaire
-      operationId: updateQuestionnairePrompt
-      parameters:
-        - name: questionnaireId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-          description: The UUID of the questionnaire
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                prompt:
-                  type: string
-                  description: The updated prompt for the questionnaire
-              required:
-                - prompt
-      responses:
-        "200":
-          description: Successfully updated the prompt
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Prompt updated successfully
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Unauthorized
-        "404":
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: The requested resource not found.
-
   /questionnaires/{questionnaireId}/attachments:
     post:
       tags:
@@ -6029,6 +6032,9 @@ components:
                   type: string
                   nullable: true
                   example: Description
+                score:
+                  type: integer
+                  example: 12
                 createdAt:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
@@ -7439,6 +7445,9 @@ components:
                       categoryId:
                         type: string
                         example: afe48fba-6da3-44fb-9123-922330ce08ca
+                      score:
+                        type: interger
+                        example: 20
                       isCompleted:
                         type: boolean
                         example: true
