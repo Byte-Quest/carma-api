@@ -7646,6 +7646,15 @@ components:
                     responseBelongsTo:
                       type: string
                       example: Doctor
+                    refrences:
+                      type: array
+                      example:
+                        [
+                          "https://example.com",
+                          "https://example.com",
+                          "https://example.com",
+                        ]
+
           PatientInfo:
             type: array
             items:
