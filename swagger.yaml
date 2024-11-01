@@ -2674,6 +2674,81 @@ paths:
                 $ref: "#/components/schemas/CreateQuestionnaireUnprocessableEntityError"
       security:
         - bearerAuth: []
+  /questionnaires/v2:
+    post:
+      tags:
+        - Questionnaire
+      operationId: Create Questionnaire v2
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - title
+                - intro
+                - visibility
+              properties:
+                title:
+                  type: string
+                  example: Title of Questionnaire
+                intro:
+                  type: string
+                  example: Intro
+                prompt:
+                  type: string
+                  example: prompt
+                visibility:
+                  type: object
+                  properties:
+                    communityResourcesStatus:
+                      type: boolean
+                      example: true
+                    careProviderTipsStatus:
+                      type: boolean
+                      example: false
+                    summaryOfFindingsStatus:
+                      type: boolean
+                      example: true
+                    assessmentAndPlanStatus:
+                      type: boolean
+                      example: false
+                    carePlanNotesStatus:
+                      type: boolean
+                      example: true
+                    genAiStatus:
+                      type: boolean
+                      example: true
+      responses:
+        "201":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The questionnaire created successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateQuestionnaireUnprocessableEntityError"
+      security:
+        - bearerAuth: []
+
   /questionnaires/{questionnaireId}:
     patch:
       tags:
@@ -3852,6 +3927,417 @@ paths:
                   message:
                     type: string
                     example: The requested resource not found.
+  # Questionnaire Question Builder
+  /api/v1/questionnaires/{questionnaireId}/categories:
+    post:
+      tags:
+        - Questionnaire
+      summary: Add a category to a questionnaire
+      operationId: addCategoryToQuestionnaire
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the questionnaire
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the category
+                description:
+                  type: string
+                  description: The description of the category
+                categoryId:
+                  type: string
+                  format: uuid
+                  description: The UUID of an existing category (optional)
+              required:
+                - name
+      responses:
+        "201":
+          description: Category created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: category_created
+                  data:
+                    type: object
+                    properties:
+                      categoryId:
+                        type: string
+                        format: uuid
+                        description: The ID of the created category
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateCategoryUnprocessableEntityError"
+      security:
+        - bearerAuth: []
+  /api/v1/questionnaires/{questionnaireId}/questions:
+    post:
+      tags:
+        - Questionnaire
+        - Question
+      operationId: CreateQuestion
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the questionnaire
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - categoryId
+                - type
+                - minRequiredOptionNumber
+                - maxRequiredOptionNumber
+              properties:
+                categoryId:
+                  type: string
+                title:
+                  type: string
+                  example: What is your favorite color?
+                description:
+                  type: string
+                  example: What is your favorite color?
+                type:
+                  type: string
+                  enum:
+                    - SingleSelectText
+                    - MultiSelectText
+                    - SingleSelectImage
+                    - MultiSelectImage
+                    - TextResponseShort
+                    - TextResponseLong
+                minRequiredOptionNumber:
+                  type: integer
+                maxRequiredOptionNumber:
+                  type: integer
+      responses:
+        "201":
+          description: Question created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The question was created successfully.
+                  data:
+                    type: object
+                    properties:
+                      questionId:
+                        type: string
+                        example: 123e4567-e89b-12d3-a456-426614174000
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateCategoryUnprocessableEntityError"
+
+      security:
+        - bearerAuth: []
+
+    patch:
+      tags:
+        - Questionnaire
+        - Question
+      operationId: UpdateQuestion
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the questionnaire
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the question
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                categoryId:
+                  type: string
+                title:
+                  type: string
+                  example: What is your favorite color?
+                description:
+                  type: string
+                  example: What is your favorite color?
+                type:
+                  type: string
+                  enum:
+                    - SingleSelectText
+                    - MultiSelectText
+                    - SingleSelectImage
+                    - MultiSelectImage
+                    - TextResponseShort
+                    - TextResponseLong
+                minRequiredOptionNumber:
+                  type: integer
+                maxRequiredOptionNumber:
+                  type: integer
+      responses:
+        "200":
+          description: Question updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The question was updated successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad Request
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateCategoryUnprocessableEntityError"
+
+      security:
+        - bearerAuth: []
+  /api/v1/questionnaires/{questionnaireId}/questions/{questionId}/options:
+    post:
+      tags:
+        - Questionnaire
+        - Question
+      operationId: CreateOption
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the questionnaire
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the question
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Blue
+                description:
+                  type: string
+                  example: Blue
+                score:
+                  type: integer
+                  example: 1
+                imageName:
+                  type: string
+                  example: image.jpg
+      responses:
+        "201":
+          description: Option created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The option was created successfully.
+                  data:
+                    type: object
+                    properties:
+                      optionId:
+                        type: string
+                        example: 123e4567-e89b-12d3-a456-426614174000
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateCategoryUnprocessableEntityError"
+      security:
+        - bearerAuth: []
+
+    patch:
+      tags:
+        - Questionnaire
+        - Question
+      operationId: UpdateOption
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the questionnaire
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the question
+        - name: optionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the option
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Blue
+                description:
+                  type: string
+                  example: Blue
+                score:
+                  type: integer
+                  example: 1
+                imageName:
+                  type: string
+                  example: image.jpg
+      responses:
+        "200":
+          description: Option updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The option was updated successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateCategoryUnprocessableEntityError"
+      security:
+        - bearerAuth: []
 
   /doctors:
     get:
