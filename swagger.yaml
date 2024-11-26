@@ -5,6 +5,7 @@ info:
   contact: {}
 servers:
   - url: https://apicarma.bytequest.solutions/api/v1
+  - url: https://apicarma-dev.bytequest.solutions/api/v1
 tags:
   - name: Authentication
     description: Authentication Management
