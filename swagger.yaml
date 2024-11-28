@@ -2899,6 +2899,85 @@ paths:
                     example: You can not remove this questionnaire because it is assigned to a patient.
       security:
         - bearerAuth: []
+    get:
+      tags:
+        - Questionnaire
+      summary: Fetch a questionnaire by ID
+      operationId: getFetchQuestionnaire
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the questionnaire to fetch
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      title:
+                        type: string
+                      intro:
+                        type: string
+                      prompt:
+                        type: string
+                      visibility:
+                        type: object
+                        properties:
+                          communityResourcesStatus:
+                            type: boolean
+                          careProviderTipsStatus:
+                            type: boolean
+                          summaryOfFindingsStatus:
+                            type: boolean
+                          assessmentAndPlanStatus:
+                            type: boolean
+                          carePlanNotesStatus:
+                            type: boolean
+                          genAiStatus:
+                            type: boolean
+                      createdAt:
+                        type: string
+                        format: date-time
+                      updatedAt:
+                        type: string
+                        format: date-time
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+      security:
+        - bearerAuth: []
 
   /progress/{progressId}/init:
     get:
@@ -3929,7 +4008,7 @@ paths:
                     type: string
                     example: The requested resource not found.
   # Questionnaire Question Builder
-  /api/v1/questionnaires/{questionnaireId}/categories:
+  questionnaires/{questionnaireId}/categories:
     post:
       tags:
         - Questionnaire
@@ -3998,7 +4077,7 @@ paths:
                 $ref: "#/components/schemas/CreateCategoryUnprocessableEntityError"
       security:
         - bearerAuth: []
-  /api/v1/questionnaires/{questionnaireId}/questions:
+  questionnaires/{questionnaireId}/questions:
     post:
       tags:
         - Questionnaire
@@ -4185,7 +4264,7 @@ paths:
 
       security:
         - bearerAuth: []
-  /api/v1/questionnaires/{questionnaireId}/questions/{questionId}/options:
+  questionnaires/{questionnaireId}/questions/{questionId}/options:
     post:
       tags:
         - Questionnaire
