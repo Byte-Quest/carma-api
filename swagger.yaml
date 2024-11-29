@@ -4331,6 +4331,118 @@ paths:
 
       security:
         - bearerAuth: []
+    get:
+      tags:
+        - Questionnaire
+        - Question
+      operationId: FetchQuestions
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Questions fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        questionnaireId:
+                          type: string
+                        categoryID:
+                          type: string
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        type:
+                          type: string
+                        minRequiredOptionNumber:
+                          type: integer
+                        maxRequiredOptionNumber:
+                          type: integer
+                        textResponseMaxLength:
+                          type: integer
+                        options:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                              type: string
+                            questionId:
+                              type: string
+                            title:
+                              type: string
+                            description:
+                              type: string
+                            score:
+                              type: integer
+                            imageUrl:
+                              type: string
+                              nullable: true
+                        branch:
+                          type: object
+                          nullable: true
+                          properties:
+                            defaultNextQuestionId:
+                              type: string
+                            rules:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  nextQuestionId:
+                                    type: string
+                                  options:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        optionId:
+                                          type: string
+                                        condition:
+                                          type: string
+                                          enum:
+                                            - Selected
+                                            - NotSelected
+                                        nextOperator:
+                                          type: string
+                                          enum:
+                                            - And
+                                            - Or
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found
+      security:
+        - bearerAuth: []
   /questionnaires/{questionnaireId}/questions/{questionId}/duplicate:
     post:
       tags:
