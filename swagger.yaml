@@ -2813,7 +2813,40 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: The questionnaire updated successfully.
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      title:
+                        type: string
+                      intro:
+                        type: string
+                      prompt:
+                        type: string
+                      visibility:
+                        type: object
+                        properties:
+                          communityResourcesStatus:
+                            type: boolean
+                          careProviderTipsStatus:
+                            type: boolean
+                          summaryOfFindingsStatus:
+                            type: boolean
+                          assessmentAndPlanStatus:
+                            type: boolean
+                          carePlanNotesStatus:
+                            type: boolean
+                          genAiStatus:
+                            type: boolean
+                      createdAt:
+                        type: string
+                        format: date-time
+                      updatedAt:
+                        type: string
+                        format: date-time
         "401":
           description: Unauthorized
           content:
@@ -4008,7 +4041,7 @@ paths:
                     type: string
                     example: The requested resource not found.
   # Questionnaire Question Builder
-  questionnaires/{questionnaireId}/categories:
+  /questionnaires/{questionnaireId}/categories:
     post:
       tags:
         - Questionnaire
@@ -4077,7 +4110,137 @@ paths:
                 $ref: "#/components/schemas/CreateCategoryUnprocessableEntityError"
       security:
         - bearerAuth: []
-  questionnaires/{questionnaireId}/questions:
+  /questionnaires/{questionnaireId}/categories/{categoryId}/replace:
+    put:
+      tags:
+        - Questionnaire
+        - Category
+      operationId: ReplaceCategory
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                categoryId:
+                  type: string
+                  format: uuid
+                  description: The UUID of the new category
+                name:
+                  type: string
+                  description: The name of the category
+                description:
+                  type: string
+                  description: The description of the category
+      responses:
+        "200":
+          description: Category replaced successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The category was replaced successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+      security:
+        - bearerAuth: []
+  /questionnaires/{questionnaireId}/categories/{categoryId}/position:
+    patch:
+      tags:
+        - Questionnaire
+        - Category
+      operationId: UpdateCategoryPosition
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                categories:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - categoryId
+                      - position
+                    properties:
+                      categoryId:
+                        type: string
+                        format: uuid
+                      position:
+                        type: integer
+                        minimum: 1
+      responses:
+        "200":
+          description: Category position updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The category position was updated successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found
+      security:
+        - bearerAuth: []
+  /questionnaires/{questionnaireId}/questions:
     post:
       tags:
         - Questionnaire
@@ -4168,7 +4331,148 @@ paths:
 
       security:
         - bearerAuth: []
-
+  /questionnaires/{questionnaireId}/questions/{questionId}/duplicate:
+    post:
+      tags:
+        - Questionnaire
+        - Question
+      operationId: DuplicateQuestion
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the questionnaire
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the question
+      responses:
+        "201":
+          description: Question duplicated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The question was duplicated successfully.
+                  data:
+                    type: object
+                    properties:
+                      questionId:
+                        type: string
+                        example: 123e4567-e89b-12d3-a456-426614174000
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad Request
+      security:
+        - bearerAuth: []
+  /questionnaires/{questionnaireId}/questions/{questionId}/position:
+    patch:
+      tags:
+        - Questionnaire
+        - Question
+      operationId: UpdateQuestionPosition
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the questionnaire
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the question
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                questions:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - questionId
+                      - position
+                    properties:
+                      questionId:
+                        type: string
+                        format: uuid
+                      categoryId:
+                        type: string
+                        format: uuid
+                      position:
+                        type: integer
+                        minimum: 1
+      responses:
+        "200":
+          description: Question position updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The question position was updated successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found
+  /questionnaires/{questionnaireId}/questions/{questionId}:
     patch:
       tags:
         - Questionnaire
@@ -4225,6 +4529,8 @@ paths:
                   message:
                     type: string
                     example: The question was updated successfully.
+                  data:
+                    $ref: "#/components/schemas/Question"
         "401":
           description: Unauthorized
           content:
@@ -4264,7 +4570,172 @@ paths:
 
       security:
         - bearerAuth: []
-  questionnaires/{questionnaireId}/questions/{questionId}/options:
+    get:
+      tags:
+        - Questionnaire
+        - Question
+      operationId: FetchQuestion
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the questionnaire
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the question
+      responses:
+        "200":
+          description: Question fetched successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Question"
+    delete:
+      tags:
+        - Questionnaire
+        - Question
+      operationId: DeleteQuestion
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the questionnaire
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the question
+      responses:
+        "200":
+          description: Question deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The question was deleted successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad Request
+      security:
+        - bearerAuth: []
+  /questionnaires/{questionnaireId}/questions/{questionId}/uploads:
+    post:
+      tags:
+        - Questionnaire
+        - Question
+      operationId: UploadOptionImage
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the questionnaire
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The ID of the question
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: The image to upload
+      responses:
+        "200":
+          description: Option image uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The option image was uploaded successfully.
+                  data:
+                    type: object
+                    properties:
+                      fileName:
+                        type: string
+                        example: image.jpg
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad Request
+      security:
+        - bearerAuth: []
+  /questionnaires/{questionnaireId}/questions/{questionId}/options:
     post:
       tags:
         - Questionnaire
@@ -4336,7 +4807,7 @@ paths:
                 $ref: "#/components/schemas/CreateCategoryUnprocessableEntityError"
       security:
         - bearerAuth: []
-
+  /questionnaires/{questionnaireId}/questions/{questionId}/options/{optionId}:
     patch:
       tags:
         - Questionnaire
@@ -4390,6 +4861,8 @@ paths:
                   message:
                     type: string
                     example: The option was updated successfully.
+                  data:
+                    $ref: "#/components/schemas/Option"
         "401":
           description: Unauthorized
           content:
@@ -4416,6 +4889,132 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CreateCategoryUnprocessableEntityError"
+      security:
+        - bearerAuth: []
+    delete:
+      tags:
+        - Questionnaire
+        - Question
+      operationId: DeleteOption
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: optionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Option deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The option was deleted successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found
+      security:
+        - bearerAuth: []
+  /questionnaires/{questionnaireId}/questions/{questionId}/options/position:
+    patch:
+      tags:
+        - Questionnaire
+        - Question
+      operationId: UpdateOptionPosition
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - options
+              properties:
+                options:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                      - optionId
+                      - position
+                    properties:
+                      optionId:
+                        type: string
+                        example: "123e4567-e89b-12d3-a456-426614174000"
+                      position:
+                        type: integer
+                        example: 1
+      responses:
+        "200":
+          description: Option position updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The option position was updated successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found
       security:
         - bearerAuth: []
 
@@ -8305,6 +8904,64 @@ components:
           perPage:
             type: integer
             example: 10
+    Question:
+      type: object
+      properties:
+        id:
+          type: string
+          example: afe48fba-6da3-44fb-8281-922330ce08ca
+        title:
+          type: string
+          example: Title of the Question
+        description:
+          type: string
+          nullable: true
+          example: Description of the Question
+        type:
+          type: string
+          example: Question Type
+          enum:
+            - SingleSelectText
+            - MultiSelectText
+            - SingleSelectImage
+            - MultiSelectImage
+            - TextResponseShort
+            - TextResponseLong
+        categoryId:
+          type: string
+          example: Category ID
+        textResponseMaxLength:
+          type: integer
+          example: 100
+        minRequiredOptionNumber:
+          type: integer
+          example: 1
+        maxRequiredOptionNumber:
+          type: integer
+          example: 5
+        options:
+          type: array
+          items:
+            $ref: "#/components/schemas/Option"
+    Option:
+      type: object
+      properties:
+        id:
+          type: string
+          example: afe48fba-6da3-44fb-8281-922330ce08ca
+        title:
+          type: string
+          example: Title of the Option
+        description:
+          type: string
+          nullable: true
+          example: Description of the Option
+        score:
+          type: integer
+          example: 10
+        imageUrl:
+          type: string
+          example: https://example.com
   securitySchemes:
     bearerAuth:
       type: http
