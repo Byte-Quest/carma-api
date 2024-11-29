@@ -5017,6 +5017,67 @@ paths:
                     example: Not Found
       security:
         - bearerAuth: []
+  /questionnaires/{questionnaireId}/questions/{questionId}/branches:
+    put:
+      tags:
+        - Questionnaire
+        - Question
+      operationId: SaveQuestionBranch
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: questionId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuestionBranch"
+        responses:
+          "200":
+            description: Question branch saved successfully
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: The question branch was saved successfully.
+          "401":
+            description: Unauthorized
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
+      security:
+        - bearerAuth: []
 
   /doctors:
     get:
@@ -5447,7 +5508,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/AssignQuestionnaireToDoctorUnprocessableEntityError"
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The provided data is invalid.
+                  errors:
+                    type: array
+                    items:
+                      type: string
+
       security:
         - bearerAuth: []
 
@@ -8962,6 +9032,55 @@ components:
         imageUrl:
           type: string
           example: https://example.com
+    QuestionBranch:
+      type: object
+      properties:
+        questionId:
+          type: string
+          example: afe48fba-6da3-44fb-8281-922330ce08ca
+        defaultNextQuestionId:
+          type: string
+          example: afe48fba-6da3-44fb-8281-922330ce08ca
+        rules:
+          type: array
+          items:
+            type: object
+            properties:
+              nextQuestionId:
+                type: string
+                example: afe48fba-6da3-44fb-8281-922330ce08ca
+              options:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    optionId:
+                      type: string
+                      example: afe48fba-6da3-44fb-8281-922330ce08ca
+                    condition:
+                      type: string
+                      example: Selected
+                      enum:
+                        - Selected
+                        - NotSelected
+                    nextOperator:
+                      type: string
+                      example: And
+                      enum:
+                        - And
+                        - Or
+    ValidationErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Validation error occurred
+        errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
   securitySchemes:
     bearerAuth:
       type: http
