@@ -4041,6 +4041,189 @@ paths:
                     type: string
                     example: The requested resource not found.
   # Questionnaire Question Builder
+  /questionnaires/{questionnaireId}/suggestions:
+    post:
+      tags:
+        - Questionnaire
+        - Suggestion
+      summary: Create a suggestion for a questionnaire
+      operationId: createSuggestion
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the questionnaire
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: The title of the suggestion
+                description:
+                  type: string
+                  description: The description of the suggestion
+      responses:
+        "201":
+          description: Suggestion created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The suggestion was created successfully.
+                  data:
+                    type: object
+                    properties:
+                      suggestionId:
+                        type: string
+                        format: uuid
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found
+    put:
+      tags:
+        - Questionnaire
+      summary: Update a questionnaire suggestion
+      operationId: updateQuestionnaireSuggestion
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the questionnaire
+        - name: suggestionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the suggestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: The title of the suggestion
+                categoryId:
+                  type: string
+                  format: uuid
+                  description: The category ID for the suggestion
+                description:
+                  type: string
+                  description: The description of the suggestion
+                rules:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      questionId:
+                        type: string
+                        format: uuid
+                      options:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            optionId:
+                              type: string
+                              format: uuid
+                            condition:
+                              type: string
+                              enum: [Selected, NotSelected]
+                            nextOperator:
+                              type: string
+                              enum: [And, Or]
+                          required:
+                            - optionId
+                            - condition
+                            - nextOperator
+                    required:
+                      - questionId
+                      - options
+              required:
+                - title
+                - rules
+      responses:
+        "200":
+          description: Suggestion updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: suggestion_updated
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: suggestion_not_found
+        "422":
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+                    example:
+                      categoryId: ["Category not found"]
+                      questionId: ["Question not found"]
+                      optionId: ["Option not found"]
   /questionnaires/{questionnaireId}/categories:
     post:
       tags:
