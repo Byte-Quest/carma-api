@@ -4041,6 +4041,123 @@ paths:
                     type: string
                     example: The requested resource not found.
   # Questionnaire Question Builder
+  /questionnaires/{questionnaireId}/items:
+    get:
+      tags:
+        - Questionnaire
+      operationId: getFetchQuestionnaireItems
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          description: The ID of the questionnaire
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      questionnaire:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                          title:
+                            type: string
+                          introDescription:
+                            type: string
+                          prompt:
+                            type: string
+                          visibility:
+                            type: object
+                            properties:
+                              communityResourcesStatus:
+                                type: boolean
+                              careProviderTipsStatus:
+                                type: boolean
+                              summaryOfFindingsStatus:
+                                type: boolean
+                              assessmentAndPlanStatus:
+                                type: boolean
+                              carePlanNotesStatus:
+                                type: boolean
+                              genAiStatus:
+                                type: boolean
+                          createdAt:
+                            type: string
+                            format: date-time
+                          updatedAt:
+                            type: string
+                            format: date-time
+                      categories:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            category:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                name:
+                                  type: string
+                                description:
+                                  type: string
+                            questions:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  title:
+                                    type: string
+                                  description:
+                                    type: string
+                                  type:
+                                    type: string
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateQuestionnaireUnprocessableEntityError"
+      security:
+        - bearerAuth: []
+
   /questionnaires/{questionnaireId}/suggestions:
     post:
       tags:
@@ -4224,6 +4341,64 @@ paths:
                       categoryId: ["Category not found"]
                       questionId: ["Question not found"]
                       optionId: ["Option not found"]
+    get:
+      tags:
+        - Questionnaire
+      summary: Fetch a questionnaire suggestions
+      operationId: fetchQuestionnaireSuggestions
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the questionnaire
+      responses:
+        200:
+          description: Suggestions fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                          description: The title of the suggestion
+                        categoryId:
+                          type: string
+                          format: uuid
+                          description: The category ID for the suggestion
+                        description:
+                          type: string
+                          description: The description of the suggestion
+                        rules:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              questionId:
+                                type: string
+                                format: uuid
+                              options:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    optionId:
+                                      type: string
+                                      format: uuid
+                                    condition:
+                                      type: string
+                                      enum: [Selected, NotSelected]
+                                    nextOperator:
+                                      type: string
+                                      enum: [And, Or]
   /questionnaires/{questionnaireId}/categories:
     post:
       tags:
@@ -9344,6 +9519,12 @@ components:
               nextQuestionId:
                 type: string
                 example: afe48fba-6da3-44fb-8281-922330ce08ca
+              type:
+                type: string
+                example: Option
+                enum:
+                  - Option
+                  - DescriptiveText
               options:
                 type: array
                 items:
@@ -9358,6 +9539,26 @@ components:
                       enum:
                         - Selected
                         - NotSelected
+                    nextOperator:
+                      type: string
+                      example: And
+                      enum:
+                        - And
+                        - Or
+              descriptiveTexts:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    descriptiveText:
+                      type: string
+                      example: test
+                    condition:
+                      type: string
+                      example: Contain
+                      enum:
+                        - Contain
+                        - NotContain
                     nextOperator:
                       type: string
                       example: And
