@@ -4269,6 +4269,23 @@ paths:
                       questionId:
                         type: string
                         format: uuid
+                      type:
+                        type: string
+                        enum: [Option, DescriptiveText]
+                      descriptiveTexts:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            text:
+                              type: string
+                              description: The text of the descriptive text
+                            condition:
+                              type: string
+                              enum: [Selected, NotSelected]
+                            nextOperator:
+                              type: string
+                              enum: [And, Or]
                       options:
                         type: array
                         items:
@@ -4289,7 +4306,7 @@ paths:
                             - nextOperator
                     required:
                       - questionId
-                      - options
+                      - type
               required:
                 - title
                 - rules
@@ -4385,6 +4402,23 @@ paths:
                               questionId:
                                 type: string
                                 format: uuid
+                              type:
+                                type: string
+                                enum: [Option, DescriptiveText]
+                              descriptiveTexts:
+                                type: array
+                                items:
+                                  type: object
+                                  properties:
+                                    text:
+                                      type: string
+                                      description: The text of the descriptive text
+                                    condition:
+                                      type: string
+                                      enum: [Selected, NotSelected]
+                                    nextOperator:
+                                      type: string
+                                      enum: [And, Or]
                               options:
                                 type: array
                                 items:
@@ -4468,6 +4502,57 @@ paths:
                 $ref: "#/components/schemas/CreateCategoryUnprocessableEntityError"
       security:
         - bearerAuth: []
+  /questionnaires/{questionnaireId}/categories/{categoryId}:
+    delete:
+      tags:
+        - Questionnaire
+      operationId: DeleteCategoryFromQuestionnaire
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the questionnaire
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the category
+      responses:
+        "200":
+          description: Category deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: category_deleted
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found
   /questionnaires/{questionnaireId}/categories/{categoryId}/replace:
     put:
       tags:
