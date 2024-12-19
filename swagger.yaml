@@ -4706,6 +4706,7 @@ paths:
                 - type
                 - minRequiredOptionNumber
                 - maxRequiredOptionNumber
+                - selectionLimit
               properties:
                 categoryId:
                   type: string
@@ -4715,6 +4716,12 @@ paths:
                 description:
                   type: string
                   example: What is your favorite color?
+                selectionLimit:
+                  type: string
+                  enum:
+                    - Unlimited
+                    - ExactNumber
+                    - Range
                 type:
                   type: string
                   enum:
@@ -4724,10 +4731,16 @@ paths:
                     - MultiSelectImage
                     - TextResponseShort
                     - TextResponseLong
+                    - YesNo
+                    - Statement
                 minRequiredOptionNumber:
                   type: integer
                 maxRequiredOptionNumber:
                   type: integer
+                isDoctorQuestion:
+                  type: boolean
+                enableFileAttachment:
+                  type: boolean
       responses:
         "201":
           description: Question created successfully
@@ -4804,11 +4817,17 @@ paths:
                           type: string
                         categoryID:
                           type: string
+                        isDoctorQuestion:
+                          type: boolean
+                        enableFileAttachment:
+                          type: boolean
                         title:
                           type: string
                         description:
                           type: string
                         type:
+                          type: string
+                        selectionLimit:
                           type: string
                         minRequiredOptionNumber:
                           type: integer
@@ -5060,6 +5079,16 @@ paths:
                 description:
                   type: string
                   example: What is your favorite color?
+                selectionLimit:
+                  type: string
+                  enum:
+                    - Unlimited
+                    - ExactNumber
+                    - Range
+                isDoctorQuestion:
+                  type: boolean
+                enableFileAttachment:
+                  type: boolean
                 type:
                   type: string
                   enum:
@@ -5069,6 +5098,8 @@ paths:
                     - MultiSelectImage
                     - TextResponseShort
                     - TextResponseLong
+                    - YesNo
+                    - Statement
                 minRequiredOptionNumber:
                   type: integer
                 maxRequiredOptionNumber:
@@ -9552,6 +9583,8 @@ components:
             - MultiSelectImage
             - TextResponseShort
             - TextResponseLong
+            - YesNo
+            - Statement
         categoryId:
           type: string
           example: Category ID
@@ -9564,6 +9597,15 @@ components:
         maxRequiredOptionNumber:
           type: integer
           example: 5
+        selectionLimit:
+          type: string
+          example: Unlimited
+        isDoctorQuestion:
+          type: boolean
+          example: false
+        enableFileAttachment:
+          type: boolean
+          example: false
         options:
           type: array
           items:
