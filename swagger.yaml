@@ -5793,7 +5793,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Score"
+                  $ref: "#/components/schemas/ScoreLogic"
       security:
         - bearerAuth: []
   /questionnaires/{questionnaireId}/scores/{scoreId}:
@@ -5821,7 +5821,7 @@ paths:
                 rules:
                   type: array
                   items:
-                    $ref: "#/components/schemas/ScoreRule"
+                    $ref: "#/components/schemas/ScoreLogic"
       responses:
         "200":
           description: Score logic updated successfully
