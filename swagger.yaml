@@ -4041,6 +4041,62 @@ paths:
                     type: string
                     example: The requested resource not found.
   # Questionnaire Question Builder
+  /questionnaires/{questionnaireId}/publish:
+    post:
+      tags:
+        - Questionnaire
+      summary: Publish a questionnaire
+      operationId: publishQuestionnaire
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          description: The ID of the questionnaire
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Questionnaire published successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Questionnaire published successfully
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "403":
+          description: when questionnaire had no questions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not allowed to publish empty questionnaire
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: questionnaire_already_published
+
   /questionnaires/{questionnaireId}/items:
     get:
       tags:
@@ -8627,6 +8683,11 @@ components:
                   type: string
                   nullable: true
                   example: Intro Description
+                status:
+                  type: string
+                  enum:
+                    - Draft
+                    - Published
                 visibility:
                   type: array
                   items:
