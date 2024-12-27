@@ -4611,7 +4611,7 @@ paths:
                     example: Unauthorized
       security:
         - bearerAuth: []
-  /questionnaires/{questionnaireId}/categories/{categoryId}/position:
+  /questionnaires/{questionnaireId}/categories/position:
     patch:
       tags:
         - Questionnaire
@@ -4623,12 +4623,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: categoryId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
       requestBody:
         required: true
         content:
@@ -4753,11 +4747,82 @@ paths:
                     type: string
                     example: The question was created successfully.
                   data:
-                    type: object
-                    properties:
-                      questionId:
-                        type: string
-                        example: 123e4567-e89b-12d3-a456-426614174000
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        questionnaireId:
+                          type: string
+                        categoryID:
+                          type: string
+                        isDoctorQuestion:
+                          type: boolean
+                        enableFileAttachment:
+                          type: boolean
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        type:
+                          type: string
+                        selectionLimit:
+                          type: string
+                        minRequiredOptionNumber:
+                          type: integer
+                        maxRequiredOptionNumber:
+                          type: integer
+                        textResponseMaxLength:
+                          type: integer
+                        options:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                              type: string
+                            questionId:
+                              type: string
+                            title:
+                              type: string
+                            description:
+                              type: string
+                            score:
+                              type: integer
+                            imageUrl:
+                              type: string
+                              nullable: true
+                        branch:
+                          type: object
+                          nullable: true
+                          properties:
+                            defaultNextQuestionId:
+                              type: string
+                            rules:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  nextQuestionId:
+                                    type: string
+                                  options:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        optionId:
+                                          type: string
+                                        condition:
+                                          type: string
+                                          enum:
+                                            - Selected
+                                            - NotSelected
+                                        nextOperator:
+                                          type: string
+                                          enum:
+                                            - And
+                                            - Or
         "401":
           description: Unauthorized
           content:
@@ -4973,7 +5038,7 @@ paths:
                     example: Bad Request
       security:
         - bearerAuth: []
-  /questionnaires/{questionnaireId}/questions/{questionId}/position:
+  /questionnaires/{questionnaireId}/questions/position:
     patch:
       tags:
         - Questionnaire
@@ -4986,12 +5051,6 @@ paths:
           schema:
             type: string
           description: The ID of the questionnaire
-        - name: questionId
-          in: path
-          required: true
-          schema:
-            type: string
-          description: The ID of the question
       requestBody:
         content:
           application/json:
@@ -5662,6 +5721,124 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ValidationErrorResponse"
+      security:
+        - bearerAuth: []
+  /questionnaires/{questionnaireId}/scores:
+    post:
+      tags:
+        - Questionnaire
+      operationId: AddScoreLogic
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                categoryID:
+                  type: string
+                  example: "123e4567-e89b-12d3-a456-426614174000"
+                summaryOfFindings:
+                  type: string
+                  example: "This is summary of findings"
+                rules:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      minScore:
+                        type: integer
+                        example: 1
+                      maxScore:
+                        type: integer
+                        example: 10
+                      overrideScore:
+                        type: integer
+                        example: 10
+      responses:
+        "201":
+          description: Score logic added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The score logic was added successfully.
+                  data:
+                    $ref: "#/components/schemas/ScoreLogic"
+      security:
+        - bearerAuth: []
+    get:
+      tags:
+        - Questionnaire
+      operationId: Fetch Questionnaire Scores
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Questionnaire scores fetched successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Score"
+      security:
+        - bearerAuth: []
+  /questionnaires/{questionnaireId}/scores/{scoreId}:
+    patch:
+      tags:
+        - Questionnaire
+      operationId: EditScoreLogic
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: scoreId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rules:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/ScoreRule"
+      responses:
+        "200":
+          description: Score logic updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Score"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
       security:
         - bearerAuth: []
 
@@ -8057,6 +8234,32 @@ components:
                 createdAt:
                   type: string
                   example: 2024-03-21T03:50:00.253695+03:30
+    ScoreLogic:
+      type: object
+      properties:
+        id:
+          type: string
+          example: fc65aa8f-9bf8-4b7f-b918-469f03203b31
+        categoryId:
+          type: string
+          example: "fc65aa8f-9bf8-4b7f-b918-469f03203b31"
+        summaryOfFindings:
+          type: string
+          example: "This is summary of findings"
+        rules:
+          type: array
+          items:
+            type: object
+            properties:
+              minScore:
+                type: integer
+                example: 1
+              maxScore:
+                type: integer
+                example: 10
+              overrideScore:
+                type: integer
+                example: 10
     CreatePatientUnprocessableEntityError:
       type: object
       properties:
