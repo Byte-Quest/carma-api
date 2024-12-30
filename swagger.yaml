@@ -8299,9 +8299,6 @@ components:
         categoryId:
           type: string
           example: "fc65aa8f-9bf8-4b7f-b918-469f03203b31"
-        summaryOfFindings:
-          type: string
-          example: "This is summary of findings"
         rules:
           type: array
           items:
@@ -8316,6 +8313,9 @@ components:
               overrideScore:
                 type: integer
                 example: 10
+              summaryOfFindings:
+                type: string
+                example: "This is summary of findings"
     CreatePatientUnprocessableEntityError:
       type: object
       properties:
@@ -9946,10 +9946,10 @@ components:
                       example: test
                     condition:
                       type: string
-                      example: Contain
+                      example: Contains
                       enum:
-                        - Contain
-                        - NotContain
+                        - Contains
+                        - NotContains
                     nextOperator:
                       type: string
                       example: And
