@@ -5816,6 +5816,9 @@ paths:
                       overrideScore:
                         type: integer
                         example: 10
+                      summaryOfFindings:
+                        type: string
+                        example: "This is summary of findings"
       responses:
         "201":
           description: Score logic added successfully
@@ -5897,7 +5900,52 @@ paths:
                     example: Unauthorized
       security:
         - bearerAuth: []
-
+    delete:
+      tags:
+        - Questionnaire
+      operationId: DeleteQuestionnaireScore
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: scoreId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Score logic deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The score logic was deleted successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found
   /doctors:
     get:
       tags:
