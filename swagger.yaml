@@ -4096,7 +4096,6 @@ paths:
                   message:
                     type: string
                     example: questionnaire_already_published
-
   /questionnaires/{questionnaireId}/items:
     get:
       tags:
@@ -4213,7 +4212,47 @@ paths:
                 $ref: "#/components/schemas/UpdateQuestionnaireUnprocessableEntityError"
       security:
         - bearerAuth: []
-
+  /questionnaires/{questionnaireId}/clone:
+    post:
+      tags:
+        - Questionnaire
+      summary: Clone a questionnaire
+      operationId: cloneQuestionnaire
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the questionnaire
+      responses:
+        "200":
+          description: Questionnaire cloned successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Questionnaire cloned successfully
+                  data:
+                    type: object
+                    properties:
+                      questionnaireId:
+                        type: string
+                        format: uuid
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
   /questionnaires/{questionnaireId}/suggestions:
     post:
       tags:
