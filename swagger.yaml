@@ -4617,6 +4617,12 @@ paths:
             type: string
             format: uuid
           description: The UUID of the category
+        - name: isForce
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Force delete category even if it has questions or suggestions
       responses:
         "200":
           description: Category deleted successfully
@@ -4628,6 +4634,16 @@ paths:
                   message:
                     type: string
                     example: category_deleted
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: questionnaire_category_has_questions_or_suggestions
         "401":
           description: Unauthorized
           content:
@@ -5353,6 +5369,12 @@ paths:
           schema:
             type: string
           description: The ID of the question
+        - name: isForce
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Force delete question even if it has suggestions
       responses:
         "200":
           description: Question deleted successfully
@@ -5364,6 +5386,16 @@ paths:
                   message:
                     type: string
                     example: The question was deleted successfully.
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The question has suggestions and cannot be deleted.
         "401":
           description: Unauthorized
           content:
@@ -5652,6 +5684,11 @@ paths:
           required: true
           schema:
             type: string
+        - name: isForce
+          in: query
+          required: false
+          schema:
+            type: boolean
       responses:
         "200":
           description: Option deleted successfully
@@ -5663,6 +5700,16 @@ paths:
                   message:
                     type: string
                     example: The option was deleted successfully.
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The option has suggestions or branch
         "401":
           description: Unauthorized
           content:
