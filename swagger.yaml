@@ -5235,6 +5235,11 @@ paths:
           schema:
             type: string
           description: The ID of the question
+        - name: isForce
+          in: query
+          required: false
+          schema:
+            type: boolean
       requestBody:
         content:
           application/json:
@@ -5323,7 +5328,16 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CreateCategoryUnprocessableEntityError"
-
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Cannot change question type
       security:
         - bearerAuth: []
     get:
