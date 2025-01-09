@@ -4319,6 +4319,7 @@ paths:
                   message:
                     type: string
                     example: Not Found
+  /questionnaires/{questionnaireId}/suggestions/{suggestionId}:
     put:
       tags:
         - Questionnaire
@@ -4367,6 +4368,9 @@ paths:
                       type:
                         type: string
                         enum: [Option, DescriptiveText]
+                      nextOperator:
+                        type: string
+                        enum: [And, Or]
                       descriptiveTexts:
                         type: array
                         items:
@@ -4528,6 +4532,40 @@ paths:
                                     nextOperator:
                                       type: string
                                       enum: [And, Or]
+    delete:
+      tags:
+        - Questionnaire
+        - Suggestion
+      summary: Delete a suggestion for a questionnaire
+      operationId: deleteSuggestion
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the questionnaire
+        - name: suggestionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: The UUID of the suggestion
+      responses:
+        "200":
+          description: Suggestion deleted successfully
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not Found
   /questionnaires/{questionnaireId}/categories:
     post:
       tags:
