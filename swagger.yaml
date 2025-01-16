@@ -3107,6 +3107,11 @@ paths:
                 textResponse:
                   type: string
                   example: Response Text
+                attachments:
+                  type: array
+                  items:
+                    type: string
+                    example: attachment.jpg
       responses:
         "200":
           description: Successful Operation
@@ -3443,6 +3448,11 @@ paths:
                 textResponse:
                   type: string
                   example: Response Text
+                attachments:
+                  type: array
+                  items:
+                    type: string
+                    example: attachment.jpg
       responses:
         "200":
           description: Successful Operation
@@ -3540,7 +3550,87 @@ paths:
                     example: The requested resource not found.
       security:
         - bearerAuth: []
-
+  /progress/{progressId}/questions/{questionId}/upload-attachment:
+    post:
+      tags:
+        - Progress
+      operationId: Upload Question Attachment
+      parameters:
+        - name: progressId
+          in: path
+          required: true
+          description: The ID of the questionnaire progress
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+        - name: questionId
+          in: path
+          required: true
+          description: The ID of the question
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                attachment:
+                  type: string
+                  format: binary
+                  description: The file to upload
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The attachment has been uploaded successfully.
+                  data:
+                    type: object
+                    properties:
+                      fileName:
+                        type: string
+                        example: attachment.pdf
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The request is invalid.
   /questionnaires/{questionnaireId}/preview/init:
     get:
       tags:
