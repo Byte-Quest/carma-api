@@ -4180,10 +4180,50 @@ paths:
                                     type: string
                                   title:
                                     type: string
+                                    example: What is your favorite color?
                                   description:
                                     type: string
+                                    example: What is your favorite color?
+                                  selectionLimit:
+                                    type: string
+                                    enum:
+                                      - Unlimited
+                                      - ExactNumber
+                                      - Range
                                   type:
                                     type: string
+                                    enum:
+                                      - SingleSelectText
+                                      - MultiSelectText
+                                      - SingleSelectImage
+                                      - MultiSelectImage
+                                      - TextResponseShort
+                                      - TextResponseLong
+                                      - YesNo
+                                      - Statement
+                                  minRequiredOptionNumber:
+                                    type: integer
+                                  maxRequiredOptionNumber:
+                                    type: integer
+                                  isDoctorQuestion:
+                                    type: boolean
+                                  enableFileAttachment:
+                                    type: boolean
+                                  options:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        id:
+                                          type: string
+                                        title:
+                                          type: string
+                                        description:
+                                          type: string
+                                        score:
+                                          type: integer
+                                        imageUrl:
+                                          type: string
         "401":
           description: Unauthorized
           content:
