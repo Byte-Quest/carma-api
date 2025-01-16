@@ -9357,6 +9357,11 @@ components:
                       text:
                         type: string
                         example: Response Text
+                      attachments:
+                        type: array
+                        items:
+                          type: string
+                          example: attachment.jpg
     InitData:
       type: array
       items:
