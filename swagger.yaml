@@ -3601,6 +3601,10 @@ paths:
                       fileName:
                         type: string
                         example: attachment.pdf
+                      fileUrl:
+                        type: string
+                        example: https://example.com/attachment.pdf
+
         "401":
           description: Unauthorized
           content:
@@ -4186,6 +4190,51 @@ paths:
                   message:
                     type: string
                     example: questionnaire_already_published
+  /questionnaires/{questionnaireId}/deprecate:
+    post:
+      tags:
+        - Questionnaire
+      summary: Deprecate a questionnaire
+      operationId: deprecateQuestionnaire
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          description: The ID of the questionnaire
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Questionnaire deprecated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Questionnaire deprecated successfully
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The questionnaire has already been deprecated.
   /questionnaires/{questionnaireId}/items:
     get:
       tags:
@@ -5657,6 +5706,9 @@ paths:
                       fileName:
                         type: string
                         example: image.jpg
+                      fileUrl:
+                        type: string
+                        example: https://example.com/option-images/image.jpg
         "401":
           description: Unauthorized
           content:
@@ -9360,8 +9412,15 @@ components:
                       attachments:
                         type: array
                         items:
-                          type: string
-                          example: attachment.jpg
+                          type: object
+                          properties:
+                            fileName:
+                              type: string
+                              example: attachment.jpg
+                            fileUrl:
+                              type: string
+                              example: https://carmax-avatar-buckets.s1.ca-central-1.amazonaws.com/answer-attachments/attachment.jpg
+
     InitData:
       type: array
       items:
@@ -9981,6 +10040,11 @@ components:
                       textResponse:
                         type: string
                         example: Text of Response
+                      attachments:
+                        type: array
+                        items:
+                          type: string
+                          example: https://example.com/attachment.pdf
                 responsesAddTo:
                   type: string
                   example: Description
