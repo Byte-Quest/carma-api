@@ -2574,6 +2574,12 @@ paths:
           schema:
             type: string
             example: 31
+        - name: isArchived
+          in: query
+          schema:
+            type: boolean
+            example: true
+            description: If true, show archived questionnaires.
       responses:
         "200":
           description: Successful Operation
@@ -4190,12 +4196,12 @@ paths:
                   message:
                     type: string
                     example: questionnaire_already_published
-  /questionnaires/{questionnaireId}/deprecate:
+  /questionnaires/{questionnaireId}/archive:
     post:
       tags:
         - Questionnaire
-      summary: Deprecate a questionnaire
-      operationId: deprecateQuestionnaire
+      summary: Archive a questionnaire
+      operationId: archiveQuestionnaire
       parameters:
         - name: questionnaireId
           in: path
@@ -4206,7 +4212,7 @@ paths:
             format: uuid
       responses:
         "200":
-          description: Questionnaire deprecated successfully
+          description: Questionnaire archived successfully
           content:
             application/json:
               schema:
@@ -4214,7 +4220,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: Questionnaire deprecated successfully
+                    example: Questionnaire archived successfully
         "401":
           description: Unauthorized
           content:
@@ -4234,7 +4240,42 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: The questionnaire has already been deprecated.
+                    example: The questionnaire has already been archived.
+  /questionnaires/{questionnaireId}/unarchive:
+    post:
+      tags:
+        - Questionnaire
+      summary: Unarchive a questionnaire
+      operationId: unarchiveQuestionnaire
+      parameters:
+        - name: questionnaireId
+          in: path
+          required: true
+          description: The ID of the questionnaire
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Questionnaire unarchived successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Questionnaire unarchived successfully
+          "400":
+            description: Bad Request
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: The questionnaire has already been unarchived.
   /questionnaires/{questionnaireId}/items:
     get:
       tags:
