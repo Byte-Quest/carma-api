@@ -5813,9 +5813,6 @@ paths:
                 description:
                   type: string
                   example: Blue
-                score:
-                  type: integer
-                  example: 1
                 imageName:
                   type: string
                   example: image.jpg
@@ -6746,6 +6743,236 @@ paths:
                     items:
                       type: string
 
+      security:
+        - bearerAuth: []
+  /progress/{progressId}/previous-hcp:
+    post:
+      tags:
+        - Progress
+      operationId: PreviousHcpQuestion
+      parameters:
+        - name: progressId
+          in: path
+          required: true
+          description: The ID of the questionnaire progress
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - questionId
+              properties:
+                questionId:
+                  type: string
+                  example: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The data fetched successfully.
+                  data:
+                    $ref: "#/components/schemas/PreviousQuestionData"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The doctor can not respond to this question.
+      security:
+        - bearerAuth: []
+        - QRToken: []
+  /progress/{progressId}/init-hcp:
+    get:
+      tags:
+        - Progress
+      operationId: InitHcpQuestionnaire
+      parameters:
+        - name: progressId
+          in: path
+          required: true
+          description: The ID of the questionnaire progress
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The data fetched successfully.
+                  data:
+                    $ref: "#/components/schemas/InitData"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Access denied.
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The requested resource not found.
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The doctor can not respond to this question.
+      security:
+        - bearerAuth: []
+  /progress/{progressId}/next-hcp:
+    post:
+      tags:
+        - Progress
+      operationId: NextHcpQuestion
+      parameters:
+        - name: progressId
+          in: path
+          required: true
+          description: The ID of the questionnaire  progress
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - optionIds
+                - questionId
+                - textResponse
+              properties:
+                questionId:
+                  type: string
+                  example: 594828bb-68ef-4a13-97a5-5952a13065f8
+                optionIds:
+                  type: string
+                  example: b0f9f3e4-048e-46d0-a96f-aa2616739e9b
+                textResponse:
+                  type: string
+                  example: Response Text
+                attachments:
+                  type: array
+                  items:
+                    type: string
+                    example: attachment.jpg
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/NextQuestionData"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NextQuestionUnprocessableEntityError"
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The doctor can not respond to this question.
       security:
         - bearerAuth: []
 
@@ -9356,6 +9583,17 @@ components:
                       text:
                         type: string
                         example: Response Text
+                      attachments:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            fileName:
+                              type: string
+                              example: attachment.jpg
+                            fileUrl:
+                              type: string
+                              example: https://carmax-avatar-buckets.s1.ca-central-1.amazonaws.com/answer-attachments/attachment.jpg
     PreviousQuestionData:
       type: array
       items:
@@ -9556,6 +9794,17 @@ components:
                       text:
                         type: string
                         example: Response Text
+                      attachments:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            fileName:
+                              type: string
+                              example: attachment.jpg
+                            fileUrl:
+                              type: string
+                              example: https://carmax-avatar-buckets.s1.ca-central-1.amazonaws.com/answer-attachments/attachment.jpg
     DoctorsListData:
       type: array
       items:
