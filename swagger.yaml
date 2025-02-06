@@ -9546,6 +9546,9 @@ components:
             items:
               type: object
               properties:
+                patientProgressId:
+                  type: string
+                  example: afe48fba-6da3-44fb-8281-922330ce08ca
                 isCompleted:
                   type: boolean
                   example: true
@@ -9678,6 +9681,9 @@ components:
             items:
               type: object
               properties:
+                patientProgressId:
+                  type: string
+                  example: afe48fba-6da3-44fb-8281-922330ce08ca
                 isCompleted:
                   type: boolean
                   example: true
@@ -9810,6 +9816,9 @@ components:
             items:
               type: object
               properties:
+                patientProgressId:
+                  type: string
+                  example: afe48fba-6da3-44fb-8281-922330ce08ca
                 isCompleted:
                   type: boolean
                   example: true
