@@ -6830,7 +6830,7 @@ paths:
       security:
         - bearerAuth: []
         - QRToken: []
-  /progress/{progressId}/init-hcp:
+  /progress/{progressId}/init-hcp/{categoryId}:
     get:
       tags:
         - Progress
@@ -6840,6 +6840,15 @@ paths:
           in: path
           required: true
           description: The ID of the questionnaire progress
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+        - name: categoryId
+          in: path
+          required: true
+          description: The ID of the category
           schema:
             type: string
           examples:
@@ -9539,7 +9548,7 @@ components:
                         example: afe48fba-6da3-44fb-8281-922330ce08ca
                       questionNumber:
                         type: integer
-                        example: 13
+                        example: 12
                       title:
                         type: string
                         example: Question Title
@@ -9550,30 +9559,57 @@ components:
                       type:
                         type: string
                         example: MultiSelectText
+                        enum:
+                          - MultiSelectText
+                          - SingleSelectText
+                          - TextResponseShort
+                          - TextResponseLong
+                          - YesNo
+                          - Statement
+                          - SingleSelectImage
+                          - MultiSelectImage
+                      selectionLimit:
+                        type: string
+                        example: unlimited
+                        enum:
+                          - Unlimited
+                          - ExactNumber
+                          - Range
+                          - None
                       minRequiredOptionNumber:
                         type: integer
-                        example: 1
+                        example: 2
                       maxRequiredOptionNumber:
                         type: integer
-                        example: 5
-                options:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        example: afe48fba-6da3-44fb-5136-922330ce08ca
-                      title:
-                        type: string
-                        example: Option title
-                      description:
-                        type: string
-                        nullable: true
-                        example: Option Description
-                      imageUrl:
-                        type: string
-                        example: /images/image.jpg
+                        example: 10
+                      textResponseMaxLength:
+                        type: integer
+                        example: 100
+                      options:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: afe48fba-6da3-44fb-5136-922330ce08ca
+                            title:
+                              type: string
+                              example: Option title
+                            description:
+                              type: string
+                              nullable: true
+                              example: Option Description
+                            imageUrl:
+                              type: string
+                              nullable: true
+                              example: /images/image.jpg
+                      enableFileAttachment:
+                        type: boolean
+                        example: true
+                      isDoctorQuestion:
+                        type: boolean
+                        example: false
                 response:
                   type: array
                   items:
@@ -9644,7 +9680,7 @@ components:
                         example: afe48fba-6da3-44fb-8281-922330ce08ca
                       questionNumber:
                         type: integer
-                        example: 10
+                        example: 12
                       title:
                         type: string
                         example: Question Title
@@ -9655,30 +9691,62 @@ components:
                       type:
                         type: string
                         example: MultiSelectText
+                        enum:
+                          - MultiSelectText
+                          - SingleSelectText
+                          - TextResponseShort
+                          - TextResponseLong
+                          - YesNo
+                          - Statement
+                          - SingleSelectImage
+                          - MultiSelectImage
+                      selectionLimit:
+                        type: string
+                        example: unlimited
+                        enum:
+                          - Unlimited
+                          - ExactNumber
+                          - Range
+                          - None
                       minRequiredOptionNumber:
                         type: integer
-                        example: 1
+                        example: 2
                       maxRequiredOptionNumber:
                         type: integer
-                        example: 6
-                options:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      id:
+                        example: 10
+                      textResponseMaxLength:
+                        type: integer
+                        example: 100
+                      options:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: afe48fba-6da3-44fb-5136-922330ce08ca
+                            title:
+                              type: string
+                              example: Option title
+                            description:
+                              type: string
+                              nullable: true
+                              example: Option Description
+                            imageUrl:
+                              type: string
+                              nullable: true
+                              example: /images/image.jpg
+                      selectionLimit:
                         type: string
-                        example: afe48fba-6da3-44fb-5136-922330ce08ca
-                      title:
-                        type: string
-                        example: Option title
-                      description:
-                        type: string
-                        nullable: true
-                        example: Option Description
-                      imageUrl:
-                        type: string
-                        example: /images/image.jpg
+                        example: unlimited
+                        enum:
+                          - un
+                      enableFileAttachment:
+                        type: boolean
+                        example: true
+                      isDoctorQuestion:
+                        type: boolean
+                        example: false
                 response:
                   type: array
                   items:
@@ -9701,7 +9769,6 @@ components:
                             fileUrl:
                               type: string
                               example: https://carmax-avatar-buckets.s1.ca-central-1.amazonaws.com/answer-attachments/attachment.jpg
-
     InitData:
       type: array
       items:
@@ -9761,30 +9828,57 @@ components:
                       type:
                         type: string
                         example: MultiSelectText
+                        enum:
+                          - MultiSelectText
+                          - SingleSelectText
+                          - TextResponseShort
+                          - TextResponseLong
+                          - YesNo
+                          - Statement
+                          - SingleSelectImage
+                          - MultiSelectImage
+                      selectionLimit:
+                        type: string
+                        example: unlimited
+                        enum:
+                          - Unlimited
+                          - ExactNumber
+                          - Range
+                          - None
                       minRequiredOptionNumber:
                         type: integer
                         example: 2
                       maxRequiredOptionNumber:
                         type: integer
                         example: 10
-                options:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        example: afe48fba-6da3-44fb-5136-922330ce08ca
-                      title:
-                        type: string
-                        example: Option title
-                      description:
-                        type: string
-                        nullable: true
-                        example: Option Description
-                      imageUrl:
-                        type: string
-                        example: /images/image.jpg
+                      textResponseMaxLength:
+                        type: integer
+                        example: 100
+                      options:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: afe48fba-6da3-44fb-5136-922330ce08ca
+                            title:
+                              type: string
+                              example: Option title
+                            description:
+                              type: string
+                              nullable: true
+                              example: Option Description
+                            imageUrl:
+                              type: string
+                              nullable: true
+                              example: /images/image.jpg
+                      enableFileAttachment:
+                        type: boolean
+                        example: true
+                      isDoctorQuestion:
+                        type: boolean
+                        example: false
                 response:
                   type: array
                   items:
@@ -10257,6 +10351,9 @@ components:
       items:
         type: object
         properties:
+          PatientProgressID:
+            type: string
+            example: afe48fba-6da3-44fb-8281-922330ce08ca
           ReportInfo:
             type: array
             items:
@@ -10280,6 +10377,9 @@ components:
                         type: interger
                         example: 20
                       isCompleted:
+                        type: boolean
+                        example: true
+                      hasHcpQuestion:
                         type: boolean
                         example: true
                 questionResponses:
