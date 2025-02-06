@@ -6986,6 +6986,42 @@ paths:
                     example: The doctor can not respond to this question.
       security:
         - bearerAuth: []
+  /progress/{progressId}/recalculate-report:
+    post:
+      tags:
+        - Progress
+      operationId: RecalculateReport
+      parameters:
+        - name: progressId
+          in: path
+          required: true
+          description: The ID of the questionnaire progress
+          schema:
+            type: string
+          examples:
+            example:
+              value: d6b613fb-00dc-44e7-b979-ded21a4df498
+      responses:
+        "200":
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: The report recalculated successfully.
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unauthorized
 
   /onboard/patients/birthday/verify:
     post:
@@ -9736,11 +9772,6 @@ components:
                               type: string
                               nullable: true
                               example: /images/image.jpg
-                      selectionLimit:
-                        type: string
-                        example: unlimited
-                        enum:
-                          - un
                       enableFileAttachment:
                         type: boolean
                         example: true
