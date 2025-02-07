@@ -5061,12 +5061,6 @@ paths:
           schema:
             type: string
           description: The ID of the questionnaire
-        - name: show_hcp_question
-          in: query
-          required: false
-          schema:
-            type: boolean
-          description: Whether to show HCP questions
       requestBody:
         content:
           application/json:
@@ -5240,6 +5234,13 @@ paths:
           required: true
           schema:
             type: string
+        - name: show_hcp_question
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Whether to show HCP questions
+
       responses:
         "200":
           description: Questions fetched successfully
