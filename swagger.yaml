@@ -5061,6 +5061,12 @@ paths:
           schema:
             type: string
           description: The ID of the questionnaire
+        - name: show_hcp_question
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: Whether to show HCP questions
       requestBody:
         content:
           application/json:
@@ -10472,11 +10478,23 @@ components:
                       textResponse:
                         type: string
                         example: Text of Response
+                      enableFileAttachment:
+                        type: boolean
+                        example: true
+                      isDoctorQuestion:
+                        type: boolean
+                        example: true
                       attachments:
                         type: array
                         items:
-                          type: string
-                          example: https://example.com/attachment.pdf
+                          type: object
+                          properties:
+                            fileName:
+                              type: string
+                              example: attachment.pdf
+                            fileUrl:
+                              type: string
+                              example: https://example.com/attachment.pdf
                 responsesAddTo:
                   type: string
                   example: Description
