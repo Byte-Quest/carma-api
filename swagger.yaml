@@ -6938,8 +6938,6 @@ paths:
               type: object
               required:
                 - optionIds
-                - questionId
-                - textResponse
               properties:
                 questionId:
                   type: string
