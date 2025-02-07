@@ -10454,6 +10454,12 @@ components:
                             type:
                               type: string
                               example: Question Type
+                            enableFileAttachment:
+                              type: boolean
+                              example: true
+                            isDoctorQuestion:
+                              type: boolean
+                              example: true
                             options:
                               type: array
                               items:
@@ -10478,12 +10484,6 @@ components:
                       textResponse:
                         type: string
                         example: Text of Response
-                      enableFileAttachment:
-                        type: boolean
-                        example: true
-                      isDoctorQuestion:
-                        type: boolean
-                        example: true
                       attachments:
                         type: array
                         items:
