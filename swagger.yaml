@@ -67,6 +67,18 @@ paths:
                     example: You're logged in!
                   data:
                     $ref: "#/components/schemas/Login"
+        "423":
+          description: Account Locked
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Account Locked
+                  data:
+                    $ref: "#/components/schemas/Login"
         "401":
           description: Unauthorized
           content:
@@ -3875,20 +3887,12 @@ paths:
                     example: The requested resource not found.
       security:
         - bearerAuth: []
-  /questionnaires/{questionnaireId}/attachments:
+  /attachments:
     post:
       tags:
-        - Questionnaire Attachments
-      summary: Upload an attachment to a questionnaire
+        - Attachments
+      summary: Upload an attachment
       operationId: uploadAttachment
-      parameters:
-        - name: questionnaireId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-          description: The UUID of the questionnaire
       requestBody:
         required: true
         content:
@@ -3911,9 +3915,19 @@ paths:
                   type: string
                   format: binary
                   description: File upload, required when type is `Pdf`, `Doc`, `Docx`, or `Txt`
+                attachmentableId:
+                  type: string
+                  format: uuid
+                  description: The UUID of the attachmentable object
+                attachmentableType:
+                  type: string
+                  description: The type of the attachmentable object can be `Questionnaire` or `Category`
+                  enum: [Questionnaire, Category]
               required:
                 - title
                 - type
+                - attachmentableId
+                - attachmentableType
       responses:
         "201":
           description: Created Successfully
@@ -3925,6 +3939,13 @@ paths:
                   message:
                     type: string
                     example: The Attachment has been uploaded successfully.
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        description: The UUID of the attachment
         "401":
           description: Unauthorized
           content:
@@ -3947,17 +3968,10 @@ paths:
                     example: The requested resource not found.
     get:
       tags:
-        - Questionnaire Attachments
-      summary: Get a list of attachments for a questionnaire
+        - Attachments
+      summary: Get a list of attachments
       operationId: getAttachments
       parameters:
-        - name: questionnaireId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-          description: The UUID of the questionnaire
         - name: page
           in: query
           required: false
@@ -3972,6 +3986,26 @@ paths:
             type: integer
             default: 10
           description: Number of items per page
+        - name: attachmentable_type
+          in: query
+          required: false
+          schema:
+            type: string
+            description: The type of the attachmentable object
+            enum: [Questionnaire, Category]
+        - name: attachmentable_id
+          in: query
+          required: false
+          schema:
+            type: string
+            format: uuid
+            description: The UUID of the attachmentable object (e.g., questionnaire or category id)
+        - name: title
+          in: query
+          required: false
+          schema:
+            type: string
+            description: The title of the attachment
       responses:
         "200":
           description: A list of attachments
@@ -3989,10 +4023,14 @@ paths:
                           type: string
                           format: uuid
                           description: The attachment's unique identifier
-                        questionnaireId:
+                        attachmentableId:
                           type: string
                           format: uuid
                           description: The associated questionnaire's UUID
+                        attachmentableType:
+                          type: string
+                          description: The type of the attachmentable object
+                          enum: [Questionnaire, Category]
                         title:
                           type: string
                           description: The title of the attachment
@@ -4075,6 +4113,23 @@ paths:
                             type: string
                             format: date-time
                             description: The last update timestamp of the questionnaire
+                      categoryInfo:
+                        type: object
+                        properties:
+                          ID:
+                            type: string
+                            format: uuid
+                            description: The category's unique identifier
+                          Name:
+                            type: string
+                            description: The name of the category
+                          Description:
+                            type: string
+                            description: The description of the category
+                          CreatedAt:
+                            type: string
+                            format: date-time
+                            description: The creation timestamp of the category
         "401":
           description: Unauthorized
           content:
@@ -4095,10 +4150,10 @@ paths:
                   message:
                     type: string
                     example: The requested resource not found.
-  /questionnaires/attachments/{attachmentId}:
+  /attachments/{attachmentId}:
     delete:
       tags:
-        - Questionnaire Attachments
+        - Attachments
       summary: Delete an attachment by ID
       operationId: deleteAttachment
       parameters:
@@ -8343,6 +8398,9 @@ components:
           expireTime:
             type: string
             example: 2024-07-22T03:46:01.166316322+03:30
+          isLocked:
+            type: boolean
+            example: false
     LoginUnprocessableEntityError:
       type: object
       properties:
